@@ -1,0 +1,9 @@
+#! /usr/bin/env php
+
+<?php
+
+use Limelight\Limelight;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$limelight = new Limelight();

@@ -1,0 +1,34 @@
+{   
+    "name": "nihongodera/limelight",
+    "type": "project",
+    "description": "A php Japanese language text analyzer and parser.",
+    "keywords": ["japanese", "language", "mecab"],
+    "homepage": "https://github.com/zachleigh/limelight",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zach Leigh",
+            "email": "zachleigh@fastmail.jp",
+            "role": "Developer"
+        }
+    ],
+
+    "require-dev": {
+        "phpunit/phpunit": "5.0.*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Limelight\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Limelight\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^2.0"
+    }
+}
