@@ -2,8 +2,6 @@
 
 namespace Limelight\Config;
 
-use Dotenv\Dotenv;
-
 class Setup
 {
     /**
@@ -21,10 +19,8 @@ class Setup
     {
         if (file_exists('.env')) {
             $envPath = dirname('.env');
+
+            \Dotenv::load($envPath);
         }
-
-        $dotenv = new Dotenv($envPath);
-
-        $dotenv->load();
     }
 }

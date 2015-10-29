@@ -40,20 +40,6 @@ class MecabTest extends TestCase
     }
 
     /**
-     * Mecab has a valid dictionary.
-     *
-     * @test
-     */
-    public function it_instantiates_with_valid_dictionary_file()
-    {
-        if (method_exists(self::$mecab, 'getDictionary')) {
-            $dictionary = self::$mecab->getDictionary();
-
-            $this->assertFileExists($dictionary);
-        }
-    }
-
-    /**
      * Mecab has parseToNode method.
      *
      * @test

@@ -23,7 +23,7 @@ class Config
      */
     private function __construct()
     {
-        $this->configFile = include 'src/config.php';
+        $this->configFile = include dirname(__DIR__) . '/config.php';
     }
 
     /**
@@ -31,7 +31,7 @@ class Config
      *
      * @return self
      */
-    public function getInstance()
+    public static function getInstance()
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();
