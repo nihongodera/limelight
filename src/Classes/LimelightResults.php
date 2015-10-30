@@ -21,15 +21,23 @@ class LimelightResults
     private $words;
 
     /**
+     * Results from plugins.
+     *
+     * @var array
+     */
+    private $pluginData = [];
+
+    /**
      * Construct.
      *
      * @param string $text
      * @param array  $words
      */
-    public function __construct($text, array $words)
+    public function __construct($text, array $words, $pluginData)
     {
         $this->text = $text;
         $this->words = $words;
+        $this->pluginData = $pluginData;
     }
 
     /**
@@ -142,5 +150,21 @@ class LimelightResults
         }
 
         return $this->words[$index];
+    }
+
+    /**
+     * Get plugin data from object.
+     *
+     * @param string $pluginName [The name of the plugin]
+     *
+     * @return mixed
+     */
+    public function plugin($pluginName)
+    {
+        if (isset($this->pluginData[$pluginName])) {
+            return $this->pluginData[$pluginName];
+        }
+
+        return;
     }
 }

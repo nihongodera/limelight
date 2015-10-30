@@ -85,6 +85,8 @@ class Tokenizer
         '人名' => 'jinmei',
         '命令ｉ' => 'meireiI',
         '係助詞' => 'kakarijoshi',
+        '連用形' => 'rennyoukei',
+        '自立' => 'jiritsu'
     ];
 
     /**

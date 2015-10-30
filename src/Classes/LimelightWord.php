@@ -61,6 +61,13 @@ class LimelightWord
     private $grammar;
 
     /**
+     * Results from plugins.
+     *
+     * @var array
+     */
+    private $pluginData = [];
+
+    /**
      * Construct.
      *
      * @param array $token
@@ -200,6 +207,22 @@ class LimelightWord
     }
 
     /**
+     * Get plugin data from word.
+     *
+     * @param string $pluginName [The name of the plugin]
+     *
+     * @return mixed
+     */
+    public function plugin($pluginName)
+    {
+        if (isset($this->pluginData[$pluginName])) {
+            return $this->pluginData[$pluginName];
+        }
+
+        return;
+    }
+
+    /**
      * Convert $this->returnItem to hiragana if possible.
      *
      * @return $this
@@ -250,5 +273,16 @@ class LimelightWord
     public function setPartOfSpeech($value)
     {
         $this->partOfSpeech = $value;
+    }
+
+    /**
+     * Set plugin data on object.
+     *
+     * @param string $pluginName [name of the plugin]
+     * @param mixed  $value      [the value to store]
+     */
+    public function setPluginData($pluginName, $value)
+    {
+        $this->pluginData[ucfirst($pluginName)] = $value;
     }
 }

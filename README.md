@@ -7,15 +7,20 @@
   - Find parts of speech for words
   - Find dictionary entries (lemmas) for conjugated words
   - Get readings and pronunciations for words
+  - Build fuirgana for words
 
 ## Contents  
   - [Quick Guide](#quick-guide)
+    - [Laravel](#laravel)
   - [Installation](#installation)
   - [Usage](#usage)
     - [Parsing Strings](#parsing-strings)
     - [Using the LimelightResults Class](#using-the-limelightresults-class)
     - [Using the LimelightWord Class](#using-the-limelightword-class)
     - [Doing Raw MeCab Queries](#doing-raw-mecab-queries)
+  - [Plugins](#plugins)
+    - [Furigana](#furigana)
+    - [Making Plugins](#making-plugins)
   - [Change Log](#change-log)
   - [Sources, Contributions, and Contributing](#sources-contributing-and-contributing)
 
@@ -59,6 +64,18 @@ foreach ($results->getNext() as $word) {
 ```
   
 Check out the [usage documentation](#usage) for more information.   
+
+#### Laravel
+  
+A Laravel service provider and a facade are included.  After installing Limelight with composer, add the service provider and, if you wish, the facade to your config/app.php file.  
+Add the service provider to 'providers'.
+```php
+'Limelight\Providers\Laravel\LimelightServiceProvider'
+```
+And add the facade to 'aliases'.
+```php
+'Limelight' => 'Limelight\Providers\Laravel\Limelight'
+```
   
 [Top](#contents)
   
@@ -413,14 +430,140 @@ $array = $limelight->mecabSplit('食べます');
   
 [Top](#contents)
   
+## Plugins
+  - [Furigana](#furigana)
+  - [Making Plugins](#making-plugins)
+  
+Plugins make it easy to use the information gained from Limelight and allow users to customize the program to improve performance and get only the results they need.  To register a plugin, list it and the full namespace of the class in the 'plugin' array in config.php.
+```php
+'plugins' => [
+    'Furigana' => 'Limelight\Plugins\Plugins\Furigana'
+],
+```
+
+Any options that the plugin needs are also registerd in config.php in an array where the key is the name of the plugin class.
+```php
+'Furigana' => [
+    'furigana_wrapper' => '<rt>{{}}</rt>',
+    'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
+    'kanji_wrapper' => '',
+    'word_wrapper' => '',
+],
+```
+  
+Plugins can put results on individual LimelightWord objects, on the LimelightResults object, or both.  To access the plugin data, simply call the 'plugin()' method on either LimelightWord or LimelightResults and pass the name of the plugin as parameter.
+```php
+$limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+$word = $results->getByIndex(0);
+
+echo $word->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+
+echo $results->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+```
+
+### Furigana
+  
+The Furigana plugin builds furigana for each word made by Limelight.  By default, furigana is made using the HTML5 ruby tag.  However, for users who wish to do something different, tags can be configured in config.php.
+```php
+'Furigana' => [
+    'furigana_wrapper' => '<rt>{{}}</rt>',
+    'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
+    'kanji_wrapper' => '',
+    'word_wrapper' => '',
+],
+```
+Use double curly braces as a place holder between opening and closing tags.  
+  
+Wrappers are applied in the following order:
+```php
+<word_wrapper><kanji_furigana_wrapper><kanji_wrapper>**kanji**</kanji_wrapper><furigana_wrapper>**furigana**</furigana_wrapper></kanji_furigana_wrapper>**other characters**</word_wrapper>
+```
+  
+Access the furigana strings on either the LimelightResults object or the LimelightWord objects.
+```php
+$limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+$word = $results->getByIndex(0);
+
+echo $word->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+
+echo $results->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+```
+  
+### Making Plugins
+  
+Making plugins for Limelight is simple.  First, create a plugin class and have it extend Limelight\Plugins\Plugin.  Limelight\Plugins\Plugin has one abstract method, handle(), which you must implement.
+```php
+use Limelight\Plugins\Plugin;
+
+class Example extends Plugin
+{
+    public function handle()
+    {
+
+    }
+}
+```
+  
+If you need to use a constructor, be sure to pass the arguments up to the parent.  
+```php
+public function __construct($text, $node, $tokens, $words)
+{
+    // Construct what you need
+
+    parent::__construct($text, $node, $tokens, $words);
+}
+```
+  
+The parent object has the following properties on it:  
+  - $text - The original, user inputed text.
+  - $node - An instance of Limelight\Mecab\Node which can be used to gain access to the raw MeCab information.
+  - $tokens - An array of information gained from the MeCab nodes.
+  - $words - An array of LimelightWord objects.
+  - $config - An instance of Limelight\Config\Config.
+  
+To get config data, use the config instance on the parent.
+```php
+$options = $this->config->get('PluginName');
+```
+
+After gaining what data you need, set the data on an individual LimelightWord instance with the setPluginData() method, passing through the name of your plugin and the data.  
+```php
+$word->setPluginData('PluginName', $data);
+```
+  
+To set data on the LimelightResults object, return the data.
+```php
+return $data;
+```
+  
+A plugin template with some example code can be found in Limelight/Plugins.  
+  
+[Top](#contents)
+  
 ## Change Log  
 
-Oct. 28, 2015: v.1.0.1
+Oct. 30, 2015: Version 1.1.0
+  - Added plugin ability
+  - Added furigana plugin
   - Bug fixes
-  - Refactor PartofSpeech classes
+
+Oct. 29, 2015: Version 1.0.2
+  - Fixed dotenv bugs
+  - Fixed config bugs
+  - Add Laravel support
+
+Oct. 28, 2015: Version 1.0.1
+  - Bug fixes
+  - Refactored PartofSpeech classes
   - Travis CI integration
 
-Oct. 27, 2015: v1.0
+Oct. 27, 2015: Version 1.0
   - Version 1.0 released.
 
 ## Sources, Contributions, and Contributing

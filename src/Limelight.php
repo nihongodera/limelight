@@ -6,6 +6,7 @@ use Limelight\Config\Setup;
 use Limelight\Parse\Parser;
 use Limelight\Config\Config;
 use Limelight\Parse\Tokenizer;
+use Limelight\Parse\TokenParser;
 
 class Limelight
 {
@@ -39,7 +40,9 @@ class Limelight
     {
         $tokenizer = new Tokenizer();
 
-        $parser = new Parser($this->mecab, $tokenizer);
+        $tokenParser = new TokenParser();
+
+        $parser = new Parser($this->mecab, $tokenizer, $tokenParser);
 
         return $parser->handle($text);
     }

@@ -3,10 +3,10 @@
 namespace Limelight\Parse;
 
 use Limelight\Mecab\Mecab;
-use Limelight\Classes\LimelightWord;
+use Limelight\Config\Config;
+use Limelight\Plugins\Plugin;
 use Limelight\Classes\LimelightResults;
-use Limelight\Parse\PartOfSpeech\POSRegistry;
-use Limelight\Parse\PartOfSpeech\PartOfSpeech;
+use Limelight\Exceptions\LimelightPluginErrorException;
 
 class Parser
 {
@@ -21,24 +21,9 @@ class Parser
     private $tokenizer;
 
     /**
-     * @var array
+     * @var Limelight\Parse\TokenParser
      */
-    private $words = [];
-
-    /**
-     * Default properties for parsing tokens.
-     *
-     * @var array
-     */
-    private $defaults = [
-        'partOfSpeech' => null,
-        'grammar' => null,
-        'eatNext' => false,
-        'eatLemma' => true,
-        'attachToPrevious' => false,
-        'alsoAttachToLemma' => false,
-        'updatePOS' => false,
-    ];
+    private $tokenParser;
 
     /**
      * Construct.
@@ -46,10 +31,11 @@ class Parser
      * @param Mecab  $mecab
      * @param string $text
      */
-    public function __construct(Mecab $mecab, Tokenizer $tokenizer)
+    public function __construct(Mecab $mecab, Tokenizer $tokenizer, TokenParser $tokenParser)
     {
         $this->mecab = $mecab;
         $this->tokenizer = $tokenizer;
+        $this->tokenParser = $tokenParser;
     }
 
     /**
@@ -65,133 +51,62 @@ class Parser
 
         $tokens = $this->tokenizer->makeTokens($node);
 
-        $this->parseTokens($tokens);
+        $words = $this->tokenParser->parseTokens($tokens);
 
-        return new LimelightResults($text, $this->words);
+        $pluginResults = $this->runPlugins($text, $node, $tokens, $words);
+
+        return new LimelightResults($text, $words, $pluginResults);
     }
 
     /**
-     * Parse the text by filtering through the tokens.
+     * Run all registered plugins.
      *
-     * @return [type] [description]
-     */
-    private function parseTokens($tokens)
-    {
-        $registry = POSRegistry::getInstance();
-
-        $length = count($tokens);
-
-        for ($i = 0; $i < $length; ++$i) {
-            if (!isset($tokens[$i]['partOfSpeech1'])) {
-                continue;
-            }
-
-            $previousWord = end($this->words);
-
-            $previous = ($i > 0 ? $tokens[$i - 1] : null);
-
-            $current = $tokens[$i];
-
-            $next = ($i + 1 < $length ? $tokens[$i + 1] : null);
-
-            $properties = $this->getProperties($registry, $previousWord, $previous, $current, $next);
-
-            if ($properties['attachToPrevious'] && count($this->words) > 0) {
-                $this->appendWordToLast($current, $properties, $previousWord);
-            } else {
-                $this->makeNewWord($current, $properties);
-            }
-
-            if ($properties['eatNext']) {
-                $this->eatNextToken($current, $next, $properties);
-
-                $i += 1;
-            }
-        }
-    }
-
-    /**
-     * Get properties for current token.
-     *
-     * @param Limelight\Parse\POSRegistry $registry
-     * @param Limelight\Classes\Word      $previousWord
-     * @param array                       $previous
-     * @param array                       $current
-     * @param array                       $next
+     * @param string $text
+     * @param Node   $node
+     * @param array  $tokens
      *
      * @return array
      */
-    private function getProperties($registry, $previousWord, $previous, $current, $next)
+    private function runPlugins($text, $node, $tokens, $words)
     {
-        $className = ucfirst($current['partOfSpeech1']);
+        $pluginResults = [];
 
-        $POSClass = $registry->getClass($className);
+        $config = Config::getInstance();
 
-        $properties = $POSClass->handle($this->defaults, $previousWord, $previous, $current, $next);
+        $plugins = $config->getPlugins();
 
-        return $properties;
+        foreach ($plugins as $plugin => $namespace) {
+            $this->validatePlugin($namespace);
+
+            $pluginClass = new $namespace($text, $node, $tokens, $words);
+
+            $pluginResults[$plugin] = $this->firePlugin($pluginClass);
+        }
+
+        return $pluginResults;
     }
 
     /**
-     * Append current word to last word in words array.
+     * Validate plugin class exists.
      *
-     * @param array                  $current
-     * @param array                  $properties
-     * @param Limelight\Classes\Word $previousWord
+     * @param string $namespace
      */
-    private function appendWordToLast($current, $properties, $previousWord)
+    private function validatePlugin($namespace)
     {
-        $previousWord->appendTo('rawMecab', $current);
-
-        $previousWord->appendTo('word', $current['literal']);
-
-        $previousWord->appendTo('reading', $current['reading']);
-
-        $previousWord->appendTo('pronunciation', $current['pronunciation']);
-
-        if ($properties['alsoAttachToLemma']) {
-            $previousWord->appendTo('lemma', $current['lemma']);
-        }
-
-        if ($properties['updatePOS']) {
-            $previousWord->setPartOfSpeech($properties['partOfSpeech']);
+        if (!class_exists($namespace)) {
+            throw new LimelightPluginErrorException("Plugin {$namespace} not found.");
         }
     }
 
     /**
-     * Make new word and append it to words array.
+     * Fire the plugin.
      *
-     * @param array $current
-     * @param array $properties
-     */
-    private function makeNewWord($current, $properties)
-    {
-        $word = new LimelightWord($current, $properties);
-
-        $this->words[] = $word;
-    }
-
-    /**
-     * Eat the next token.
+     * @param Plugin $plugin
      *
-     * @param array $current
-     * @param array $next
-     * @param array $properties
+     * @return mixed
      */
-    private function eatNextToken($current, $next, $properties)
+    private function firePlugin(Plugin $plugin)
     {
-        $word = end($this->words);
-
-        $word->appendTo('rawMecab', $next);
-
-        $word->appendTo('word', $next['literal']);
-
-        $word->appendTo('reading', $next['reading']);
-
-        $word->appendTo('pronunciation', $next['pronunciation']);
-
-        if ($properties['eatLemma']) {
-            $word->appendTo('lemma', $current['lemma']);
-        }
+        return $plugin->handle();
     }
 }

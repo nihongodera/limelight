@@ -2,6 +2,7 @@
 
 namespace Limelight\Config;
 
+use Limelight\Exceptions\LimelightInvalidInputException;
 use Limelight\Exceptions\LimelightInternalErrorException;
 
 class Config
@@ -23,7 +24,23 @@ class Config
      */
     private function __construct()
     {
-        $this->configFile = include dirname(__DIR__) . '/config.php';
+        $this->configFile = include dirname(__DIR__).'/config.php';
+    }
+
+    /**
+     * Get value from config file.
+     *
+     * @param string $string [config.php key]
+     *
+     * @return mixed
+     */
+    public function get($string)
+    {
+        if (isset($this->configFile[$string])) {
+            return $this->configFile[$string];
+        }
+
+        throw new LimelightInvalidInputException("Index {$string} does not exist in config.php.");
     }
 
     /**
@@ -38,6 +55,16 @@ class Config
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Get registered plugins from config file.
+     *
+     * @return array
+     */
+    public function getPlugins()
+    {
+        return $this->configFile['plugins'];
     }
 
     /**

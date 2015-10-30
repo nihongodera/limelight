@@ -2,7 +2,7 @@
     "name": "nihongodera/limelight",
     "type": "project",
     "description": "A php Japanese language text analyzer and parser.",
-    "keywords": ["japanese", "language", "mecab"],
+    "keywords": ["japanese", "language", "mecab", "furigana", "kanji"],
     "homepage": "https://github.com/zachleigh/limelight",
     "license": "MIT",
     "authors": [

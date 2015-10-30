@@ -24,7 +24,7 @@ class FunctionalTest extends TestCase
     {
         self::$limelight = new Limelight();
 
-        self::$lib = include 'tests/Functional/lib.php';
+        self::$lib = include 'tests/lib.php';
     }
 
     /**

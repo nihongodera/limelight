@@ -35,7 +35,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_be_instantiated()
     {
-        $results = new LimelightResults('test', ['item', 'another thing']);
+        $results = new LimelightResults('test', ['item', 'another thing'], []);
 
         $this->assertInstanceOf('Limelight\Classes\LimelightResults', $results);
     }

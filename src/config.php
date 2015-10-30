@@ -3,6 +3,33 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Plugins
+    |--------------------------------------------------------------------------
+    |
+    | Register plugins with the classname and the namespace of the plugin.
+    |
+    */
+    'plugins' => [
+        'Furigana' => 'Limelight\Plugins\Plugins\Furigana'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plugin Options
+    |--------------------------------------------------------------------------
+    |
+    | Options should use the name of the plugin class as the key.
+    |
+    */
+    'Furigana' => [
+        'furigana_wrapper' => '<rt>{{}}</rt>',
+        'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
+        'kanji_wrapper' => '',
+        'word_wrapper' => '',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Interface => Class Bindings
     |--------------------------------------------------------------------------
     |
