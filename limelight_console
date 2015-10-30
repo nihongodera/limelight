@@ -7,3 +7,20 @@ use Limelight\Limelight;
 require __DIR__ . '/vendor/autoload.php';
 
 $limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+// $word = $results->getByIndex(0);
+
+// $romanji = $word->reading()->toRomanji()->get();
+
+// echo $romanji;
+
+// var_dump($results);
+
+foreach ($results->getNext() as $word) {
+    echo $word->romanji;
+}
+
+// echo $word->romanji;
+// 

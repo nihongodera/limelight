@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Plugins\Plugins;
+namespace Limelight\Plugins\Library\Furigana;
 
 use Limelight\Plugins\Plugin;
 
@@ -35,9 +35,11 @@ class Furigana extends Plugin
      */
     public function handle()
     {
-        $furiganaWord = '';
+        $furiganaString = '';
 
         foreach ($this->words as $wordObject) {
+            $furiganaWord = '';
+
             $word = $wordObject->word;
 
             $wordChars = $this->getChars($word);
@@ -57,11 +59,13 @@ class Furigana extends Plugin
             $kanjiWithKana = $this->combineKanjiKana($kanji, $kana);
 
             $furiganaWord .= $this->rebuildWord($wordChars, $kanjiWithKana, $katakanaChars);
+
+            $this->addToWord($wordObject, $furiganaWord);
+
+            $furiganaString .= $furiganaWord;
         }
 
-        $this->addToWord($wordObject, $furiganaWord);
-
-        return $furiganaWord;
+        return $furiganaString;
     }
 
     /**
@@ -125,21 +129,7 @@ class Furigana extends Plugin
 
         foreach ($hiraganaChars as $hiraganaChar) {
             if ($this->countArrayValues($hiraganaChars, $hiraganaChar) !== 1 && !empty($wordKanaIntersect) && in_array($hiraganaChar, $wordKanaIntersect)) {
-                $reverseHiragana = array_reverse($hiraganaChars);
-
-                $reverseHiraganaCopy = $reverseHiragana;
-
-                $wordCopy = $wordChars;
-
-                foreach ($reverseHiragana as $key => $char) {
-                    if (in_array($char, $wordCopy)) {
-                        unset($wordCopy[array_search($char, $wordCopy)]);
-
-                        unset($reverseHiraganaCopy[$key]);
-                    }
-                }
-
-                return array_diff(array_reverse($reverseHiraganaCopy), $wordCopy);
+                return $this->reverseArrayCompile($wordChars, $hiraganaChars);
             }
         }
 
@@ -159,6 +149,31 @@ class Furigana extends Plugin
         $counts = array_count_values($array);
 
         return $counts[$value];
+    }
+
+    /**
+     * Find valid furigana by walking hiragana array in reverse.
+     * 
+     * @param  array $wordChars
+     * @param  array $hiraganaChars
+     * 
+     * @return array
+     */
+    private function reverseArrayCompile(array $wordChars, array $hiraganaChars)
+    {
+        $reverseHiragana = array_reverse($hiraganaChars);
+
+        $reverseHiraganaCopy = $reverseHiragana;
+
+        foreach ($reverseHiragana as $key => $char) {
+            if (in_array($char, $wordChars)) {
+                unset($wordChars[array_search($char, $wordChars)]);
+
+                unset($reverseHiraganaCopy[$key]);
+            }
+        }
+
+        return array_diff(array_reverse($reverseHiraganaCopy), $wordChars);
     }
 
     /**

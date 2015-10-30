@@ -36,7 +36,7 @@ class Limelight
      *
      * @return Limelight\Classes\LimelightResults
      */
-    public function parse($text)
+    public function parse($text, $runPlugins = true)
     {
         $tokenizer = new Tokenizer();
 
@@ -44,7 +44,7 @@ class Limelight
 
         $parser = new Parser($this->mecab, $tokenizer, $tokenParser);
 
-        return $parser->handle($text);
+        return $parser->handle($text, $runPlugins);
     }
 
     /**

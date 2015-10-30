@@ -28,8 +28,9 @@ class Parser
     /**
      * Construct.
      *
-     * @param Mecab  $mecab
-     * @param string $text
+     * @param Mecab       $mecab
+     * @param Tokenizer   $tokenizer
+     * @param TokenParser $tokenParser
      */
     public function __construct(Mecab $mecab, Tokenizer $tokenizer, TokenParser $tokenParser)
     {
@@ -42,10 +43,11 @@ class Parser
      * Handle the parse for given text.
      *
      * @param string $text
+     * @param boolean $runPlugins
      *
      * @return [type] [description]
      */
-    public function handle($text)
+    public function handle($text, $runPlugins)
     {
         $node = $this->mecab->parseToNode($text);
 
@@ -53,7 +55,7 @@ class Parser
 
         $words = $this->tokenParser->parseTokens($tokens);
 
-        $pluginResults = $this->runPlugins($text, $node, $tokens, $words);
+        $pluginResults = ($runPlugins ? $this->runPlugins($text, $node, $tokens, $words) : null);
 
         return new LimelightResults($text, $words, $pluginResults);
     }

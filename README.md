@@ -1,7 +1,7 @@
 # Limelight   
-[![Build Status](https://travis-ci.org/nihongodera/limelight.svg?branch=master)](https://travis-ci.org/zachleigh/petrol)
-[![Latest Stable Version](https://poser.pugx.org/nihongodera/limelight/version.svg)](//packagist.org/packages/zachleigh/petrol) 
-[![License](https://poser.pugx.org/nihongodera/limelight/license.svg)](//packagist.org/packages/zachleigh/petrol)  
+[![Build Status](https://travis-ci.org/nihongodera/limelight.svg?branch=master)](https://travis-ci.org/nihongodera/limelight)
+[![Latest Stable Version](https://poser.pugx.org/nihongodera/limelight/version.svg)](//packagist.org/packages/nihongodera/limelight) 
+[![License](https://poser.pugx.org/nihongodera/limelight/license.svg)](//packagist.org/packages/nihongodera/limelight)  
 ##### A php Japanese language analyzer and parser.  
   - Split Japanese text into individual, full words
   - Find parts of speech for words
@@ -20,6 +20,7 @@
     - [Doing Raw MeCab Queries](#doing-raw-mecab-queries)
   - [Plugins](#plugins)
     - [Furigana](#furigana)
+    - [Romanji](#romanji)
     - [Making Plugins](#making-plugins)
   - [Change Log](#change-log)
   - [Sources, Contributions, and Contributing](#sources-contributing-and-contributing)
@@ -400,9 +401,9 @@ echo $wordObject->reading()->toHiragana()->get(); // Output: とうきょう
 Convert a property to katakana with toKatakana().
 ```php
 // $wordObject is おいしい
-echo $wordObject->reading;  // Output: おいしい
+echo $wordObject->word;  // Output: おいしい
 
-echo $wordObject->reading()->toKatakana()->get(); // Output: オイシイ
+echo $wordObject->word()->toKatakana()->get(); // Output: オイシイ
 ```
   
 ### Doing Raw MeCab Queries
@@ -432,6 +433,7 @@ $array = $limelight->mecabSplit('食べます');
   
 ## Plugins
   - [Furigana](#furigana)
+  - [Romanji](#romanji)
   - [Making Plugins](#making-plugins)
   
 Plugins make it easy to use the information gained from Limelight and allow users to customize the program to improve performance and get only the results they need.  To register a plugin, list it and the full namespace of the class in the 'plugin' array in config.php.
@@ -451,7 +453,7 @@ Any options that the plugin needs are also registerd in config.php in an array w
 ],
 ```
   
-Plugins can put results on individual LimelightWord objects, on the LimelightResults object, or both.  To access the plugin data, simply call the 'plugin()' method on either LimelightWord or LimelightResults and pass the name of the plugin as parameter.
+Plugins can put results on individual LimelightWord objects, on the LimelightResults object, or both.  To access the plugin data, a few choices exist.  First, call the 'plugin()' method on either LimelightWord or LimelightResults and pass the name of the plugin as parameter.
 ```php
 $limelight = new Limelight();
 
@@ -462,6 +464,19 @@ $word = $results->getByIndex(0);
 echo $word->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
 
 echo $results->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+```
+   
+Plugin data can also be accesed on LimelightWord objects in the same way other properties can be accesed by using either the property name or the property method call.
+```php
+$limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+$word = $results->getByIndex(0);
+
+echo $word->romanji; // Output: Toukyou
+
+echo $word->romanji()->get(); // Output: Toukyou
 ```
 
 ### Furigana
@@ -490,10 +505,41 @@ $results = $limelight->parse('東京に行きます');
 
 $word = $results->getByIndex(0);
 
-echo $word->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
+echo $word->furigana; // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
 
 echo $results->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます
 ```
+  
+### Romanji
+  
+The Romanji plugin converts words from Japanese to romanji (English letters).  Currently, only [traditional hepburn](https://en.wikipedia.org/wiki/Hepburn_romanization) romanization is available, but other options are coming soon.  
+
+To get romanji for a string, parse it and access it on the LimelightResults object.
+```php
+$limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+echo $results->plugin('Romanji'); // Output: Toukyou ni ikimasu
+```
+Strings on the LimelightResults object are space seperated.  
+
+Results can also be accessed on LimelightWord objects.
+```php
+$limelight = new Limelight();
+
+$results = $limelight->parse('東京に行きます');
+
+foreach ($results->getNext() as $word) {
+    echo $word->romanji;
+}
+
+// Output
+//
+// Toukyouniikimasu
+```
+  
+Proper nouns are capitalized.  
   
 ### Making Plugins
   
@@ -547,6 +593,11 @@ A plugin template with some example code can be found in Limelight/Plugins.
 [Top](#contents)
   
 ## Change Log  
+  
+Nov. 1, 2015: Version 1.2.0
+  - Added Romanji plugin
+  - Improved plugin data accessability
+  - Bug fixes
 
 Oct. 30, 2015: Version 1.1.0
   - Added plugin ability

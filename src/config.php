@@ -10,7 +10,8 @@ return [
     |
     */
     'plugins' => [
-        'Furigana' => 'Limelight\Plugins\Plugins\Furigana'
+        'Furigana' => 'Limelight\Plugins\Library\Furigana\Furigana',
+        'Romanji' => 'Limelight\Plugins\Library\Romanji\Romanji'
     ],
 
     /*
@@ -26,6 +27,10 @@ return [
         'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
         'kanji_wrapper' => '',
         'word_wrapper' => '',
+    ],
+
+    'Romanji' => [
+        'style' => 'hepburn_traditional'
     ],
 
     /*

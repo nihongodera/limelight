@@ -93,6 +93,22 @@ class LimelightResults
     }
 
     /**
+     * Get all lemmas combined as a string.
+     * 
+     * @return [type] [description]
+     */
+    public function getLemmaString()
+    {
+        $string = '';
+
+        foreach ($this->words as $word) {
+            $string .= $word->lemma()->get();
+        }
+
+        return $string;
+    }
+
+    /**
      * Get all words.
      *
      * @return $this

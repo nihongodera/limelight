@@ -95,6 +95,25 @@ class LimelightWord
     {
         if (property_exists($this, $name)) {
             return $this->$name;
+        } elseif (isset($this->pluginData[ucfirst($name)])) {
+            return $this->pluginData[ucfirst($name)];
+        }
+    }
+
+    /**
+     * Call methods for plugin items.
+     * 
+     * @param  string $name
+     * @param  array $arguments
+     * 
+     * @return $this
+     */
+    public function __call($name, $arguments)
+    {
+        if (isset($this->pluginData[ucfirst($name)])) {
+            $this->returnItem = $this->pluginData[ucfirst($name)];
+
+            return $this;
         }
     }
 
@@ -246,6 +265,13 @@ class LimelightWord
         if (gettype($this->returnItem) === 'string') {
             $this->returnItem = mb_convert_kana($this->returnItem, 'C');
         }
+
+        return $this;
+    }
+
+    public function toRomanji()
+    {
+
 
         return $this;
     }

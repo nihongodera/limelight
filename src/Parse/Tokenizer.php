@@ -141,10 +141,6 @@ class Tokenizer
             $this->parsing = false;
 
             return;
-
-            // $token['type'] = 'sentenceSplit';
-
-            // $token['literal'] = '';
         } else {
             $token['type'] = 'parsed';
 

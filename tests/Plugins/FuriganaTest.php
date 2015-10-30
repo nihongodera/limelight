@@ -42,7 +42,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertContains('<ruby>燃<rt>', $furigana);
+        $this->assertEquals('<ruby>燃<rt>も</rt></ruby>える', $furigana);
     }
 
     /**
@@ -60,7 +60,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertContains('テレビ', $furigana);
+        $this->assertEquals('テレビ', $furigana);
     }
 
     /**
@@ -78,7 +78,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertContains('おいしい', $furigana);
+        $this->assertEquals('おいしい', $furigana);
     }
 
     /**
@@ -96,7 +96,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertContains('<ruby>勉強<rt>', $furigana);
+        $this->assertEquals('<ruby>勉強<rt>べんきょう</rt></ruby>する', $furigana);
     }
 
     /**
@@ -114,7 +114,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertContains('おいしい', $furigana);
+        $this->assertEquals('おいしい', $furigana);
     }
 
     /**
@@ -315,5 +315,19 @@ class FuriganaTest extends TestCase
         $expected = self::$lib['furigana1Expected'];
 
         $this->assertEquals($expected, $furigana);
+    }
+
+    /**
+     * Can get furigana off LimelightResults object.
+     * 
+     * @test
+     */
+    public function it_can_get_furigana_off_results_object()
+    {
+        $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
+
+        $furigana = $results->plugin('Furigana');
+
+        $this->assertEquals('アッ、<ruby>太郎<rt>たろう</rt></ruby>！<ruby>久<rt>ひさ</rt></ruby>しぶり！<ruby>元気<rt>げんき</rt></ruby>？', $furigana);
     }
 }
