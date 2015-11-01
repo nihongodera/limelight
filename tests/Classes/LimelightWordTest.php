@@ -149,7 +149,7 @@ class LimelightWordTest extends TestCase
     {
         $romanji = self::$results->getByIndex(0)->romanji;
 
-        $this->assertEquals('Toukyou', $romanji);
+        $this->assertEquals('Tōkyō', $romanji);
     }
 
     /**
@@ -161,6 +161,6 @@ class LimelightWordTest extends TestCase
     {
         $romanji = self::$results->getByIndex(0)->romanji()->get();
 
-        $this->assertEquals('Toukyou', $romanji);
+        $this->assertEquals('Tōkyō', $romanji);
     }
 }

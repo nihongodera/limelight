@@ -4,6 +4,7 @@ namespace Limelight\Tests\Classes;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
+use Limelight\Plugins\Library\Romanji\RomanjiConverter;
 use Limelight\Plugins\Library\Romanji\Styles\HepburnTraditional;
 
 class HepburnTraditionalTest extends TestCase
@@ -25,7 +26,7 @@ class HepburnTraditionalTest extends TestCase
     {
         self::$limelight = new Limelight();
 
-        self::$hepburn = new HepburnTraditional();
+        self::$hepburn = new HepburnTraditional(new RomanjiConverter());
     }
 
     /**
@@ -109,11 +110,11 @@ class HepburnTraditionalTest extends TestCase
     }
 
     /**
-     * It converts shou.
+     * It converts long 0.
      * 
      * @test
      */
-    public function it_converts_shou_to_romanji()
+    public function it_converts_long_o_to_romanji()
     {
         $results = self::$limelight->parse('証券');
 
@@ -125,7 +126,7 @@ class HepburnTraditionalTest extends TestCase
             $conversion .= self::$hepburn->convert($reading, $word);
         }
 
-        $this->assertEquals('shouken', $conversion);
+        $this->assertEquals('shōken', $conversion);
     }
 
     /**
@@ -145,7 +146,7 @@ class HepburnTraditionalTest extends TestCase
             $conversion .= self::$hepburn->convert($reading, $word);
         }
 
-        $this->assertEquals('kyou', $conversion);
+        $this->assertEquals('kyō', $conversion);
     }
 
     /**
@@ -206,5 +207,105 @@ class HepburnTraditionalTest extends TestCase
         }
 
         $this->assertEquals('matcha', $conversion);
+    }
+
+    /**
+     * It converts nm to mm.
+     * 
+     * @test
+     */
+    public function it_converts_nm_to_mm()
+    {
+        $results = self::$limelight->parse('群馬');
+
+        $conversion = '';
+
+        foreach ($results->getNext() as $word) {
+            $reading = mb_convert_kana($word->reading, 'c');
+
+            $conversion .= self::$hepburn->convert($reading, $word);
+        }
+
+        $this->assertEquals('Gumma', $conversion);
+    }
+
+    /**
+     * It converts n+vowel to n-.
+     * 
+     * @test
+     */
+    public function it_converts_n_vowel_to_n_dash()
+    {
+        $results = self::$limelight->parse('簡易');
+
+        $conversion = '';
+
+        foreach ($results->getNext() as $word) {
+            $reading = mb_convert_kana($word->reading, 'c');
+
+            $conversion .= self::$hepburn->convert($reading, $word);
+        }
+
+        $this->assertEquals('kan-i', $conversion);
+    }
+
+    /**
+     * It doesnt convert long vowels its not supposed to.
+     * 
+     * @test
+     */
+    public function it_doesnt_convert_long_vowels_not_listed()
+    {
+        $results = self::$limelight->parse('お婆さん');
+
+        $conversion = '';
+
+        foreach ($results->getNext() as $word) {
+            $reading = mb_convert_kana($word->reading, 'c');
+
+            $conversion .= self::$hepburn->convert($reading, $word);
+        }
+
+        $this->assertEquals('obaasan', $conversion);
+    }
+
+    /**
+     * It converts ha to wa.
+     * 
+     * @test
+     */
+    public function it_converts_ha_to_wa()
+    {
+        $results = self::$limelight->parse('は');
+
+        $conversion = '';
+
+        foreach ($results->getNext() as $word) {
+            $reading = mb_convert_kana($word->reading, 'c');
+
+            $conversion .= self::$hepburn->convert($reading, $word);
+        }
+
+        $this->assertEquals('wa', $conversion);
+    }
+
+    /**
+     * It converts he to we.
+     * 
+     * @test
+     */
+    public function it_converts_he_to_e()
+    {
+        $results = self::$limelight->parse('へ');
+
+        $conversion = '';
+
+        foreach ($results->getNext() as $word) {
+            $reading = mb_convert_kana($word->reading, 'c');
+
+            $conversion .= self::$hepburn->convert($reading, $word);
+        }
+
+        $this->assertEquals('e', $conversion);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Limelight\Plugins\Library\Romanji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiStyle;
+use Limelight\Plugins\Library\Romanji\StyleDecorator;
+use Limelight\Plugins\Library\Romanji\RomanjiConverterInterface;
 
-class HepburnTraditional extends RomanjiStyle
+class HepburnTraditional extends StyleDecorator
 {
     /**
      * Romanji library.
@@ -12,37 +13,61 @@ class HepburnTraditional extends RomanjiStyle
      * @var array
      */
     protected $conversions;
-    /**
-     * Number of index values to eat.
-     *
-     * @var int
-     */
-    protected $eat;
 
     /**
-     * Can be combined with other characters.
+     * Conversions for 'n'.
      *
      * @var array
      */
-    protected $edible = [
-        'ゃ',
-        'ゅ',
-        'ょ',
-        'ぇ',
-        'ぃ',
-        'あ',
-        'い',
-        'う',
-        'え',
-        'お',
+    protected $nConversions = [
+        'b' => 'm',
+        'm' => 'm',
+        'p' => 'm',
+        'a' => 'n-',
+        'i' => 'n-',
+        'u' => 'n-',
+        'e' => 'n-',
+        'o' => 'n-',
+        'y' => 'n-',
+    ];
+
+    /**
+     * Conversions for particles.
+     *
+     * @var array
+     */
+    protected $particleConversions = [
+        'ha' => 'wa',
+        'he' => 'e',
+    ];
+
+    /**
+     * Conversions for small tsu.
+     *
+     * @var array
+     */
+    protected $tsuConversions = [
+        'c' => 't',
+    ];
+
+    /**
+     * Acceptable verb combinations.
+     *
+     * @var array
+     */
+    protected $verbCombos = [
+        'u' => 'ū',
+        'o' => 'ō',
     ];
 
     /**
      * Construct.
      */
-    public function __construct()
+    public function __construct(RomanjiConverterInterface $converter)
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/HepburnTraditional.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
+
+        parent::__construct($converter);
     }
 
     /**
@@ -55,50 +80,14 @@ class HepburnTraditional extends RomanjiStyle
      */
     public function convert($string, $word)
     {
-        $this->eat = 0;
+        $this->converter->setVariables(
+            $this->conversions,
+            $this->verbCombos,
+            $this->nConversions,
+            $this->particleConversions,
+            $this->tsuConversions
+        );
 
-        $characters = preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-        $count = count($characters);
-
-        $results = '';
-
-        for ($index = 0; $index < $count; ++$index) {
-            $index = $index + $this->eat;
-
-            if ($index >= $count) {
-                break;
-            }
-
-            $this->eat = 0;
-
-            $char = $characters[$index];
-
-            $next = (isset($characters[$index + 1]) ?  $characters[$index + 1] : null);
-
-            $nextNext = (isset($characters[$index + 2]) ?  $characters[$index + 2] : null);
-
-            $finalChar = $this->findCombos($char, $next, $nextNext);
-
-            if ($char === 'っ') {
-                if ($this->canBeRomanji($next)) {
-                    $nextRomanji = $this->conversions[$next];
-
-                    $firstChar = preg_split('//u', $nextRomanji, -1, PREG_SPLIT_NO_EMPTY)[0];
-
-                    $results .= ($firstChar !== 'c' ? $firstChar : 't');
-
-                    continue;
-                }
-            }
-
-            if ($this->canBeRomanji($finalChar)) {
-                $results .= $this->conversions[$finalChar];
-            } else {
-                $results .= $finalChar;
-            }
-        }
-
-        return $this->upperCaseNames($results, $word);
+        return $this->converter->convert($string, $word);
     }
 }

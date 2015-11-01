@@ -30,7 +30,7 @@ return [
     ],
 
     'Romanji' => [
-        'style' => 'hepburn_traditional'
+        'style' => 'hepburn_modified'
     ],
 
     /*

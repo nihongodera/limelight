@@ -1,12 +1,11 @@
 <?php
 
-<?php
-
 namespace Limelight\Plugins\Library\Romanji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiStyle;
+use Limelight\Plugins\Library\Romanji\StyleDecorator;
+use Limelight\Plugins\Library\Romanji\RomanjiConverterInterface;
 
-class HepburnModified extends RomanjiStyle
+class HepburnModified extends StyleDecorator
 {
     /**
      * Romanji library.
@@ -16,108 +15,79 @@ class HepburnModified extends RomanjiStyle
     protected $conversions;
 
     /**
-     * Number of index values to eat.
-     * 
-     * @var int
-     */
-    protected $eat;
-
-    /**
-     * Can be combined with other characters.
-     * 
+     * Conversions for 'n'.
+     *
      * @var array
      */
-    protected $edible = [
-        'ゃ',
-        'ゅ',
-        'ょ',
-        'ぇ',
-        'ぃ',
-        'あ',
-        'い',
-        'う',
-        'え',
-        'お',
+    protected $nConversions = [
+        'a' => 'n\'',
+        'i' => 'n\'',
+        'u' => 'n\'',
+        'e' => 'n\'',
+        'o' => 'n\'',
+        'y' => 'n\'',
+    ];
+
+    /**
+     * Conversions for particles.
+     *
+     * @var array
+     */
+    protected $particleConversions = [
+        'ha' => 'wa',
+        'he' => 'e',
+        'wo' => 'o',
+    ];
+
+    /**
+     * Conversions for small tsu.
+     *
+     * @var array
+     */
+    protected $tsuConversions = [
+        'c' => 't',
+    ];
+
+    /**
+     * Acceptable verb combinations.
+     *
+     * @var array
+     */
+    protected $verbCombos = [
+        'a' => 'ā',
+        'u' => 'ū',
+        'e' => 'ē',
+        'o' => 'ō',
     ];
 
     /**
      * Construct.
      */
-    public function __construct()
+    public function __construct(RomanjiConverterInterface $converter)
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/HepburnModified.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
+
+        parent::__construct($converter);
     }
 
     /**
      * Convert string to romanji.
      *
-     * @param string $string
+     * @param string        $string
      * @param LimelightWord $word
      *
      * @return string
      */
     public function convert($string, $word)
     {
-        $this->eat = 0;
+        $this->converter->setVariables(
+            $this->conversions,
+            $this->verbCombos,
+            $this->nConversions,
+            $this->particleConversions,
+            $this->tsuConversions
+        );
 
-        $this->combineVowels = false;
-
-        $characters = preg_split('//u', $hiraganaString, -1, PREG_SPLIT_NO_EMPTY);
-
-        $count = count($characters);
-
-        $results = '';
-
-        for ($index = 0; $index < $count; ++$index) {
-            $index = $index + $this->eat;
-
-            if ($index >= $count) {
-                break;
-            }
-
-            $this->eat = 0;
-
-            $char = $characters[$index];
-
-            $next = (isset($characters[$index + 1]) ?  $characters[$index + 1] : null);
-
-            $nextNext = (isset($characters[$index + 2]) ?  $characters[$index + 2] : null);
-
-            $finalChar = $this->findCombos($char, $next, $nextNext);
-
-            if ($char === 'っ') {
-                if ($this->canBeRomanji($next)) {
-                    $nextRomanji = $this->conversions[$next];
-
-                    $firstChar = preg_split('//u', $nextRomanji, -1, PREG_SPLIT_NO_EMPTY)[0];
-
-                    $results .= ($firstChar !== 'c' ? $firstChar : 't');
-
-                    continue;
-                }
-            }
-
-            if ($this->conversions[$finalChar] === substr($results, -1)) {
-                $firstHalf = mb_substr($hiraganaString, 0, $index);
-
-                $lastHalf = mb_substr($hiraganaString, $index);
-
-                // $limelight = new Limelight();
-
-                // $firstWord = $limelight->parse($firstHalf)->getByIndex(0);
-
-                // $lastWord = $limelight->parse($lastHalf)->getByIndex(0);
-
-                // if (is_null($firstWord->reading) && is_null($lastWord->reading)) {
-                //     $this->combineVowels = true;
-
-
-                // }
-            }
-
-            $results .= $this->conversions[$finalChar];
-        }
-
-        return $results;
+        return $this->converter->convert($string, $word);
     }
 }

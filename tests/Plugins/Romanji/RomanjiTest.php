@@ -31,6 +31,20 @@ class RomanjiTest extends TestCase
 
         $conversion = $results->plugin('Romanji');
 
-        $this->assertEquals('Konshuumatsu yama wo noborimasu！', $conversion);
+        $this->assertEquals('Konshūmatsu yama o noborimasu!', $conversion);
+    }
+
+    /**
+     * It converts multibyte characters to upercase.
+     * 
+     * @test
+     */
+    public function it_converts_multibyte_chars_to_uppercase()
+    {
+        $results = self::$limelight->parse('大阪');
+
+        $conversion = $results->plugin('Romanji');
+
+        $this->assertEquals('Ōsaka', $conversion);
     }
 }

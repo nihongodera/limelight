@@ -4,7 +4,6 @@ namespace Limelight\Plugins\Library\Romanji;
 
 use Limelight\Limelight;
 use Limelight\Plugins\Plugin;
-use Limelight\Plugins\Library\Romanji\Styles\Hepburn;
 
 class Romanji extends Plugin
 {
@@ -15,18 +14,14 @@ class Romanji extends Plugin
      */
     public function handle()
     {
-        $options = $this->config->get('Romanji');
-
-        $styleClass = 'Limelight\\Plugins\\Library\\Romanji\\Styles\\' . ucfirst($this->underscoreToCamelCase($options['style']));
-
-        $style = new $styleClass();
+        $decorator = $this->makeDecoratorClass();
 
         $romanjiString = '';
 
         foreach ($this->words as $word) {
             $hiraganaWord = mb_convert_kana($word->reading, 'c');
 
-            $romanjiWord = $style->convert($hiraganaWord, $word);
+            $romanjiWord = $decorator->convert($hiraganaWord, $word);
 
             $word->setPluginData('Romanji', $romanjiWord);
 
@@ -37,17 +32,41 @@ class Romanji extends Plugin
             $romanjiString .= $romanjiWord;
         }
 
-        return ucfirst(trim($romanjiString));
+        $romanjiString = trim($romanjiString);
+
+        return $this->uppercaseFirst($romanjiString);
+    }
+
+    /**
+     * Make decorator class from config value.
+     *
+     * @return Limelight\Plugins\Library\Romanji\StyleDecorator
+     */
+    private function makeDecoratorClass()
+    {
+        $options = $this->config->get('Romanji');
+
+        $style = $this->underscoreToCamelCase($options['style']);
+
+        $decoratorClass = 'Limelight\\Plugins\\Library\\Romanji\\Styles\\'.ucfirst($style);
+
+        if (class_exists($decoratorClass)) {
+            $converter = new RomanjiConverter();
+
+            return new $decoratorClass($converter);
+        }
+
+        throw new LimelightPluginErrorException("Style {$style} does not exist.  Check config.php file.");
     }
 
     /**
      * Make an underscored word camel-case.
      *
-     * @param   string  $string
+     * @param string $string
      *
-     * @return  string
+     * @return string
      */
-    function underscoreToCamelCase($string)
+    public function underscoreToCamelCase($string)
     {
         $string = strtolower($string);
 
@@ -66,5 +85,21 @@ class Romanji extends Plugin
         $string = str_replace('_', '', $string);
 
         return $string;
+    }
+
+    /**
+     * Multibyte safe ucfirst.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function uppercaseFirst($string)
+    {
+        $firstChar = mb_substr($string, 0, 1);
+
+        $rest = mb_substr($string, 1);
+
+        return mb_convert_case($firstChar, MB_CASE_UPPER, 'UTF-8').$rest;
     }
 }

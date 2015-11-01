@@ -8,6 +8,7 @@
   - Find dictionary entries (lemmas) for conjugated words
   - Get readings and pronunciations for words
   - Build fuirgana for words
+  - Convert Japanese to romanji (English lettering)
 
 ## Contents  
   - [Quick Guide](#quick-guide)
@@ -512,15 +513,24 @@ echo $results->plugin('Furigana'); // Output: <ruby>東京<rt>とうきょう</r
   
 ### Romanji
   
-The Romanji plugin converts words from Japanese to romanji (English letters).  Currently, only [traditional hepburn](https://en.wikipedia.org/wiki/Hepburn_romanization) romanization is available, but other options are coming soon.  
-
+The Romanji plugin converts words from Japanese to romanji (English letters).  A few different romanji systems are available and can be set in the config.php file in the 'style' key. 
+```php
+'Romanji' => [
+  'style' => 'hepburn_modified'
+]
+```
+  
+The plugin supports the following romanji systems:  
+  - [Traditional Hepburn](https://en.wikipedia.org/wiki/Hepburn_romanization): traditional_hepburn
+  - [Modified Hepburn](https://en.wikipedia.org/wiki/Hepburn_romanization): modified_hepburn
+  
 To get romanji for a string, parse it and access it on the LimelightResults object.
 ```php
 $limelight = new Limelight();
 
 $results = $limelight->parse('東京に行きます');
 
-echo $results->plugin('Romanji'); // Output: Toukyou ni ikimasu
+echo $results->plugin('Romanji'); // Output: Tōkyō ni ikimasu
 ```
 Strings on the LimelightResults object are space seperated.  
 
@@ -536,7 +546,7 @@ foreach ($results->getNext() as $word) {
 
 // Output
 //
-// Toukyouniikimasu
+// Tōkyōniikimasu
 ```
   
 Proper nouns are capitalized.  
