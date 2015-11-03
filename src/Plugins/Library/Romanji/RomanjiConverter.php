@@ -2,7 +2,7 @@
 
 namespace Limelight\Plugins\Library\Romanji;
 
-class RomanjiConverter implements RomanjiConverterInterface
+abstract class RomanjiConverter
 {
     /**
      * Number of index values to eat.
@@ -30,53 +30,14 @@ class RomanjiConverter implements RomanjiConverterInterface
     ];
 
     /**
-     * Romanji library.
+     * handle conversion request.
      *
-     * @var array
-     */
-    protected $conversions = [];
-
-    /**
-     * Conversions for 'n'.
+     * @param string        $string
+     * @param LimelightWord $word
      *
-     * @var array
+     * @return string
      */
-    protected $nConversions = [];
-
-    /**
-     * Conversions for particles.
-     *
-     * @var array
-     */
-    protected $particleConversions = [];
-
-    /**
-     * Conversions for small tsu.
-     *
-     * @var array
-     */
-    protected $tsuConversions = [];
-
-    /**
-     * Acceptable verb combinations.
-     *
-     * @var array
-     */
-    protected $verbCombos = [];
-
-    /**
-     * Set variables on object.
-     *
-     * @param array $conversions
-     */
-    public function setVariables(array $conversions, array $verbCombos, array $nConversions, array $particleConversions, array $tsuConversions)
-    {
-        $this->conversions = $conversions;
-        $this->verbCombos = $verbCombos;
-        $this->nConversions = $nConversions;
-        $this->particleConversions = $particleConversions;
-        $this->tsuConversions = $tsuConversions;
-    }
+    abstract protected function handle($string, $word);
 
     /**
      * Convert string to romanji.
@@ -86,7 +47,7 @@ class RomanjiConverter implements RomanjiConverterInterface
      *
      * @return string
      */
-    public function convert($string, $word)
+    protected function convert($string, $word)
     {
         $this->eat = 0;
 
@@ -150,7 +111,7 @@ class RomanjiConverter implements RomanjiConverterInterface
      *
      * @return string
      */
-    protected function findCombos($current, $next = null, $nextNext = null)
+    private function findCombos($current, $next = null, $nextNext = null)
     {
         if ($this->isEdible($next)) {
             $combo = $current.$next;
@@ -174,7 +135,7 @@ class RomanjiConverter implements RomanjiConverterInterface
      *
      * @return bool
      */
-    protected function isEdible($value)
+    private function isEdible($value)
     {
         return in_array($value, $this->edible);
     }
@@ -186,7 +147,7 @@ class RomanjiConverter implements RomanjiConverterInterface
      *
      * @return bool
      */
-    protected function canBeRomanji($value)
+    private function canBeRomanji($value)
     {
         return in_array($value, array_keys($this->conversions));
     }
@@ -323,7 +284,7 @@ class RomanjiConverter implements RomanjiConverterInterface
      *
      * @return string
      */
-    protected function upperCaseNames($romanji, $word)
+    private function upperCaseNames($romanji, $word)
     {
         if ($word->partOfSpeech === 'proper noun') {
             return mb_convert_case($romanji, MB_CASE_TITLE, 'UTF-8');

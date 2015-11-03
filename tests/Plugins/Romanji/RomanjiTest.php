@@ -22,7 +22,7 @@ class RomanjiTest extends TestCase
 
     /**
      * Strings stored on LimelightResults are space seperated.
-     * 
+     *
      * @test
      */
     public function it_stores_space_seperated_strings_on_object()
@@ -36,7 +36,7 @@ class RomanjiTest extends TestCase
 
     /**
      * It converts multibyte characters to upercase.
-     * 
+     *
      * @test
      */
     public function it_converts_multibyte_chars_to_uppercase()

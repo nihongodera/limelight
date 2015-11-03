@@ -2,7 +2,6 @@
 
 namespace Limelight;
 
-use Limelight\Config\Setup;
 use Limelight\Parse\Parser;
 use Limelight\Config\Config;
 use Limelight\Parse\Tokenizer;
@@ -11,7 +10,7 @@ use Limelight\Parse\TokenParser;
 class Limelight
 {
     /**
-     * @var implements Limelight\Mecab\Mecab
+     * @var Limelight\Mecab\Mecab
      */
     private $mecab;
 
@@ -20,10 +19,6 @@ class Limelight
      */
     public function __construct()
     {
-        $setup = new Setup();
-
-        $setup->boot();
-
         $config = Config::getInstance();
 
         $this->mecab = $config->make('Limelight\Mecab\Mecab');
@@ -93,5 +88,21 @@ class Limelight
     public function mecabSplit($string)
     {
         return $this->mecab->split($string);
+    }
+
+    /**
+     * Dynamically set config values.
+     *
+     * @param string $value
+     * @param string $key1
+     * @param string $key1
+     *
+     * @return bool
+     */
+    public function setConfig($value, $key1, $key2)
+    {
+        $config = Config::getInstance();
+
+        $config->set($value, $key1, $key2);
     }
 }

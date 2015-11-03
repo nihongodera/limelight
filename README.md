@@ -34,8 +34,6 @@ Install Limelight.
 composer require nihongodera/limelight
 ```
   
-Copy the **.env.example** file to **.env**. If your MeCab install requires a dictionary directory, set **DIC_DIRECTORY** to your MeCab dictionary directory path.  Otherwise, leave it as it is.
-  
 Make a Limelight instance.
 ```php
 $limelight = new Limelight();
@@ -89,7 +87,7 @@ Once installed and working, install Limelight through composer.
 composer require nihongodera/limelight
 ```
   
-After installation, copy the **.env.example** file to **.env**. If your MeCab install requires a dictionary directory, set **DIC_DIRECTORY** to your MeCab dictionary directory path.  Otherwise, leave it as it is. 
+If your install of MeCab requires a dictionary directory, set the dictionary directory path in config.php under options->PhpMecab->dictionary.
   
 ## Usage  
   - [Parsing Strings](#parsing-strings)
@@ -603,6 +601,10 @@ A plugin template with some example code can be found in Limelight/Plugins.
 [Top](#contents)
   
 ## Change Log  
+
+Nov. 2, 2015: Version 1.2.1
+  - Added Modified Hepburn Romanji
+  - Rewrote romanji plugin engine
   
 Nov. 1, 2015: Version 1.2.0
   - Added Romanji plugin

@@ -2,8 +2,6 @@
 
 namespace Limelight\Plugins;
 
-use Limelight\Config\Config;
-
 abstract class Plugin
 {
     /**
@@ -35,13 +33,6 @@ abstract class Plugin
     protected $words;
 
     /**
-     * Config access.
-     *
-     * @var Limelight\Config\Config
-     */
-    protected $config;
-
-    /**
      * Construct.
      *
      * @param string $text
@@ -55,7 +46,6 @@ abstract class Plugin
         $this->node = $node;
         $this->tokens = $tokens;
         $this->words = $words;
-        $this->config = Config::getInstance();
     }
 
     /**

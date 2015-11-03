@@ -7,11 +7,15 @@ use Limelight\Mecab\Mecab;
 class PhpMecab implements Mecab
 {
     /**
-     * @var implements Limelight\Mecab\Mecab
+     * MeCab.
+     * 
+     * @var Limelight\Mecab\Mecab
      */
     private $mecab;
 
     /**
+     * Options array pulled from config.php.
+     * 
      * @var array
      */
     private $options;
@@ -27,6 +31,8 @@ class PhpMecab implements Mecab
 
     /**
      * Construct.
+     *
+     * @param  array $options
      */
     public function __construct($options)
     {

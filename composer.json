@@ -29,6 +29,6 @@
         }
     },
     "require": {
-        "vlucas/phpdotenv": "~1.0"
+
     }
 }

@@ -58,7 +58,7 @@ return [
     */
     'options' => [
         'PhpMecab' => [
-            'dictionary' => getenv('DIC_DIRECTORY')
+            'dictionary' => ''
         ]
     ]
 ];

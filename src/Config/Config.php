@@ -8,6 +8,8 @@ use Limelight\Exceptions\LimelightInternalErrorException;
 class Config
 {
     /**
+     * config.php
+     * 
      * @var array
      */
     private $configFile;
@@ -92,6 +94,34 @@ class Config
         } catch (\Exception $e) {
             throw new LimelightInternalErrorException("Class {$fullClassName} could not be instantiated.");
         }
+    }
+
+    /**
+     * Reset config values to those defined in config file.
+     */
+    public function resetConfig()
+    {
+        $this->configFile = include dirname(__DIR__).'/config.php';
+    }
+
+    /**
+     * Dynamically set config values.
+     *
+     * @param string $value
+     * @param string $key1
+     * @param string $key1
+     *
+     * @return bool
+     */
+    public function set($value, $key1, $key2)
+    {
+        if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
+            $this->configFile[$key1][$key2] = $value;
+
+            return true;
+        }
+
+        throw new LimelightInvalidInputException('Key not found in config file.');
     }
 
     /**

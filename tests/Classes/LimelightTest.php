@@ -65,7 +65,15 @@ class LimelightTest extends TestCase
             'BOS/EOS,*,*,*,*,*,*,*,*',
         ];
 
-        $this->assertNodeResult($rawNodes, $expected);
+        $count = 0;
+
+        foreach ($rawNodes as $node) {
+            $expectedLine = $expected[$count];
+
+            $this->assertEquals($expectedLine, $node->feature);
+
+            $count += 1;
+        }
     }
 
     /**

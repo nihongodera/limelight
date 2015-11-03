@@ -2,7 +2,7 @@
 
 namespace Limelight\Plugins\Library\Romanji;
 
-use Limelight\Limelight;
+use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
 
 class Romanji extends Plugin
@@ -14,14 +14,14 @@ class Romanji extends Plugin
      */
     public function handle()
     {
-        $decorator = $this->makeDecoratorClass();
+        $style = $this->makeStyleClass();
 
         $romanjiString = '';
 
         foreach ($this->words as $word) {
             $hiraganaWord = mb_convert_kana($word->reading, 'c');
 
-            $romanjiWord = $decorator->convert($hiraganaWord, $word);
+            $romanjiWord = $style->handle($hiraganaWord, $word);
 
             $word->setPluginData('Romanji', $romanjiWord);
 
@@ -42,18 +42,18 @@ class Romanji extends Plugin
      *
      * @return Limelight\Plugins\Library\Romanji\StyleDecorator
      */
-    private function makeDecoratorClass()
+    private function makeStyleClass()
     {
-        $options = $this->config->get('Romanji');
+        $config = Config::getInstance();
+
+        $options = $config->get('Romanji');
 
         $style = $this->underscoreToCamelCase($options['style']);
 
-        $decoratorClass = 'Limelight\\Plugins\\Library\\Romanji\\Styles\\'.ucfirst($style);
+        $styleClass = 'Limelight\\Plugins\\Library\\Romanji\\Styles\\'.ucfirst($style);
 
-        if (class_exists($decoratorClass)) {
-            $converter = new RomanjiConverter();
-
-            return new $decoratorClass($converter);
+        if (class_exists($styleClass)) {
+            return new $styleClass();
         }
 
         throw new LimelightPluginErrorException("Style {$style} does not exist.  Check config.php file.");

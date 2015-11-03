@@ -7,7 +7,3 @@ use Limelight\Limelight;
 require __DIR__ . '/vendor/autoload.php';
 
 $limelight = new Limelight();
-
-$results = $limelight->parse('東京に行きます');
-
-var_dump($results);

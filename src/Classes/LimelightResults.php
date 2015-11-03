@@ -43,11 +43,11 @@ class LimelightResults
     /**
      * Call generator if invoked as function.
      *
-     * @return generator
+     * @return function
      */
     public function __invoke()
     {
-        return $this->next();
+        return $this->getNext();
     }
 
     /**
@@ -94,8 +94,8 @@ class LimelightResults
 
     /**
      * Get all lemmas combined as a string.
-     * 
-     * @return [type] [description]
+     *
+     * @return string
      */
     public function getLemmaString()
     {
@@ -133,7 +133,7 @@ class LimelightResults
     }
 
     /**
-     * Get single word by word.
+     * Get single word, by word.
      *
      * @param string $string
      *
@@ -153,7 +153,7 @@ class LimelightResults
     /**
      * Get single word by index.
      *
-     * @param int $position
+     * @param int $index
      *
      * @return Limelight\Classes\LimelightWord
      */

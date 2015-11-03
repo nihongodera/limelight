@@ -4,9 +4,9 @@ namespace Limelight\Tests\Classes;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
-use Limelight\Plugins\Library\Romanji\Styles\HepburnTraditional;
+use Limelight\Plugins\Library\Romanji\Styles\NihonShiki;
 
-class HepburnTraditionalTest extends TestCase
+class NihonShikiTest extends TestCase
 {
     /**
      * @var Limelight\Limelight
@@ -14,18 +14,18 @@ class HepburnTraditionalTest extends TestCase
     private static $limelight;
 
     /**
-     * @var Limelight\Plugins\Library\Romanji\Styles\HepburnTraditional
+     * @var Limelight\Plugins\Library\Romanji\Styles\NihonShiki
      */
-    protected static $hepburn;
+    protected static $nihon;
 
     /**
-     * Set static Limelight and Hepburn on object.
+     * Set static hepburn on object.
      */
     public static function setUpBeforeClass()
     {
         self::$limelight = new Limelight();
 
-        self::$hepburn = new HepburnTraditional();
+        self::$nihon = new NihonShiki();
     }
 
     /**
@@ -37,7 +37,7 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('行きます');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
         $this->assertEquals('ikimasu', $conversion);
     }
@@ -51,7 +51,7 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('参加');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
         $this->assertEquals('sanka', $conversion);
     }
@@ -65,7 +65,7 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('お兄さん');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
         $this->assertEquals('oniisan', $conversion);
     }
@@ -79,9 +79,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('初夏');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('shoka', $conversion);
+        $this->assertEquals('syoka', $conversion);
     }
 
     /**
@@ -93,9 +93,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('証券');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('shōken', $conversion);
+        $this->assertEquals('syôken', $conversion);
     }
 
     /**
@@ -107,9 +107,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('今日');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('kyō', $conversion);
+        $this->assertEquals('kyô', $conversion);
     }
 
     /**
@@ -121,9 +121,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('福岡に住んでいます。');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('Fukuokanisundeimasu.', $conversion);
+        $this->assertEquals('Hukuokanisundeimasu.', $conversion);
     }
 
     /**
@@ -135,7 +135,7 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('結果');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
         $this->assertEquals('kekka', $conversion);
     }
@@ -149,9 +149,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('抹茶');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('matcha', $conversion);
+        $this->assertEquals('mattya', $conversion);
     }
 
     /**
@@ -163,9 +163,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('群馬');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('Gumma', $conversion);
+        $this->assertEquals('Gunma', $conversion);
     }
 
     /**
@@ -177,9 +177,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('簡易');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('kan-i', $conversion);
+        $this->assertEquals('kan\'i', $conversion);
     }
 
     /**
@@ -191,9 +191,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('お婆さん');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('obaasan', $conversion);
+        $this->assertEquals('obâsan', $conversion);
     }
 
     /**
@@ -205,9 +205,9 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('は');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('wa', $conversion);
+        $this->assertEquals('ha', $conversion);
     }
 
     /**
@@ -219,8 +219,8 @@ class HepburnTraditionalTest extends TestCase
     {
         $results = self::$limelight->parse('へ');
 
-        $conversion = $this->getRomanjiConversion(self::$hepburn, $results);
+        $conversion = $this->getRomanjiConversion(self::$nihon, $results);
 
-        $this->assertEquals('e', $conversion);
+        $this->assertEquals('he', $conversion);
     }
 }

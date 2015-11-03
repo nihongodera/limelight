@@ -102,10 +102,10 @@ class LimelightWord
 
     /**
      * Call methods for plugin items.
-     * 
-     * @param  string $name
-     * @param  array $arguments
-     * 
+     *
+     * @param string $name
+     * @param array  $arguments
+     *
      * @return $this
      */
     public function __call($name, $arguments)
@@ -265,13 +265,6 @@ class LimelightWord
         if (gettype($this->returnItem) === 'string') {
             $this->returnItem = mb_convert_kana($this->returnItem, 'C');
         }
-
-        return $this;
-    }
-
-    public function toRomanji()
-    {
-
 
         return $this;
     }

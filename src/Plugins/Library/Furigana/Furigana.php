@@ -2,6 +2,7 @@
 
 namespace Limelight\Plugins\Library\Furigana;
 
+use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
 
 class Furigana extends Plugin
@@ -335,7 +336,9 @@ class Furigana extends Plugin
      */
     private function setTags()
     {
-        $tags = $this->config->get('Furigana');
+        $config = Config::getInstance();
+
+        $tags = $config->get('Furigana');
 
         foreach ($tags as $name => $tag) {
             $openClose = explode('{{}}', $tag);

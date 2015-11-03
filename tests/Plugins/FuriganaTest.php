@@ -29,7 +29,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Kanji from single kanji word makes it to output.
-     * 
+     *
      * @test
      */
     public function it_adds_kanji_to_string_for_single_kanji_word()
@@ -47,7 +47,7 @@ class FuriganaTest extends TestCase
 
     /**
      * It does nothing to katakana words.
-     * 
+     *
      * @test
      */
     public function it_passes_katakana_words_untouched()
@@ -65,7 +65,7 @@ class FuriganaTest extends TestCase
 
     /**
      * It does nothing to hiragana words.
-     * 
+     *
      * @test
      */
     public function it_passes_hiragana_words_untouched()
@@ -83,7 +83,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Kanji from double kanji word makes it to output.
-     * 
+     *
      * @test
      */
     public function it_adds_kanji_to_string_for_double_kanji_word()
@@ -101,7 +101,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Kana from kana word makes it to output.
-     * 
+     *
      * @test
      */
     public function it_adds_kana_to_string_for_kana_only_word()
@@ -119,7 +119,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a kanji-kana.
-     * 
+     *
      * @test
      */
     public function it_makes_furigana_for_kanji_kana_word()
@@ -137,7 +137,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a kanji-kana-kanji word.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_kanji_kana_kanji_word()
@@ -155,7 +155,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a kanji-kanji word.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_kanji_kanji_word()
@@ -173,7 +173,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a kana-kanji word.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_kana_kanji_word()
@@ -191,12 +191,12 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a kanji-punc word.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_kanji_punc_word()
     {
-       $results = self::$limelight->parse('元気？');
+        $results = self::$limelight->parse('元気？');
 
         $furigana = '';
 
@@ -209,7 +209,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns proper furigana when multiple instances of same hiragana appear.
-     * 
+     *
      * @test
      */
     public function it_makes_furigana_for_word_when_same_hiragana_appears_1()
@@ -227,7 +227,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns proper furigana when multiple instances of same hiragana appear.
-     * 
+     *
      * @test
      */
     public function it_makes_furigana_for_word_when_same_hiragana_appears_2()
@@ -245,7 +245,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns proper furigana when multiple instances of same hiragana appear.
-     * 
+     *
      * @test
      */
     public function it_makes_furigana_for_word_when_same_hiragana_appears_3()
@@ -263,7 +263,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a complex phrase.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_complex_phrase()
@@ -281,7 +281,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Number kanji combos are ok.
-     * 
+     *
      * @test
      */
     public function it_makes_furigana_for_number_kanji_combos()
@@ -299,7 +299,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Returns a string with furigana for a complete article.
-     *  
+     *
      * @test
      */
     public function it_makes_furigana_for_complete_article()
@@ -319,7 +319,7 @@ class FuriganaTest extends TestCase
 
     /**
      * Can get furigana off LimelightResults object.
-     * 
+     *
      * @test
      */
     public function it_can_get_furigana_off_results_object()

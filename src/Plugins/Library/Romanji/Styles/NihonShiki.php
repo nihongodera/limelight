@@ -4,7 +4,7 @@ namespace Limelight\Plugins\Library\Romanji\Styles;
 
 use Limelight\Plugins\Library\Romanji\RomanjiConverter;
 
-class HepburnTraditional extends RomanjiConverter
+class NihonShiki extends RomanjiConverter
 {
     /**
      * Romanji library.
@@ -19,15 +19,12 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $nConversions = [
-        'b' => 'm',
-        'm' => 'm',
-        'p' => 'm',
-        'a' => 'n-',
-        'i' => 'n-',
-        'u' => 'n-',
-        'e' => 'n-',
-        'o' => 'n-',
-        'y' => 'n-',
+        'a' => 'n\'',
+        'i' => 'n\'',
+        'u' => 'n\'',
+        'e' => 'n\'',
+        'o' => 'n\'',
+        'y' => 'n\'',
     ];
 
     /**
@@ -36,8 +33,7 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $particleConversions = [
-        'ha' => 'wa',
-        'he' => 'e',
+
     ];
 
     /**
@@ -46,7 +42,7 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $tsuConversions = [
-        'c' => 't',
+
     ];
 
     /**
@@ -55,8 +51,10 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $verbCombos = [
-        'u' => 'ū',
-        'o' => 'ō',
+        'a' => 'â',
+        'u' => 'û',
+        'e' => 'ê',
+        'o' => 'ô',
     ];
 
     /**
@@ -64,7 +62,7 @@ class HepburnTraditional extends RomanjiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/NihonShiki.php';
     }
 
     /**

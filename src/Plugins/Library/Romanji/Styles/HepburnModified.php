@@ -2,10 +2,9 @@
 
 namespace Limelight\Plugins\Library\Romanji\Styles;
 
-use Limelight\Plugins\Library\Romanji\StyleDecorator;
-use Limelight\Plugins\Library\Romanji\RomanjiConverterInterface;
+use Limelight\Plugins\Library\Romanji\RomanjiConverter;
 
-class HepburnModified extends StyleDecorator
+class HepburnModified extends RomanjiConverter
 {
     /**
      * Romanji library.
@@ -63,31 +62,21 @@ class HepburnModified extends StyleDecorator
     /**
      * Construct.
      */
-    public function __construct(RomanjiConverterInterface $converter)
+    public function __construct()
     {
         $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
-
-        parent::__construct($converter);
     }
 
     /**
-     * Convert string to romanji.
+     * handle conversion request.
      *
      * @param string        $string
      * @param LimelightWord $word
      *
      * @return string
      */
-    public function convert($string, $word)
+    public function handle($string, $word)
     {
-        $this->converter->setVariables(
-            $this->conversions,
-            $this->verbCombos,
-            $this->nConversions,
-            $this->particleConversions,
-            $this->tsuConversions
-        );
-
-        return $this->converter->convert($string, $word);
+        return $this->convert($string, $word);
     }
 }

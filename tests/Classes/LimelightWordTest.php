@@ -1,10 +1,9 @@
 <?php
 
-namespace Limelight\Tests\Classes;
+namespace Limelight\tests\Classes;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
-use Limelight\Classes\LimelightWord;
 
 class LimelightWordTest extends TestCase
 {
@@ -29,8 +28,40 @@ class LimelightWordTest extends TestCase
     }
 
     /**
+     * It can get properties by property name.
+     *
+     * @test
+     */
+    public function it_can_get_property_by_property_name()
+    {
+        $word = self::$results->getByIndex(0)->word;
+
+        $this->assertEquals('東京', $word);
+    }
+
+    /**
+     * It prints info when printed or echoed.
+     *
+     * @test
+     */
+    public function it_can_prints_info_when_printed()
+    {
+        $results = self::$results;
+
+        ob_start();
+
+        echo $results;
+
+        $output = ob_get_contents();
+
+        ob_end_clean();
+
+        $this->assertContains('東京', $output);
+    }
+
+    /**
      * It can get raw mecab data off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_raw_mecab_data()
@@ -42,7 +73,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get word off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_word()
@@ -54,7 +85,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get lemma off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_lemma()
@@ -66,7 +97,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get reading off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_reading()
@@ -78,7 +109,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get pronunciation off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_pronunciation()
@@ -90,7 +121,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get partOfSpeech off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_partOfSpeech()
@@ -102,7 +133,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get grammar off object.
-     * 
+     *
      * @test
      */
     public function it_can_get_grammar()
@@ -113,8 +144,32 @@ class LimelightWordTest extends TestCase
     }
 
     /**
+     * Plugin data can be called by property name.
+     *
+     * @test
+     */
+    public function it_can_get_plugin_data_by_property_call()
+    {
+        $romanji = self::$results->getByIndex(0)->romanji;
+
+        $this->assertEquals('Tōkyō', $romanji);
+    }
+
+    /**
+     * Plugin data can be called by method.
+     *
+     * @test
+     */
+    public function it_can_get_plugin_data_by_method_call()
+    {
+        $romanji = self::$results->getByIndex(0)->romanji()->get();
+
+        $this->assertEquals('Tōkyō', $romanji);
+    }
+
+    /**
      * It can get convert to hiragana.
-     * 
+     *
      * @test
      */
     public function it_can_convert_to_hiragana()
@@ -126,7 +181,7 @@ class LimelightWordTest extends TestCase
 
     /**
      * It can get convert to katakana.
-     * 
+     *
      * @test
      */
     public function it_can_convert_to_katakana()
@@ -141,26 +196,62 @@ class LimelightWordTest extends TestCase
     }
 
     /**
-     * Plugin data can be called by property name.
-     * 
+     * It can append to a property.
+     *
      * @test
      */
-    public function it_can_get_plugin_data_by_property_call()
+    public function it_can_append_to_property()
     {
-        $romanji = self::$results->getByIndex(0)->romanji;
+        $wordObject = self::$results->getByIndex(0);
 
-        $this->assertEquals('Tōkyō', $romanji);
+        $word = $wordObject->word;
+
+        $this->assertEquals('東京', $word);
+
+        $wordObject->appendTo('word', '市');
+
+        $word = $wordObject->word;
+
+        $this->assertEquals('東京市', $word);
     }
 
     /**
-     * Plugin data can be called by method.
-     * 
+     * It can set partOfSpeech.
+     *
      * @test
      */
-    public function it_can_get_plugin_data_by_method_call()
+    public function it_can_set_partOfSpeech()
     {
-        $romanji = self::$results->getByIndex(0)->romanji()->get();
+        $wordObject = self::$results->getByIndex(0);
+
+        $partOfSpeech = $wordObject->partOfSpeech;
+
+        $this->assertEquals('proper noun', $partOfSpeech);
+
+        $wordObject->setPartOfSpeech('test');
+
+        $partOfSpeech = $wordObject->partOfSpeech;
+
+        $this->assertEquals('test', $partOfSpeech);
+    }
+
+    /**
+     * It can set plugin data.
+     *
+     * @test
+     */
+    public function it_can_set_plugin_data()
+    {
+        $wordObject = self::$results->getByIndex(0);
+
+        $romanji = $wordObject->romanji;
 
         $this->assertEquals('Tōkyō', $romanji);
+
+        $wordObject->setPluginData('Romanji', 'test');
+
+        $romanji = $wordObject->romanji;
+
+        $this->assertEquals('test', $romanji);
     }
 }
