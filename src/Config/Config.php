@@ -2,14 +2,14 @@
 
 namespace Limelight\Config;
 
-use Limelight\Exceptions\LimelightInvalidInputException;
-use Limelight\Exceptions\LimelightInternalErrorException;
+use Limelight\Exceptions\InvalidInputException;
+use Limelight\Exceptions\InternalErrorException;
 
 class Config
 {
     /**
-     * config.php
-     * 
+     * config.php.
+     *
      * @var array
      */
     private $configFile;
@@ -34,7 +34,7 @@ class Config
      *
      * @param string $string [config.php key]
      *
-     * @return mixed
+     * @return mixed/InvalidInputException
      */
     public function get($string)
     {
@@ -42,7 +42,7 @@ class Config
             return $this->configFile[$string];
         }
 
-        throw new LimelightInvalidInputException("Index {$string} does not exist in config.php.");
+        throw new InvalidInputException("Index {$string} does not exist in config.php.");
     }
 
     /**
@@ -75,7 +75,7 @@ class Config
      *
      * @param string $interface [full interface namespace]
      *
-     * @return class instance
+     * @return class_instance/InternalErrorException
      */
     public function make($interface)
     {
@@ -87,12 +87,18 @@ class Config
 
         $classOptions = $this->getClassOptions($fullClassName);
 
+        set_error_handler(function () {
+            throw new \Exception();
+        });
+
         try {
             $instance = new $fullClassName($classOptions);
 
+            restore_error_handler();
+
             return $instance;
         } catch (\Exception $e) {
-            throw new LimelightInternalErrorException("Class {$fullClassName} could not be instantiated.");
+            throw new InternalErrorException("Class {$fullClassName} could not be instantiated.");
         }
     }
 
@@ -111,7 +117,7 @@ class Config
      * @param string $key1
      * @param string $key1
      *
-     * @return bool
+     * @return bool/InvalidInputException
      */
     public function set($value, $key1, $key2)
     {
@@ -121,7 +127,14 @@ class Config
             return true;
         }
 
-        throw new LimelightInvalidInputException('Key not found in config file.');
+        throw new InvalidInputException('Key not found in config file.');
+    }
+
+    public function erase($key1, $key2)
+    {
+        if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
+            unset($this->configFile[$key1][$key2]);
+        }
     }
 
     /**
@@ -130,14 +143,14 @@ class Config
      * @param array  $bindings
      * @param string $interface
      *
-     * @return string
+     * @return string/InternalErrorException
      */
     private function getFullClassName(array $bindings, $interface)
     {
         if (isset($bindings[$interface])) {
             return $bindings[$interface];
         } else {
-            throw new LimelightInternalErrorException("Cannot resolve interface {$interface}. Check config.php file bindings.");
+            throw new InternalErrorException("Cannot resolve interface {$interface}. Check config.php file bindings.");
         }
     }
 
@@ -146,15 +159,17 @@ class Config
      *
      * @param string $fullClassName
      * @param string $interface
+     *
+     * @return  null/InternalErrorException 
      */
     private function validateClass($fullClassName, $interface)
     {
         if (!class_exists($fullClassName)) {
-            throw new LimelightInternalErrorException("Class {$fullClassName} defined in config.php does not exist.");
+            throw new InternalErrorException("Class {$fullClassName} defined in config.php does not exist.");
         }
 
         if (!in_array($interface, class_implements($fullClassName))) {
-            throw new LimelightInternalErrorException("Class {$fullClassName} does not implement interface {$interface}.");
+            throw new InternalErrorException("Class {$fullClassName} does not implement interface {$interface}.");
         }
     }
 

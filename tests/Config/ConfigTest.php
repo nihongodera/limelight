@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\tests\Classes;
+namespace Limelight\Tests\Config;
 
 use Limelight\Limelight;
 use Limelight\Config\Config;
@@ -49,7 +49,7 @@ class ConfigTest extends TestCase
      * Invalid config value throws error.
      *
      * @test
-     * @expectedException Limelight\Exceptions\LimelightInvalidInputException
+     * @expectedException Limelight\Exceptions\InvalidInputException
      * @expectedExceptionMessage Index pluins does not exist in config.php.
      */
     public function it_throws_exception_for_getting_invalid_config_value()
@@ -103,7 +103,7 @@ class ConfigTest extends TestCase
      * It throws exception when it cant make mecab.
      *
      * @test
-     * @expectedException Limelight\Exceptions\LimelightInternalErrorException
+     * @expectedException Limelight\Exceptions\InternalErrorException
      * @expectedExceptionMessage Class kljsdf defined in config.php does not exist.
      */
     public function it_throws_exception_when_it_cant_make_mecab()
@@ -165,7 +165,7 @@ class ConfigTest extends TestCase
      * Invalid set key throws error.
      *
      * @test
-     * @expectedException Limelight\Exceptions\LimelightInvalidInputException
+     * @expectedException Limelight\Exceptions\InvalidInputException
      * @expectedExceptionMessage Key not found in config file.
      */
     public function it_throws_exception_for_setting_invalid_config_value()

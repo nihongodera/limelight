@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -29,7 +29,7 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('です');
 
-        $this->assertEquals('postposition', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('postposition', $results->findIndex(0)->partOfSpeech());
     }
 
     /**
@@ -41,13 +41,13 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('大好きです');
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(2, $words);
 
-        $this->assertEquals('大好きです', $results->getResultString());
+        $this->assertEquals('大好きです', $results->words());
 
-        $this->assertEquals('です', $words[1]->word()->get());
+        $this->assertEquals('です', $words[1]->word());
     }
 
     /**
@@ -59,11 +59,11 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('したくない');
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('したくない', $results->getResultString());
+        $this->assertEquals('したくない', $results->words());
     }
 
     /**
@@ -75,11 +75,11 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('見えません');
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('見えません', $results->getResultString());
+        $this->assertEquals('見えません', $results->words());
     }
 
     /**
@@ -91,11 +91,11 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('作ろう');
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('作ろう', $results->getResultString());
+        $this->assertEquals('作ろう', $results->words());
     }
 
     /**
@@ -107,7 +107,7 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('楽しいだ');
 
-        $this->assertEquals('verb', $results->getByIndex(1)->partOfSpeech()->get());
+        $this->assertEquals('verb', $results->findIndex(1)->partOfSpeech());
     }
 
     /**
@@ -119,6 +119,6 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('美味しいです');
 
-        $this->assertEquals('verb', $results->getByIndex(1)->partOfSpeech()->get());
+        $this->assertEquals('verb', $results->findIndex(1)->partOfSpeech());
     }
 }

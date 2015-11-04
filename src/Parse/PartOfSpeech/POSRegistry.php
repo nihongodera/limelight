@@ -2,11 +2,13 @@
 
 namespace Limelight\Parse\PartOfSpeech;
 
-use Limelight\Exceptions\LimelightInternalErrorException;
+use Limelight\Exceptions\InternalErrorException;
 
 class POSRegistry
 {
     /**
+     * Instance of self.
+     *
      * @var self
      */
     private static $instance;
@@ -44,7 +46,7 @@ class POSRegistry
      *
      * @param string $className
      *
-     * @return class_instance
+     * @return PartOfSpeech
      */
     public function getClass($className)
     {
@@ -52,11 +54,11 @@ class POSRegistry
 
         if (isset($this->classes[$fullName])) {
             return $this->classes[$fullName];
-        } elseif (class_exists($fullName)) {
+        } elseif ($this->validateClass($fullName)) {
             return $this->setClass($fullName);
         }
 
-        throw new LimelightInternalErrorException("Class {$fullName} does not exist.");
+        throw new InternalErrorException("Class {$fullName} could not be instantiated.");
     }
 
     /**
@@ -64,14 +66,32 @@ class POSRegistry
      *
      * @param string $fullName
      *
-     * @return class_instance
+     * @return PartOfSpeech
      */
     public function setClass($fullName)
     {
+        $this->validateClass($fullName);
+
         $newClass = new $fullName();
 
         $this->classes[$fullName] = $newClass;
 
         return $newClass;
+    }
+
+    /**
+     * Validate class.
+     * 
+     * @param  string $class
+     * 
+     * @return bool/InternalErrorException
+     */
+    private function validateClass($class)
+    {
+        if (!class_exists($class)) {
+            throw new InternalErrorException("Class {$class} does not exist.");
+        }
+
+        return true;
     }
 }

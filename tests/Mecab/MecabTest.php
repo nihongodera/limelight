@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\Classes;
+namespace Limelight\Tests\Mecab;
 
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;

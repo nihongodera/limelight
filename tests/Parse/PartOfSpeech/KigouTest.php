@@ -1,11 +1,11 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
-class KeiyoushiTest extends TestCase
+class KigouTest extends TestCase
 {
     /**
      * @var Limelight\Limelight
@@ -21,14 +21,14 @@ class KeiyoushiTest extends TestCase
     }
 
     /**
-     * Class changes the part of speech to 'adjective'.
+     * Class changes the part of speech to 'symbol'.
      * 
      * @test
      */
-    public function it_changes_partOfSpeech_to_adjective()
+    public function it_changes_partOfSpeech_to_symbol()
     {
-        $results = self::$limelight->parse('熱い');
+        $results = self::$limelight->parse('。');
 
-        $this->assertEquals('adjective', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('symbol', $results->findIndex(0)->partOfSpeech());
     }
 }

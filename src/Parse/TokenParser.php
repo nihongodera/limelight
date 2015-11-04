@@ -2,6 +2,8 @@
 
 namespace Limelight\Parse;
 
+use Limelight\Limelight;
+use Limelight\Helpers\Converter;
 use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
@@ -34,6 +36,10 @@ class TokenParser
      */
     public function parseTokens($tokens)
     {
+        $limelight = new Limelight();
+
+        $converter = new Converter($limelight);
+
         $registry = POSRegistry::getInstance();
 
         $length = count($tokens);
@@ -56,7 +62,7 @@ class TokenParser
             if ($properties['attachToPrevious'] && count($this->words) > 0) {
                 $this->appendWordToLast($current, $properties, $previousWord);
             } else {
-                $this->makeNewWord($current, $properties);
+                $this->makeNewWord($current, $properties, $converter);
             }
 
             if ($properties['eatNext']) {
@@ -122,10 +128,11 @@ class TokenParser
      *
      * @param array $current
      * @param array $properties
+     * @param  Converter $converter
      */
-    private function makeNewWord($current, $properties)
+    private function makeNewWord($current, $properties, Converter $converter)
     {
-        $word = new LimelightWord($current, $properties);
+        $word = new LimelightWord($current, $properties, $converter);
 
         $this->words[] = $word;
     }

@@ -10,6 +10,8 @@ use Limelight\Parse\TokenParser;
 class Limelight
 {
     /**
+     * Mecab instance.
+     *
      * @var Limelight\Mecab\Mecab
      */
     private $mecab;
@@ -28,6 +30,7 @@ class Limelight
      * Parse the given text.
      *
      * @param string $text
+     * @param bool   $runPlugins [When false, plugins do not run]
      *
      * @return Limelight\Classes\LimelightResults
      */

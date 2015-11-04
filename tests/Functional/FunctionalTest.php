@@ -36,27 +36,27 @@ class FunctionalTest extends TestCase
     {
         $results = self::$limelight->parse('音楽を聴きます。');
 
-        $this->assertEquals('音楽を聴きます。', $results->getResultString());
+        $this->assertEquals('音楽を聴きます。', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(4, $words);
 
-        $this->assertEquals('音楽', $words[0]->word()->get());
+        $this->assertEquals('音楽', $words[0]->word());
 
-        $this->assertEquals('noun', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('noun', $words[0]->partOfSpeech());
 
-        $this->assertEquals('を', $words[1]->word()->get());
+        $this->assertEquals('を', $words[1]->word());
 
-        $this->assertEquals('postposition', $words[1]->partOfSpeech()->get());
+        $this->assertEquals('postposition', $words[1]->partOfSpeech());
 
-        $this->assertEquals('聴きます', $words[2]->word()->get());
+        $this->assertEquals('聴きます', $words[2]->word());
 
-        $this->assertEquals('verb', $words[2]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[2]->partOfSpeech());
 
-        $this->assertEquals('。', $words[3]->word()->get());
+        $this->assertEquals('。', $words[3]->word());
 
-        $this->assertEquals('symbol', $words[3]->partOfSpeech()->get());
+        $this->assertEquals('symbol', $words[3]->partOfSpeech());
     }
 
     /**
@@ -68,43 +68,43 @@ class FunctionalTest extends TestCase
     {
         $results = self::$limelight->parse('東京に行って、パスタを食べてしまった。');
 
-        $this->assertEquals('東京に行って、パスタを食べてしまった。', $results->getResultString());
+        $this->assertEquals('東京に行って、パスタを食べてしまった。', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(8, $words);
 
-        $this->assertEquals('東京', $words[0]->word()->get());
+        $this->assertEquals('東京', $words[0]->word());
 
-        $this->assertEquals('proper noun', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('proper noun', $words[0]->partOfSpeech());
 
-        $this->assertEquals('に', $words[1]->word()->get());
+        $this->assertEquals('に', $words[1]->word());
 
-        $this->assertEquals('postposition', $words[1]->partOfSpeech()->get());
+        $this->assertEquals('postposition', $words[1]->partOfSpeech());
 
-        $this->assertEquals('行って', $words[2]->word()->get());
+        $this->assertEquals('行って', $words[2]->word());
 
-        $this->assertEquals('verb', $words[2]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[2]->partOfSpeech());
 
-        $this->assertEquals('、', $words[3]->word()->get());
+        $this->assertEquals('、', $words[3]->word());
 
-        $this->assertEquals('symbol', $words[3]->partOfSpeech()->get());
+        $this->assertEquals('symbol', $words[3]->partOfSpeech());
 
-        $this->assertEquals('パスタ', $words[4]->word()->get());
+        $this->assertEquals('パスタ', $words[4]->word());
 
-        $this->assertEquals('noun', $words[4]->partOfSpeech()->get());
+        $this->assertEquals('noun', $words[4]->partOfSpeech());
 
-        $this->assertEquals('を', $words[5]->word()->get());
+        $this->assertEquals('を', $words[5]->word());
 
-        $this->assertEquals('postposition', $words[5]->partOfSpeech()->get());
+        $this->assertEquals('postposition', $words[5]->partOfSpeech());
 
-        $this->assertEquals('食べてしまった', $words[6]->word()->get());
+        $this->assertEquals('食べてしまった', $words[6]->word());
 
-        $this->assertEquals('verb', $words[6]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[6]->partOfSpeech());
 
-        $this->assertEquals('。', $words[7]->word()->get());
+        $this->assertEquals('。', $words[7]->word());
 
-        $this->assertEquals('symbol', $words[7]->partOfSpeech()->get());
+        $this->assertEquals('symbol', $words[7]->partOfSpeech());
     }
 
     /**
@@ -116,9 +116,9 @@ class FunctionalTest extends TestCase
     {
         $results = self::$limelight->parse('私はすき焼きが大好きです。だから、いつも食べています。');
 
-        $this->assertEquals('私はすき焼きが大好きです。だから、いつも食べています。', $results->getResultString());
+        $this->assertEquals('私はすき焼きが大好きです。だから、いつも食べています。', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(12, $words);
     }
@@ -132,9 +132,9 @@ class FunctionalTest extends TestCase
     {
         $results = self::$limelight->parse('フキイldksf塩jkdfllsdf帰依kdサブ');
 
-        $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->getResultString());
+        $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
     }
 
     /**
@@ -146,9 +146,9 @@ class FunctionalTest extends TestCase
     {
          $results = self::$limelight->parse(self::$lib['textOne']);
 
-         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->getResultString());
+         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->words());
 
-         $words = $results->getAll();
+         $words = $results->all();
 
          $this->assertCount(445, $words);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -29,7 +29,7 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('テレビ');
 
-        $this->assertEquals('noun', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('noun', $results->findIndex(0)->partOfSpeech());
     }
 
     /**
@@ -41,15 +41,15 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('東京');
 
-        $this->assertEquals('東京', $results->getResultString());
+        $this->assertEquals('東京', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('東京', $words[0]->word()->get());
+        $this->assertEquals('東京', $words[0]->word());
 
-        $this->assertEquals('proper noun', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('proper noun', $words[0]->partOfSpeech());
     }
 
     /**
@@ -61,15 +61,15 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('私');
 
-        $this->assertEquals('私', $results->getResultString());
+        $this->assertEquals('私', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('私', $words[0]->word()->get());
+        $this->assertEquals('私', $words[0]->word());
 
-        $this->assertEquals('pronoun', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('pronoun', $words[0]->partOfSpeech());
     }
 
     /**
@@ -81,13 +81,13 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('全うするために');
 
-        $this->assertEquals('全うするために', $results->getResultString());
+        $this->assertEquals('全うするために', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
-        $this->assertEquals('全うする', $words[0]->word()->get());
+        $this->assertEquals('全うする', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -99,13 +99,13 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('大好きです');
 
-        $this->assertEquals('大好きです', $results->getResultString());
+        $this->assertEquals('大好きです', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
-        $this->assertEquals('大好き', $words[0]->word()->get());
+        $this->assertEquals('大好き', $words[0]->word());
 
-        $this->assertEquals('adjective', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('adjective', $words[0]->partOfSpeech());
     }
 
     /**
@@ -117,15 +117,15 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('食べるために');
 
-        $this->assertEquals('食べるために', $results->getResultString());
+        $this->assertEquals('食べるために', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(2, $words);
 
-        $this->assertEquals('ために', $words[1]->word()->get());
+        $this->assertEquals('ために', $words[1]->word());
 
-        $this->assertEquals('adverb', $words[1]->partOfSpeech()->get());
+        $this->assertEquals('adverb', $words[1]->partOfSpeech());
     }
 
     /**
@@ -137,15 +137,15 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('一');
 
-        $this->assertEquals('一', $results->getResultString());
+        $this->assertEquals('一', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('一', $words[0]->word()->get());
+        $this->assertEquals('一', $words[0]->word());
 
-        $this->assertEquals('number', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('number', $words[0]->partOfSpeech());
     }
 
     /**
@@ -157,12 +157,12 @@ class MeishiTest extends TestCase
     {
         $results = self::$limelight->parse('5');
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('5', $words[0]->word()->get());
+        $this->assertEquals('5', $words[0]->word());
 
-        $this->assertEquals('number', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('number', $words[0]->partOfSpeech());
     }
 }

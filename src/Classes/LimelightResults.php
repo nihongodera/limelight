@@ -2,10 +2,13 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Exceptions\LimelightInvalidInputException;
+use Limelight\Helpers\ResultsHelpers;
+use Limelight\Exceptions\InvalidInputException;
 
 class LimelightResults
 {
+    use ResultsHelpers;
+
     /**
      * The original input.
      *
@@ -28,10 +31,18 @@ class LimelightResults
     private $pluginData = [];
 
     /**
+     * Flag for calling Converter on LimelightWord.
+     *
+     * @var null/string
+     */
+    private $conversionFlag = null;
+
+    /**
      * Construct.
      *
-     * @param string $text
-     * @param array  $words
+     * @param string     $text
+     * @param array      $words
+     * @param array/null $pluginData
      */
     public function __construct($text, array $words, $pluginData)
     {
@@ -47,7 +58,7 @@ class LimelightResults
      */
     public function __invoke()
     {
-        return $this->getNext();
+        return $this->next();
     }
 
     /**
@@ -67,11 +78,21 @@ class LimelightResults
     }
 
     /**
+     * Get all words.
+     *
+     * @return $this
+     */
+    public function all()
+    {
+        return $this->words;
+    }
+
+    /**
      * Get the original, user inputed text.
      *
      * @return string
      */
-    public function getOriginal()
+    public function original()
     {
         return $this->text;
     }
@@ -81,15 +102,9 @@ class LimelightResults
      *
      * @return string
      */
-    public function getResultString()
+    public function words($spaces = false, $divider = ' ')
     {
-        $string = '';
-
-        foreach ($this->words as $word) {
-            $string .= $word->word()->get();
-        }
-
-        return $string;
+        return $this->makePropertyString('word', $spaces, $divider);
     }
 
     /**
@@ -97,25 +112,91 @@ class LimelightResults
      *
      * @return string
      */
-    public function getLemmaString()
+    public function lemmas($spaces = false, $divider = ' ')
     {
-        $string = '';
-
-        foreach ($this->words as $word) {
-            $string .= $word->lemma()->get();
-        }
-
-        return $string;
+        return $this->makePropertyString('lemma', $spaces, $divider);
     }
 
     /**
-     * Get all words.
+     * Get all readings combined as a string.
+     *
+     * @return string
+     */
+    public function readings($spaces = false, $divider = ' ')
+    {
+        return $this->makePropertyString('reading', $spaces, $divider);
+    }
+
+    /**
+     * Get all pronunciations combined as a string.
+     *
+     * @return string
+     */
+    public function pronunciations($spaces = false, $divider = ' ')
+    {
+        return $this->makePropertyString('pronunciation', $spaces, $divider);
+    }
+
+    /**
+     * Get all partsOfSpeech combined as a space sseerated string.
+     *
+     * @return string
+     */
+    public function partsOfSpeech($spaces = true, $divider = ' ')
+    {
+        return $this->makePropertyString('partOfSpeech', $spaces, $divider);
+    }
+
+    /**
+     * Set $this->conversionFlag to hiragana.
      *
      * @return $this
      */
-    public function getAll()
+    public function toHiragana()
     {
-        return $this->words;
+        $this->conversionFlag = 'hiragana';
+
+        return $this;
+    }
+
+    /**
+     * Set $this->conversionFlag to katakana.
+     *
+     * @return $this
+     */
+    public function toKatakana()
+    {
+        $this->conversionFlag = 'katakana';
+
+        return $this;
+    }
+
+    /**
+     * Set $this->conversionFlag to romanji.
+     *
+     * @return $this
+     */
+    public function toRomanji()
+    {
+        $this->checkPlugin('romanji');
+
+        $this->conversionFlag = 'romanji';
+
+        return $this;
+    }
+
+    /**
+     * Set $this->conversionFlag to furigana.
+     *
+     * @return $this
+     */
+    public function toFurigana()
+    {
+        $this->checkPlugin('furigana');
+
+        $this->conversionFlag = 'furigana';
+
+        return $this;
     }
 
     /**
@@ -123,7 +204,7 @@ class LimelightResults
      *
      * @return function
      */
-    public function getNext()
+    public function next()
     {
         $count = count($this->words);
 
@@ -137,17 +218,17 @@ class LimelightResults
      *
      * @param string $string
      *
-     * @return Limelight\Classes\LimelightWord
+     * @return Limelight\Classes\LimelightWord/InvalidInputException
      */
-    public function getByWord($string)
+    public function findWord($string)
     {
         foreach ($this->words as $word) {
-            if ($word->word()->get() === $string) {
+            if ($word->word() === $string) {
                 return $word;
             }
         }
 
-        throw new LimelightInvalidInputException("Word {$string} does not exist.");
+        throw new InvalidInputException("Word {$string} does not exist.");
     }
 
     /**
@@ -155,32 +236,89 @@ class LimelightResults
      *
      * @param int $index
      *
-     * @return Limelight\Classes\LimelightWord
+     * @return Limelight\Classes\LimelightWord/InvalidInputException
      */
-    public function getByIndex($index)
+    public function findIndex($index)
     {
         $count = count($this->words);
 
         if ($count <= $index) {
-            throw new LimelightInvalidInputException("Index {$index} does not exist. Results contain exactly {$count} item(s).");
+            throw new InvalidInputException("Index {$index} does not exist. Results contain exactly {$count} item(s).");
         }
 
         return $this->words[$index];
     }
 
     /**
-     * Get plugin data from object.
+     * Loop through words to make string of properties.
      *
-     * @param string $pluginName [The name of the plugin]
+     * @param string $property
+     * @param bool   $space    [should results be sparated by spaces?]
      *
-     * @return mixed
+     * @return string
      */
-    public function plugin($pluginName)
+    private function makePropertyString($property, $space = false, $divider = ' ')
     {
-        if (isset($this->pluginData[$pluginName])) {
-            return $this->pluginData[$pluginName];
+        if ($this->isNonLemmaPlugin($property)) {
+            return $this->plugin(ucfirst($this->conversionFlag));
         }
 
-        return;
+        $string = '';
+
+        foreach ($this->words as $word) {
+            $word->setConversionFlag($this->conversionFlag);
+
+            if ($this->shouldTrim($word, $string, $property)) {
+                $string = substr($string, 0, -1);
+            }
+
+            $string .= $word->$property().($space === true || $this->conversionFlag === 'romanji' ? $divider : '');
+        }
+
+        $this->conversionFlag = null;
+
+        return $this->cutLast($string, $divider);
+    }
+
+    /**
+     * Property is not lemma and conversionFlag is a plugin.
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    private function isNonLemmaPlugin($property)
+    {
+        return ($this->conversionFlag === 'furigana' || $this->conversionFlag === 'romanji') && $property !== 'lemma';
+    }
+
+    /**
+     * Results string should have last space trimmed.
+     *
+     * @param LimelightWord $word
+     * @param string        $string
+     *
+     * @return bool
+     */
+    private function shouldTrim($word, $string, $property)
+    {
+        return $word->partOfSpeech === 'symbol' && substr($string, -1) === ' ' && $property !== 'partOfSpeech';
+    }
+
+    /**
+     * Cut last char if its is divider.
+     * 
+     * @param  string $string 
+     * @param  string $divider
+     * 
+     * @return string
+     */
+    private function cutLast($string, $divider)
+    {
+        if (mb_substr($string, -1) === $divider) {
+            return mb_substr($string, 0, -1);
+        }
+
+        return $string;
     }
 }

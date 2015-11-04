@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\Classes;
+namespace Limelight\Tests\Parse;
 
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;

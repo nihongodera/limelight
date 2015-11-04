@@ -1,11 +1,11 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
-class KigouTest extends TestCase
+class SettoushiTest extends TestCase
 {
     /**
      * @var Limelight\Limelight
@@ -21,14 +21,14 @@ class KigouTest extends TestCase
     }
 
     /**
-     * Class changes the part of speech to 'symbol'.
+     * Class changes the part of speech to 'prefix'.
      * 
      * @test
      */
-    public function it_changes_partOfSpeech_to_symbol()
+    public function it_changes_partOfSpeech_to_prefix()
     {
-        $results = self::$limelight->parse('。');
+        $results = self::$limelight->parse('超音速');
 
-        $this->assertEquals('symbol', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('prefix', $results->findIndex(0)->partOfSpeech());
     }
 }

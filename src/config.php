@@ -58,7 +58,7 @@ return [
     */
     'options' => [
         'PhpMecab' => [
-            'dictionary' => ''
+            // '-d' => 'path/to/your/dic/directory'
         ]
     ]
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -29,7 +29,7 @@ class JoshiTest extends TestCase
     {
         $results = self::$limelight->parse('を');
 
-        $this->assertEquals('postposition', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('postposition', $results->findIndex(0)->partOfSpeech());
     }
 
     /**
@@ -41,9 +41,9 @@ class JoshiTest extends TestCase
     {
         $results = self::$limelight->parse('行けば');
 
-        $this->assertEquals('行けば', $results->getResultString());
+        $this->assertEquals('行けば', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
     }

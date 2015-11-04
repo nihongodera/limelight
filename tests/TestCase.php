@@ -35,7 +35,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         $conversion = '';
 
-        foreach ($results->getNext() as $word) {
+        foreach ($results->next() as $word) {
             $reading = mb_convert_kana($word->reading, 'c');
 
             $conversion .= $converter->handle($reading, $word);

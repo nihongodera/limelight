@@ -9,7 +9,7 @@ interface Mecab
      *
      * @param string $string
      *
-     * @return nodes
+     * @return Node
      */
     public function parseToNode($string);
 

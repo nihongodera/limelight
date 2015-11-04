@@ -2,7 +2,7 @@
 
 namespace Limelight\Exceptions;
 
-class LimelightPluginErrorException extends \Exception
+class InvalidInputException extends \Exception
 {
     /**
      * @var string
@@ -14,7 +14,7 @@ class LimelightPluginErrorException extends \Exception
      *
      * @param string $message
      */
-    public function __construct($message)
+    public function __construct($message = 'Invalid input.')
     {
         $this->message = $message;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -29,6 +29,6 @@ class SetsuzokushiTest extends TestCase
     {
         $results = self::$limelight->parse('けれども');
 
-        $this->assertEquals('conjunction', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('conjunction', $results->findIndex(0)->partOfSpeech());
     }
 }

@@ -3,6 +3,7 @@
 namespace Limelight\tests\Classes;
 
 use Limelight\Limelight;
+use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 use Limelight\Classes\LimelightResults;
 
@@ -59,7 +60,7 @@ class LimelightResultsTest extends TestCase
      *
      * @test
      */
-    public function it_can_prints_info_when_printed()
+    public function it_prints_info_when_printed()
     {
         $results = self::$results;
 
@@ -75,13 +76,25 @@ class LimelightResultsTest extends TestCase
     }
 
     /**
+     * It can get the all words array off the object.
+     *
+     * @test
+     */
+    public function it_can_get_all_words()
+    {
+        $words = self::$results->all();
+
+        $this->AssertCount(4, $words);
+    }
+
+    /**
      * It can get the original text off the object.
      *
      * @test
      */
     public function it_can_get_original_string()
     {
-        $original = self::$results->getOriginal();
+        $original = self::$results->original();
 
         $this->AssertEquals('音楽を聴きます。', $original);
     }
@@ -91,9 +104,9 @@ class LimelightResultsTest extends TestCase
      *
      * @test
      */
-    public function it_can_build_result_string()
+    public function it_can_build_words_string()
     {
-        $string = self::$results->getResultString();
+        $string = self::$results->words();
 
         $this->AssertEquals('音楽を聴きます。', $string);
     }
@@ -105,21 +118,109 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_build_lemma_string()
     {
-        $string = self::$results->getLemmaString();
+        $string = self::$results->lemmas();
 
         $this->AssertEquals('音楽を聴く。', $string);
     }
 
     /**
-     * It can get the all words array off the object.
+     * It can make a lemma string from words.
      *
      * @test
      */
-    public function it_can_get_all_words()
+    public function it_can_build_reading_string()
     {
-        $words = self::$results->getAll();
+        $string = self::$results->readings();
 
-        $this->AssertCount(4, $words);
+        $this->AssertEquals('オンガクヲキキマス。', $string);
+    }
+
+    /**
+     * It can make a lemma string from words.
+     *
+     * @test
+     */
+    public function it_can_build_pronunciation_string()
+    {
+        $string = self::$results->pronunciations();
+
+        $this->AssertEquals('オンガクヲキキマス。', $string);
+    }
+
+    /**
+     * It can make a lemma string from words.
+     *
+     * @test
+     */
+    public function it_can_build_partsOfSpeech_string()
+    {
+        $string = self::$results->partsOfSpeech();
+
+        $this->AssertEquals('noun postposition verb symbol', $string);
+    }
+
+    /**
+     * It can convert to hiragana.
+     *
+     * @test
+     */
+    public function it_can_convert_to_hiragana()
+    {
+        $string = self::$results->toHiragana()->readings();
+
+        $this->AssertEquals('おんがくをききます。', $string);
+    }
+
+    /**
+     * It can convert to katakana.
+     *
+     * @test
+     */
+    public function it_can_convert_to_katakana()
+    {
+        $string = self::$results->toKatakana()->lemmas();
+
+        $this->AssertEquals('オンガクヲキク。', $string);
+    }
+
+    /**
+     * It can convert to romanji.
+     *
+     * @test
+     */
+    public function it_can_convert_to_romanji()
+    {
+        $string = self::$results->toRomanji()->words();
+
+        $this->AssertEquals('Ongaku o kikimasu.', $string);
+    }
+
+    /**
+     * It can convert to furigana.
+     *
+     * @test
+     */
+    public function it_can_convert_to_furigana()
+    {
+        $string = self::$results->toFurigana()->lemmas();
+
+        $this->AssertEquals('<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>く。', $string);
+    }
+
+    /**
+     * It throws exception when plugin not registered.
+     *
+     * @test
+     * @expectedException Limelight\Exceptions\PluginNotFoundException
+     * @expectedExceptionMessage Plugin Romanji not found in config.php
+     */
+    public function it_throws_exception_when_plugin_not_registered()
+    {
+        $config = Config::getInstance();
+
+        $config->erase('plugins', 'Romanji');
+
+        $string = self::$results->toRomanji()->words();
     }
 
     /**
@@ -131,11 +232,11 @@ class LimelightResultsTest extends TestCase
     {
         $results = self::$results;
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $count = 0;
 
-        foreach ($results->getNext() as $word) {
+        foreach ($results->next() as $word) {
             $this->AssertEquals($words[$count], $word);
 
             $count += 1;
@@ -149,21 +250,21 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_word_by_string()
     {
-        $word = self::$results->getByWord('聴きます');
+        $word = self::$results->findWord('聴きます');
 
-        $this->AssertEquals('聴きます', $word->word()->get());
+        $this->AssertEquals('聴きます', $word->word());
     }
 
     /**
      * It throws exception when word is not present.
      *
      * @test
-     * @expectedException Limelight\Exceptions\LimelightInvalidInputException
+     * @expectedException Limelight\Exceptions\InvalidInputException
      * @expectedExceptionMessage Word 佐賀県 does not exist.
      */
     public function it_throws_exception_for_invalid_string()
     {
-        $word = self::$results->getByWord('佐賀県');
+        $word = self::$results->findWord('佐賀県');
     }
 
     /**
@@ -173,21 +274,21 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_word_by_index()
     {
-        $word = self::$results->getByIndex(2);
+        $word = self::$results->findIndex(2);
 
-        $this->AssertEquals('聴きます', $word->word()->get());
+        $this->AssertEquals('聴きます', $word->word());
     }
 
     /**
      * It throws exception when index is not present.
      *
      * @test
-     * @expectedException Limelight\Exceptions\LimelightInvalidInputException
+     * @expectedException Limelight\Exceptions\InvalidInputException
      * @expectedExceptionMessage Index 23 does not exist. Results contain exactly 4 item(s).
      */
     public function it_throws_exception_for_invalid_index()
     {
-        $word = self::$results->getByIndex(23);
+        $word = self::$results->findIndex(23);
     }
 
     /**

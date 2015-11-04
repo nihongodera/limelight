@@ -3,36 +3,28 @@
 namespace Limelight\Mecab\PhpMecab;
 
 use Limelight\Mecab\Mecab;
+use Limelight\Exceptions\InternalErrorException;
 
 class PhpMecab implements Mecab
 {
     /**
      * MeCab.
-     * 
+     *
      * @var Limelight\Mecab\Mecab
      */
     private $mecab;
 
     /**
      * Options array pulled from config.php.
-     * 
+     *
      * @var array
      */
     private $options;
 
     /**
-     * Console flags for php-mecab constructor options.
-     *
-     * @var array
-     */
-    private $flags = [
-        'dictionary' => '-d',
-    ];
-
-    /**
      * Construct.
      *
-     * @param  array $options
+     * @param array $options
      */
     public function __construct($options)
     {
@@ -46,7 +38,7 @@ class PhpMecab implements Mecab
      *
      * @param string $string
      *
-     * @return Limelight\Mecab\Node
+     * @return Node
      */
     public function parseToNode($string)
     {
@@ -96,16 +88,6 @@ class PhpMecab implements Mecab
     }
 
     /**
-     * Return dictionary file.
-     *
-     * @return string
-     */
-    public function getDictionary()
-    {
-        return $this->options['dictionary'];
-    }
-
-    /**
      * Make instance of MeCab_Tagger.
      *
      * @return MeCab_Tagger
@@ -114,7 +96,9 @@ class PhpMecab implements Mecab
     {
         $options = $this->buildOptions();
 
-        return new \MeCab_Tagger($options);
+        $mecab = new \MeCab_Tagger($options);
+
+        return $mecab;
     }
 
     /**
@@ -126,36 +110,12 @@ class PhpMecab implements Mecab
     {
         $options = [];
 
-        foreach ($this->options as $option => $value) {
+        foreach ($this->options as $flag => $value) {
             if (!is_null($value) && !empty($value) && $value !== '') {
-                $flag = $this->setFlag($option);
-
-                if ($flag) {
-                    $options[] = $flag;
-                }
-
-                $options[] = $value;
+                array_push($options, $flag, $value);
             }
         }
 
         return $options;
-    }
-
-    /**
-     * Find console flags in $this->flags.
-     *
-     * @param string $option
-     *
-     * @return mixed
-     */
-    private function setFlag($option)
-    {
-        if (array_key_exists($option, $this->flags)) {
-            return $this->flags[$option];
-        } elseif (!is_numeric($option)) {
-            return $option;
-        }
-
-        return;
     }
 }

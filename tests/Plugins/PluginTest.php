@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\Classes;
+namespace Limelight\Tests\Plugins;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -31,7 +31,7 @@ class PluginTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->getNext() as $word) {
+        foreach ($results->next() as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -49,7 +49,7 @@ class PluginTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->getNext() as $word) {
+        foreach ($results->next() as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 

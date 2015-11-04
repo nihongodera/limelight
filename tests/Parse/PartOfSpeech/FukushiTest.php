@@ -1,11 +1,11 @@
 <?php
 
-namespace Limelight\Tests\PartOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
-class FiraaTest extends TestCase
+class FukushiTest extends TestCase
 {
     /**
      * @var Limelight\Limelight
@@ -21,14 +21,14 @@ class FiraaTest extends TestCase
     }
 
     /**
-     * It sets partOfSpeech to 'interjection'.
+     * Class changes the part of speech to 'adverb'.
      * 
      * @test
      */
-    public function it_sets_partOfSpeech_to_interjection()
+    public function it_changes_partOfSpeech_to_adverb()
     {
-        $results = self::$limelight->parse('えーと');
+        $results = self::$limelight->parse('ときどき');
 
-        $this->assertEquals('interjection', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('adverb', $results->findIndex(0)->partOfSpeech());
     }
 }

@@ -6,7 +6,7 @@ use Limelight\Mecab\Mecab;
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
 use Limelight\Classes\LimelightResults;
-use Limelight\Exceptions\LimelightPluginErrorException;
+use Limelight\Exceptions\PluginNotFoundException;
 
 class Parser
 {
@@ -43,9 +43,9 @@ class Parser
      * Handle the parse for given text.
      *
      * @param string $text
-     * @param boolean $runPlugins
+     * @param bool   $runPlugins
      *
-     * @return [type] [description]
+     * @return LimelightResults
      */
     public function handle($text, $runPlugins)
     {
@@ -66,6 +66,7 @@ class Parser
      * @param string $text
      * @param Node   $node
      * @param array  $tokens
+     * @param array  $words
      *
      * @return array
      */
@@ -96,7 +97,7 @@ class Parser
     private function validatePlugin($namespace)
     {
         if (!class_exists($namespace)) {
-            throw new LimelightPluginErrorException("Plugin {$namespace} not found.");
+            throw new PluginNotFoundException("Plugin {$namespace} not found.");
         }
     }
 

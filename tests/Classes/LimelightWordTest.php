@@ -3,6 +3,7 @@
 namespace Limelight\tests\Classes;
 
 use Limelight\Limelight;
+use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class LimelightWordTest extends TestCase
@@ -24,7 +25,31 @@ class LimelightWordTest extends TestCase
     {
         self::$limelight = new Limelight();
 
-        self::$results = self::$limelight->parse('東京に行って、パスタを食べてしまった。');
+        self::$results = self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
+    }
+
+    /**
+     * Plugin data can be called by method.
+     *
+     * @test
+     */
+    public function it_can_get_plugin_data_by_method_call()
+    {
+        $romanji = self::$results->findIndex(0)->romanji();
+
+        $this->assertEquals('Tōkyō', $romanji);
+    }
+
+    /**
+     * Plugin data can be called by property name.
+     *
+     * @test
+     */
+    public function it_can_get_plugin_data_by_property_call()
+    {
+        $romanji = self::$results->findIndex(0)->romanji;
+
+        $this->assertEquals('Tōkyō', $romanji);
     }
 
     /**
@@ -34,7 +59,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_property_by_property_name()
     {
-        $word = self::$results->getByIndex(0)->word;
+        $word = self::$results->findIndex(0)->word;
 
         $this->assertEquals('東京', $word);
     }
@@ -66,7 +91,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_raw_mecab_data()
     {
-        $rawMecab = self::$results->getByIndex(0)->rawMecab()->get();
+        $rawMecab = self::$results->findIndex(0)->rawMecab();
 
         $this->assertEquals('東京', $rawMecab[0]['literal']);
     }
@@ -78,7 +103,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_word()
     {
-        $word = self::$results->getByIndex(0)->word()->get();
+        $word = self::$results->findIndex(0)->word();
 
         $this->assertEquals('東京', $word);
     }
@@ -90,7 +115,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_lemma()
     {
-        $lemma = self::$results->getByIndex(0)->lemma()->get();
+        $lemma = self::$results->findIndex(0)->lemma();
 
         $this->assertEquals('東京', $lemma);
     }
@@ -102,7 +127,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_reading()
     {
-        $reading = self::$results->getByIndex(0)->reading()->get();
+        $reading = self::$results->findIndex(0)->reading();
 
         $this->assertEquals('トウキョウ', $reading);
     }
@@ -114,7 +139,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_pronunciation()
     {
-        $pronunciation = self::$results->getByIndex(0)->pronunciation()->get();
+        $pronunciation = self::$results->findIndex(0)->pronunciation();
 
         $this->assertEquals('トーキョー', $pronunciation);
     }
@@ -126,7 +151,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_partOfSpeech()
     {
-        $partOfSpeech = self::$results->getByIndex(0)->partOfSpeech()->get();
+        $partOfSpeech = self::$results->findIndex(0)->partOfSpeech();
 
         $this->assertEquals('proper noun', $partOfSpeech);
     }
@@ -138,33 +163,21 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_grammar()
     {
-        $grammar = self::$results->getByIndex(0)->grammar()->get();
+        $grammar = self::$results->findIndex(0)->grammar();
 
         $this->assertEquals(null, $grammar);
     }
 
     /**
-     * Plugin data can be called by property name.
+     * It can get plugin data.
      *
      * @test
      */
-    public function it_can_get_plugin_data_by_property_call()
+    public function it_can_get_plugin_data()
     {
-        $romanji = self::$results->getByIndex(0)->romanji;
+        $furigana = self::$results->findIndex(0)->plugin('Furigana');
 
-        $this->assertEquals('Tōkyō', $romanji);
-    }
-
-    /**
-     * Plugin data can be called by method.
-     *
-     * @test
-     */
-    public function it_can_get_plugin_data_by_method_call()
-    {
-        $romanji = self::$results->getByIndex(0)->romanji()->get();
-
-        $this->assertEquals('Tōkyō', $romanji);
+        $this->AssertEquals('<ruby>東京<rt>とうきょう</rt></ruby>', $furigana);
     }
 
     /**
@@ -174,7 +187,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_hiragana()
     {
-        $reading = self::$results->getByIndex(0)->reading()->toHiragana()->get();
+        $reading = self::$results->findIndex(0)->toHiragana()->reading();
 
         $this->assertEquals('とうきょう', $reading);
     }
@@ -186,13 +199,49 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_katakana()
     {
-        $pronunciation = self::$results->getByIndex(0)->pronunciation()->toHiragana()->get();
+        $pronunciation = self::$results->findIndex(8)->toKatakana()->word();
 
-        $this->assertEquals('とーきょー', $pronunciation);
+        $this->assertEquals('オイシカッタ', $pronunciation);
+    }
 
-        $pronunciation = self::$results->getByIndex(0)->pronunciation()->toHiragana()->toKatakana()->get();
+    /**
+     * It can get convert to romanji.
+     *
+     * @test
+     */
+    public function it_can_convert_to_romanji()
+    {
+        $pronunciation = self::$results->findIndex(8)->toRomanji()->word();
 
-        $this->assertEquals('トーキョー', $pronunciation);
+        $this->assertEquals('oishikatta', $pronunciation);
+    }
+
+    /**
+     * It can get convert to furigana.
+     *
+     * @test
+     */
+    public function it_can_convert_to_furigana()
+    {
+        $pronunciation = self::$results->findIndex(6)->toFurigana()->lemma();
+
+        $this->assertEquals('<ruby>食<rt>た</rt></ruby>べる', $pronunciation);
+    }
+
+    /**
+     * It throws exception when plugin not registered.
+     *
+     * @test
+     * @expectedException Limelight\Exceptions\PluginNotFoundException
+     * @expectedExceptionMessage Plugin Romanji not found in config.php
+     */
+    public function it_throws_exception_when_plugin_not_registered()
+    {
+        $config = Config::getInstance();
+
+        $config->erase('plugins', 'Romanji');
+
+        $string = self::$results->toRomanji()->words();
     }
 
     /**
@@ -202,7 +251,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_append_to_property()
     {
-        $wordObject = self::$results->getByIndex(0);
+        $wordObject = self::$results->findIndex(0);
 
         $word = $wordObject->word;
 
@@ -222,7 +271,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_set_partOfSpeech()
     {
-        $wordObject = self::$results->getByIndex(0);
+        $wordObject = self::$results->findIndex(0);
 
         $partOfSpeech = $wordObject->partOfSpeech;
 
@@ -242,7 +291,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_set_plugin_data()
     {
-        $wordObject = self::$results->getByIndex(0);
+        $wordObject = self::$results->findIndex(0);
 
         $romanji = $wordObject->romanji;
 

@@ -3,6 +3,7 @@
 namespace Limelight\Tests\Classes;
 
 use Limelight\Limelight;
+use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class LimelightTest extends TestCase
@@ -30,6 +31,18 @@ class LimelightTest extends TestCase
         $limelight = new Limelight();
 
         $this->assertInstanceOf('Limelight\Limelight', $limelight);
+    }
+
+    /**
+     * It can parse stuff.
+     * 
+     * @test
+     */
+    public function it_can_parse()
+    {
+        $results = self::$limelight->parse('出来るかな。。。');
+
+        $this->assertEquals('出来るかな。。。', $results->words());
     }
 
     /**
@@ -102,5 +115,25 @@ class LimelightTest extends TestCase
         $this->assertEquals('眠い', $results[1]);
 
         $this->assertEquals('。', $results[2]);
+    }
+
+    /**
+     * It can set cofig values.
+     * 
+     * @test
+     */
+    public function it_can_set_config_values()
+    {
+        $limelight = self::$limelight;
+
+        $limelight->setConfig('test', 'Romanji', 'style');
+
+        $config = Config::getInstance();
+
+        $romanji = $config->get('Romanji');
+
+        $this->assertContains('test', $romanji);
+
+        $config->resetConfig();
     }
 }

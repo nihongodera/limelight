@@ -59,6 +59,7 @@ class Tokenizer
         '副詞' => 'fukushi',
         '接続助詞' => 'setsuzokujoshi',
         '形容詞' => 'keiyoushi',
+        
         // Secondary part of speech, inflection types
         '非自立' => 'hijiritsu',
         '副詞可能' => 'fukushikanou',
@@ -86,15 +87,17 @@ class Tokenizer
         '命令ｉ' => 'meireiI',
         '係助詞' => 'kakarijoshi',
         '連用形' => 'rennyoukei',
-        '自立' => 'jiritsu'
+        '自立' => 'jiritsu',
     ];
 
     /**
      * Make tokens for text and store them on the object.
      *
-     * @return $this
+     * @param Node $node
+     *
+     * @return array
      */
-    public function makeTokens($node)
+    public function makeTokens(Node $node)
     {
         $this->walkNodes($node, function ($node) {
             $this->parseNode($node);
@@ -106,8 +109,8 @@ class Tokenizer
     /**
      * Walk down node series.
      *
-     * @param Node     $node     [description]
-     * @param function $callback [description]
+     * @param Node     $node
+     * @param function $callback
      */
     private function walkNodes(Node $node, $callback)
     {
@@ -121,7 +124,7 @@ class Tokenizer
     /**
      * Get tokens off node.
      *
-     * @param Node $node [description]
+     * @param Node $node
      */
     private function parseNode(Node $node)
     {

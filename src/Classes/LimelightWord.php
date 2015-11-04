@@ -2,14 +2,12 @@
 
 namespace Limelight\Classes;
 
+use Limelight\Helpers\Converter;
+use Limelight\Helpers\ResultsHelpers;
+
 class LimelightWord
 {
-    /**
-     * Items returned by get().
-     *
-     * @var mixed
-     */
-    private $returnItem;
+    use ResultsHelpers;
 
     /**
      * Raw mecab data for word.
@@ -68,36 +66,31 @@ class LimelightWord
     private $pluginData = [];
 
     /**
-     * Construct.
+     * Converter for hiragana/katakana/romanji/furigana.
      *
-     * @param array $token
-     * @param array $properties
+     * @var Limelight\Helpers\Converter
      */
-    public function __construct($token, $properties)
-    {
-        $this->rawMecab = [$token];
-        $this->word = $token['literal'];
-        $this->lemma = $token['lemma'];
-        $this->reading = (isset($token['reading']) ?  $token['reading'] : null);
-        $this->pronunciation = (isset($token['pronunciation']) ?  $token['pronunciation'] : null);
-        $this->partOfSpeech = $properties['partOfSpeech'];
-        $this->grammar = $properties['grammar'];
-    }
+    private $converter;
 
     /**
-     * Get private properties.
+     * Flag for calling Converter.
      *
-     * @param string $name
-     *
-     * @return mixed
+     * @var null/string
      */
-    public function __get($name)
+    private $conversionFlag = null;
+
+    /**
+     * Construct.
+     *
+     * @param array     $token
+     * @param array     $properties
+     * @param Converter $converter
+     */
+    public function __construct($token, $properties, Converter $converter)
     {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        } elseif (isset($this->pluginData[ucfirst($name)])) {
-            return $this->pluginData[ucfirst($name)];
-        }
+        $this->setProperties($token, $properties);
+
+        $this->converter = $converter;
     }
 
     /**
@@ -106,14 +99,28 @@ class LimelightWord
      * @param string $name
      * @param array  $arguments
      *
-     * @return $this
+     * @return array
      */
     public function __call($name, $arguments)
     {
         if (isset($this->pluginData[ucfirst($name)])) {
-            $this->returnItem = $this->pluginData[ucfirst($name)];
+            return $this->pluginData[ucfirst($name)];
+        }
+    }
 
-            return $this;
+    /**
+     * Get private properties.
+     *
+     * @param string $name
+     *
+     * @return string/array
+     */
+    public function __get($name)
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        } elseif (isset($this->pluginData[ucfirst($name)])) {
+            return $this->pluginData[ucfirst($name)];
         }
     }
 
@@ -132,139 +139,139 @@ class LimelightWord
     }
 
     /**
-     * Return $this->returnItem.
-     *
-     * @return mixed
-     */
-    public function get()
-    {
-        return $this->returnItem;
-    }
-
-    /**
      * Get tokens for word.
      *
-     * @return $this
+     * @return array
      */
     public function rawMecab()
     {
-        $this->returnItem = $this->rawMecab;
-
-        return $this;
+        return $this->rawMecab;
     }
 
     /**
      * Get word.
      *
-     * @return $this
+     * @return string
      */
     public function word()
     {
-        $this->returnItem = $this->word;
+        if (!is_null($this->conversionFlag)) {
+            return $this->callConverter('word');
+        }
 
-        return $this;
+        return $this->word;
     }
 
     /**
      * Get lemma (dictionary entry) for word.
      *
-     * @return $this
+     * @return string
      */
     public function lemma()
     {
-        $this->returnItem = $this->lemma;
+        if (!is_null($this->conversionFlag)) {
+            return $this->callConverter('lemma');
+        }
 
-        return $this;
+        return $this->lemma;
     }
 
     /**
      * Get reading for word.
      *
-     * @return $this
+     * @return string
      */
     public function reading()
     {
-        $this->returnItem = $this->reading;
+        if (!is_null($this->conversionFlag)) {
+            return $this->callConverter('reading');
+        }
 
-        return $this;
+        return $this->reading;
     }
 
     /**
      * Get pronunciation for word.
      *
-     * @return $this
+     * @return string
      */
     public function pronunciation()
     {
-        $this->returnItem = $this->pronunciation;
+        if (!is_null($this->conversionFlag)) {
+            return $this->callConverter('pronunciation');
+        }
 
-        return $this;
+        return $this->pronunciation;
     }
 
     /**
      * Get part of speech for word.
      *
-     * @return $this
+     * @return string
      */
     public function partOfSpeech()
     {
-        $this->returnItem = $this->partOfSpeech;
-
-        return $this;
+        return $this->partOfSpeech;
     }
 
     /**
      * Get grammar for word, if any.
      *
-     * @return $this
+     * @return string
      */
     public function grammar()
     {
-        $this->returnItem = $this->grammar;
-
-        return $this;
+        return $this->grammar;
     }
 
     /**
-     * Get plugin data from word.
-     *
-     * @param string $pluginName [The name of the plugin]
-     *
-     * @return mixed
-     */
-    public function plugin($pluginName)
-    {
-        if (isset($this->pluginData[$pluginName])) {
-            return $this->pluginData[$pluginName];
-        }
-
-        return;
-    }
-
-    /**
-     * Convert $this->returnItem to hiragana if possible.
+     * Set $this->conversionFlag to hiragana.
      *
      * @return $this
      */
     public function toHiragana()
     {
-        if (gettype($this->returnItem) === 'string') {
-            $this->returnItem = mb_convert_kana($this->returnItem, 'c');
-        }
+        $this->conversionFlag = 'hiragana';
 
         return $this;
     }
 
     /**
-     * Convert $this->returnItem to katakana if possible.
+     * Set $this->conversionFlag to katakana.
      *
      * @return $this
      */
     public function toKatakana()
     {
-        if (gettype($this->returnItem) === 'string') {
-            $this->returnItem = mb_convert_kana($this->returnItem, 'C');
-        }
+        $this->conversionFlag = 'katakana';
+
+        return $this;
+    }
+
+    /**
+     * Set $this->conversionFlag to romanji.
+     *
+     * @return $this
+     */
+    public function toRomanji()
+    {
+        $this->checkPlugin('romanji');
+
+        $this->conversionFlag = 'romanji';
+
+        return $this;
+    }
+
+    /**
+     * Set $this->conversionFlag to furigana.
+     *
+     * @return $this
+     */
+    public function toFurigana()
+    {
+        $this->checkPlugin('furigana');
+
+        $this->conversionFlag = 'furigana';
 
         return $this;
     }
@@ -272,8 +279,8 @@ class LimelightWord
     /**
      * Append value to end of property.
      *
-     * @param string $property
-     * @param mixed  $value
+     * @param string       $property
+     * @param string/array $value
      */
     public function appendTo($property, $value)
     {
@@ -303,5 +310,73 @@ class LimelightWord
     public function setPluginData($pluginName, $value)
     {
         $this->pluginData[ucfirst($pluginName)] = $value;
+    }
+
+    /**
+     * Set the conversionFlag.
+     *
+     * @param string $flag
+     */
+    public function setConversionFlag($flag)
+    {
+        $this->conversionFlag = $flag;
+    }
+
+    /**
+     * Set properties on object.
+     *
+     * @param array $token
+     * @param array $properties
+     */
+    private function setProperties($token, $properties)
+    {
+        $this->rawMecab = [$token];
+
+        $this->word = $token['literal'];
+
+        $this->lemma = $token['lemma'];
+
+        $this->reading = (isset($token['reading']) ?  $token['reading'] : null);
+
+        $this->pronunciation = (isset($token['pronunciation']) ?  $token['pronunciation'] : null);
+
+        $this->partOfSpeech = $properties['partOfSpeech'];
+
+        $this->grammar = $properties['grammar'];
+    }
+
+    /**
+     * Call $this->converter.
+     *
+     * @param string $property [Property to convert]
+     *
+     * @return string
+     */
+    private function callConverter($property)
+    {
+        $dto = $this->getAllData();
+
+        $convertedString = $this->converter->convert($dto, $property, $this->conversionFlag);
+
+        $this->conversionFlag = null;
+
+        return $convertedString;
+    }
+
+    /**
+     * Build dto for conversion.
+     *
+     * @return array
+     */
+    private function getAllData()
+    {
+        return [
+            'word' => $this->word,
+            'lemma' => $this->lemma,
+            'reading' => $this->reading,
+            'pronunciation' => $this->pronunciation,
+            'furigana' => (isset($this->pluginData['Furigana']) ? $this->pluginData['Furigana'] : null),
+            'romanji' => (isset($this->pluginData['Romanji']) ? $this->pluginData['Romanji'] : null),
+        ];
     }
 }

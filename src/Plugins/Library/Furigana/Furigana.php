@@ -4,9 +4,12 @@ namespace Limelight\Plugins\Library\Furigana;
 
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
+use Limelight\Helpers\JapaneseHelpers;
 
 class Furigana extends Plugin
 {
+    use JapaneseHelpers;
+
     /**
      * Tags pulled from config file.
      *
@@ -41,11 +44,11 @@ class Furigana extends Plugin
         foreach ($this->words as $wordObject) {
             $furiganaWord = '';
 
-            $word = $wordObject->word;
+            $word = $wordObject->word();
 
             $wordChars = $this->getChars($word);
 
-            $katakanaChars = $this->getChars($wordObject->reading()->get());
+            $katakanaChars = $this->getChars($wordObject->reading());
 
             $hiraganaChars = $this->buildHiraganaChars($wordChars, $katakanaChars);
 
@@ -100,20 +103,6 @@ class Furigana extends Plugin
         return array_filter($array, function ($value) {
             return !$this->isKatakana($value) && $this->hasKanji($value);
         });
-    }
-
-    /**
-     * Return true if character is katakana.
-     *
-     * @param string $character
-     *
-     * @return bool
-     */
-    private function isKatakana($character)
-    {
-        $kanaPattern = '[ァ-・ヽヾ゛゜ー]';
-
-        return mb_ereg($kanaPattern, $character);
     }
 
     /**
@@ -284,38 +273,6 @@ class Furigana extends Plugin
         }
 
         return $word;
-    }
-
-    /**
-     * Return true if word contains kanji.
-     *
-     * @param string $word
-     *
-     * @return bool
-     */
-    private function hasKanji($word)
-    {
-        $kanjiPattern = '\p{Han}';
-
-        foreach ($this->getChars($word) as $char) {
-            if (mb_ereg($kanjiPattern, $char) === false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Get character array from string.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    private function getChars($string)
-    {
-        return preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**

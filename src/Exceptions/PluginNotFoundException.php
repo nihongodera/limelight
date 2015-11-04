@@ -2,7 +2,7 @@
 
 namespace Limelight\Exceptions;
 
-class LimelightInternalErrorException extends \Exception
+class PluginNotFoundException extends \Exception
 {
     /**
      * @var string
@@ -14,7 +14,7 @@ class LimelightInternalErrorException extends \Exception
      *
      * @param string $message
      */
-    public function __construct($message)
+    public function __construct($message = 'Requested plugin not found.')
     {
         $this->message = $message;
 

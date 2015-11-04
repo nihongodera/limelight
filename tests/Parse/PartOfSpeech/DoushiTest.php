@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Tests\partOfSpeech;
+namespace Limelight\Tests\Parse\PartOfSpeech;
 
 use Limelight\Limelight;
 use Limelight\Tests\TestCase;
@@ -29,7 +29,7 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('開く');
 
-        $this->assertEquals('verb', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('verb', $results->findIndex(0)->partOfSpeech());
     }
 
     /**
@@ -41,13 +41,13 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('乗せられる');
 
-        $this->assertEquals('verb', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('verb', $results->findIndex(0)->partOfSpeech());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('乗せられる', $words[0]->word()->get());
+        $this->assertEquals('乗せられる', $words[0]->word());
     }
 
     /**
@@ -59,13 +59,13 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('開いてる');
 
-        $this->assertEquals('verb', $results->getByIndex(0)->partOfSpeech()->get());
+        $this->assertEquals('verb', $results->findIndex(0)->partOfSpeech());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('開いてる', $words[0]->word()->get());
+        $this->assertEquals('開いてる', $words[0]->word());
     }
 
     /**
@@ -77,15 +77,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('行く');
 
-        $this->assertEquals('行く', $results->getResultString());
+        $this->assertEquals('行く', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('行く', $words[0]->word()->get());
+        $this->assertEquals('行く', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -97,15 +97,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('帰ります');
 
-        $this->assertEquals('帰ります', $results->getResultString());
+        $this->assertEquals('帰ります', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('帰ります', $words[0]->word()->get());
+        $this->assertEquals('帰ります', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -117,15 +117,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('読みました');
 
-        $this->assertEquals('読みました', $results->getResultString());
+        $this->assertEquals('読みました', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('読みました', $words[0]->word()->get());
+        $this->assertEquals('読みました', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -137,15 +137,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('始まった');
 
-        $this->assertEquals('始まった', $results->getResultString());
+        $this->assertEquals('始まった', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('始まった', $words[0]->word()->get());
+        $this->assertEquals('始まった', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -157,15 +157,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('干さない');
 
-        $this->assertEquals('干さない', $results->getResultString());
+        $this->assertEquals('干さない', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('干さない', $words[0]->word()->get());
+        $this->assertEquals('干さない', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -177,15 +177,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('掛けません');
 
-        $this->assertEquals('掛けません', $results->getResultString());
+        $this->assertEquals('掛けません', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('掛けません', $words[0]->word()->get());
+        $this->assertEquals('掛けません', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -197,15 +197,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('落とさなかった');
 
-        $this->assertEquals('落とさなかった', $results->getResultString());
+        $this->assertEquals('落とさなかった', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('落とさなかった', $words[0]->word()->get());
+        $this->assertEquals('落とさなかった', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -217,15 +217,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('聞いていた');
 
-        $this->assertEquals('聞いていた', $results->getResultString());
+        $this->assertEquals('聞いていた', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('聞いていた', $words[0]->word()->get());
+        $this->assertEquals('聞いていた', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -237,15 +237,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('取ってた');
 
-        $this->assertEquals('取ってた', $results->getResultString());
+        $this->assertEquals('取ってた', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('取ってた', $words[0]->word()->get());
+        $this->assertEquals('取ってた', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -257,15 +257,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('見ている');
 
-        $this->assertEquals('見ている', $results->getResultString());
+        $this->assertEquals('見ている', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('見ている', $words[0]->word()->get());
+        $this->assertEquals('見ている', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -277,15 +277,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('飲んでる');
 
-        $this->assertEquals('飲んでる', $results->getResultString());
+        $this->assertEquals('飲んでる', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('飲んでる', $words[0]->word()->get());
+        $this->assertEquals('飲んでる', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -297,15 +297,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('行け');
 
-        $this->assertEquals('行け', $results->getResultString());
+        $this->assertEquals('行け', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('行け', $words[0]->word()->get());
+        $this->assertEquals('行け', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -317,15 +317,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('買えば');
 
-        $this->assertEquals('買えば', $results->getResultString());
+        $this->assertEquals('買えば', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('買えば', $words[0]->word()->get());
+        $this->assertEquals('買えば', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -337,15 +337,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('書いたら');
 
-        $this->assertEquals('書いたら', $results->getResultString());
+        $this->assertEquals('書いたら', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('書いたら', $words[0]->word()->get());
+        $this->assertEquals('書いたら', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -357,15 +357,15 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('しよう');
 
-        $this->assertEquals('しよう', $results->getResultString());
+        $this->assertEquals('しよう', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('しよう', $words[0]->word()->get());
+        $this->assertEquals('しよう', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
     /**
@@ -377,14 +377,14 @@ class DoushiTest extends TestCase
     {
         $results = self::$limelight->parse('載せれる');
 
-        $this->assertEquals('載せれる', $results->getResultString());
+        $this->assertEquals('載せれる', $results->words());
 
-        $words = $results->getAll();
+        $words = $results->all();
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('載せれる', $words[0]->word()->get());
+        $this->assertEquals('載せれる', $words[0]->word());
 
-        $this->assertEquals('verb', $words[0]->partOfSpeech()->get());
+        $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 }

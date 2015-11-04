@@ -4,6 +4,7 @@ namespace Limelight\Plugins\Library\Romanji;
 
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
+use Limelight\Exceptions\PluginErrorException;
 
 class Romanji extends Plugin
 {
@@ -40,7 +41,7 @@ class Romanji extends Plugin
     /**
      * Make decorator class from config value.
      *
-     * @return Limelight\Plugins\Library\Romanji\StyleDecorator
+     * @return RomanjiConverter/PluginErrorException
      */
     private function makeStyleClass()
     {
@@ -56,7 +57,7 @@ class Romanji extends Plugin
             return new $styleClass();
         }
 
-        throw new LimelightPluginErrorException("Style {$style} does not exist.  Check config.php file.");
+        throw new PluginErrorException("Style {$style} does not exist.  Check config.php file.");
     }
 
     /**
