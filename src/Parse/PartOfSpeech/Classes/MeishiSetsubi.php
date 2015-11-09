@@ -21,6 +21,8 @@ class MeishiSetsubi implements PartOfSpeech
     {
         if ($current['partOfSpeech3'] === 'jinmei') {
             $properties['partOfSpeech'] = 'suffix';
+        } elseif ($previous['partOfSpeech2'] === 'kazu') {
+            $properties['partOfSpeech'] = 'suffix';
         } else {
             if ($current['partOfSpeech3'] === 'tokushu' && $current['lemma'] === 'さ') {
                 $properties['updatePOS'] = true;

@@ -150,6 +150,6 @@ class FunctionalTest extends TestCase
 
          $words = $results->all();
 
-         $this->assertCount(445, $words);
+         $this->assertCount(450, $words);
     }
 }

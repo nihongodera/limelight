@@ -71,7 +71,7 @@ class MeishiHijiritsu implements PartOfSpeech
             if ($next['inflectionForm'] === 'taigensetsuzoku') {
                 $properties['eatNext'] = true;
             }
-        } elseif ($next['partOfSpeech'] === 'joshi' && $next['partOfSpeech2'] === 'fukushika') {
+        } elseif ($next['partOfSpeech1'] === 'joshi' && $next['partOfSpeech2'] === 'fukushika') {
             $properties['partOfSpeech'] = 'adverb';
 
             $properties['eatNext'] = true;

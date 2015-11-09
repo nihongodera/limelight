@@ -330,4 +330,32 @@ class FuriganaTest extends TestCase
 
         $this->assertEquals('アッ、<ruby>太郎<rt>たろう</rt></ruby>！<ruby>久<rt>ひさ</rt></ruby>しぶり！<ruby>元気<rt>げんき</rt></ruby>？', $furigana);
     }
+
+    /**
+     * Half width numbers have no furigana.
+     * 
+     * @test
+     */
+    public function half_width_numbers_have_no_furigana()
+    {
+        $results = self::$limelight->parse('7時');
+
+        $furigana = $results->plugin('Furigana');
+
+        $this->assertEquals('7<ruby>時<rt>じ</rt></ruby>', $furigana);
+    }
+
+    /**
+     * Full width numbers have no furigana.
+     * 
+     * @test
+     */
+    public function full_width_numbers_have_no_furigana()
+    {
+        $results = self::$limelight->parse('７時');
+
+        $furigana = $results->plugin('Furigana');
+
+        $this->assertEquals('７<ruby>時<rt>じ</rt></ruby>', $furigana);
+    }
 }
