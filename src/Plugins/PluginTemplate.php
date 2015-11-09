@@ -38,7 +38,9 @@ class PluginTemplate extends Plugin
         // Loop through words
         foreach ($this->words as $word) {
             // Access config.php options
-            $options = $this->config->get('PluginName');
+            $config = Config::getInstance();
+
+            $options = $config->get('PluginName');
 
             // Do something cool
             $data = $this->yourMethod($word, $options);

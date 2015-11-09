@@ -9,7 +9,7 @@ class Config
 {
     /**
      * config.php.
-     *
+     *q
      * @var array
      */
     private $configFile;
@@ -26,7 +26,7 @@ class Config
      */
     private function __construct()
     {
-        $this->configFile = include dirname(__DIR__).'/config.php';
+        $this->resetConfig();
     }
 
     /**
@@ -38,7 +38,9 @@ class Config
      */
     public function get($string)
     {
-        if (isset($this->configFile[$string])) {
+        if (function_exists('config') && config('limelight.'.$string) !== null) {
+            return config('limelight.'.$string);
+        } elseif (isset($this->configFile[$string])) {
             return $this->configFile[$string];
         }
 
@@ -66,7 +68,7 @@ class Config
      */
     public function getPlugins()
     {
-        return $this->configFile['plugins'];
+        return $this->get('plugins');
     }
 
     /**
@@ -79,7 +81,7 @@ class Config
      */
     public function make($interface)
     {
-        $bindings = $this->configFile['bindings'];
+        $bindings = $this->get('bindings');
 
         $fullClassName = $this->getFullClassName($bindings, $interface);
 
@@ -107,6 +109,10 @@ class Config
      */
     public function resetConfig()
     {
+        if (function_exists('config') && config('limelight') !== null) {
+            $this->configFile = config('limelight');
+        }
+
         $this->configFile = include dirname(__DIR__).'/config.php';
     }
 
@@ -130,6 +136,12 @@ class Config
         throw new InvalidInputException('Key not found in config file.');
     }
 
+    /**
+     * Erase config value entirely.
+     * 
+     * @param  string $key1 
+     * @param  string $key2 
+     */
     public function erase($key1, $key2)
     {
         if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
@@ -184,7 +196,7 @@ class Config
     {
         $shortClassName = $this->getShortClassName($fullClassName);
 
-        $options = $this->configFile['options'];
+        $options = $this->get('options');
 
         $classOptions = (isset($options[$shortClassName]) ? $options[$shortClassName] : []);
 

@@ -260,7 +260,13 @@ class LimelightResults
     private function makePropertyString($property, $space = false, $divider = ' ')
     {
         if ($this->isNonLemmaPlugin($property)) {
-            return $this->plugin(ucfirst($this->conversionFlag));
+            $string = $this->plugin(ucfirst($this->conversionFlag));
+
+            if ($divider !== ' ') {
+                $string = mb_ereg_replace(' ', $divider, $string);
+            }
+
+            return $string;
         }
 
         $string = '';

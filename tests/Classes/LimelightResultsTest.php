@@ -112,6 +112,30 @@ class LimelightResultsTest extends TestCase
     }
 
     /**
+     * It can make a result string from words with spaces.
+     *
+     * @test
+     */
+    public function it_can_build_words_string_with_spaces()
+    {
+        $string = self::$results->words(true);
+
+        $this->AssertEquals('音楽 を 聴きます。', $string);
+    }
+
+    /**
+     * It can make a result string from words with dividing char.
+     *
+     * @test
+     */
+    public function it_can_build_words_string_with_dividing_char()
+    {
+        $string = self::$results->words(true, '-');
+
+        $this->AssertEquals('音楽-を-聴きます-。', $string);
+    }
+
+    /**
      * It can make a lemma string from words.
      *
      * @test
@@ -172,6 +196,30 @@ class LimelightResultsTest extends TestCase
     }
 
     /**
+     * It can make a hiragana string from words with spaces.
+     *
+     * @test
+     */
+    public function it_can_build_hiragana_string_with_spaces()
+    {
+        $string = self::$results->toHiragana()->words(true);
+
+        $this->AssertEquals('おんがく を ききます。', $string);
+    }
+
+    /**
+     * It can make a hiragana string from words with dividing char.
+     *
+     * @test
+     */
+    public function it_can_build_hiragana_string_with_dividing_char()
+    {
+        $string = self::$results->toHiragana()->words(true, '-');
+
+        $this->AssertEquals('おんがく-を-ききます-。', $string);
+    }
+
+    /**
      * It can convert to katakana.
      *
      * @test
@@ -193,6 +241,30 @@ class LimelightResultsTest extends TestCase
         $string = self::$results->toRomanji()->words();
 
         $this->AssertEquals('Ongaku o kikimasu.', $string);
+    }
+
+    /**
+     * It can make a romanji string from words with spaces.
+     *
+     * @test
+     */
+    public function it_can_build_romanji_string_with_spaces()
+    {
+        $string = self::$results->toRomanji()->words(true);
+
+        $this->AssertEquals('Ongaku o kikimasu.', $string);
+    }
+
+    /**
+     * It can make a romanji string from words with dividing char.
+     *
+     * @test
+     */
+    public function it_can_build_romanji_string_with_dividing_char()
+    {
+        $string = self::$results->toRomanji()->words(true, '-');
+
+        $this->AssertEquals('Ongaku-o-kikimasu.', $string);
     }
 
     /**

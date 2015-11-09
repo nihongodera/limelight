@@ -13,6 +13,6 @@ before_script:
   - chmod +x install-php-mecab.sh
 
 script:
-  - ./install-php-mecab.sh
+  - ./travis-php-mecab.sh
 
 install: composer install

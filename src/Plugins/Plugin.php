@@ -2,6 +2,8 @@
 
 namespace Limelight\Plugins;
 
+use Limelight\Config\Config;
+
 abstract class Plugin
 {
     /**

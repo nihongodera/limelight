@@ -11,8 +11,8 @@
   - Convert Japanese to romanji (English lettering)
 
 ### Quick Guide
-  - [Install limelight](#install-limelight)
-  - [Initialize limelight](#initialize-limelight)
+  - [Install Limelight](#install-limelight)
+  - [Initialize Limelight](#initialize-limelight)
   - [Parse Text](#parse-text)
   - [Get Results](#get-results)
   - [Full Documentation](#full-documentation)
