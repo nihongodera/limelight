@@ -42,7 +42,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>燃<rt>も</rt></ruby>える', $furigana);
+        $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
     /**
@@ -96,7 +96,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>勉強<rt>べんきょう</rt></ruby>する', $furigana);
+        $this->assertEquals('<ruby><rb>勉強</rb><rp>(</rp><rt>べんきょう</rt><rp>)</rp></ruby>する', $furigana);
     }
 
     /**
@@ -132,7 +132,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>燃<rt>も</rt></ruby>える', $furigana);
+        $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
     /**
@@ -150,7 +150,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>', $furigana);
+        $this->assertEquals('<ruby><rb>使</rb><rp>(</rp><rt>つか</rt><rp>)</rp></ruby>い<ruby><rb>方</rb><rp>(</rp><rt>かた</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -168,7 +168,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>健康<rt>けんこう</rt></ruby>', $furigana);
+        $this->assertEquals('<ruby><rb>健康</rb><rp>(</rp><rt>けんこう</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -186,7 +186,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('ソ<ruby>連<rt>れん</rt></ruby>', $furigana);
+        $this->assertEquals('ソ<ruby><rb>連</rb><rp>(</rp><rt>れん</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -204,7 +204,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>元気<rt>げんき</rt></ruby>？', $furigana);
+        $this->assertEquals('<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？', $furigana);
     }
 
     /**
@@ -222,7 +222,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>中傷<rt>ちゅうしょう</rt></ruby>し', $furigana);
+        $this->assertEquals('<ruby><rb>中傷</rb><rp>(</rp><rt>ちゅうしょう</rt><rp>)</rp></ruby>し', $furigana);
     }
 
     /**
@@ -240,7 +240,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>少々<rt>しょうしょう</rt></ruby>', $furigana);
+        $this->assertEquals('<ruby><rb>少々</rb><rp>(</rp><rt>しょうしょう</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -258,7 +258,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>行<rt>い</rt></ruby>きたい', $furigana);
+        $this->assertEquals('<ruby><rb>行</rb><rp>(</rp><rt>い</rt><rp>)</rp></ruby>きたい', $furigana);
     }
 
     /**
@@ -276,7 +276,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('アッ、<ruby>太郎<rt>たろう</rt></ruby>！<ruby>久<rt>ひさ</rt></ruby>しぶり！<ruby>元気<rt>げんき</rt></ruby>？', $furigana);
+        $this->assertEquals('アッ、<ruby><rb>太郎</rb><rp>(</rp><rt>たろう</rt><rp>)</rp></ruby>！<ruby><rb>久</rb><rp>(</rp><rt>ひさ</rt><rp>)</rp></ruby>しぶり！<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？', $furigana);
     }
 
     /**
@@ -294,7 +294,7 @@ class FuriganaTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('20<ruby>日<rt>にち</rt></ruby>', $furigana);
+        $this->assertEquals('20<ruby><rb>日</rb><rp>(</rp><rt>にち</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -328,7 +328,7 @@ class FuriganaTest extends TestCase
 
         $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals('アッ、<ruby>太郎<rt>たろう</rt></ruby>！<ruby>久<rt>ひさ</rt></ruby>しぶり！<ruby>元気<rt>げんき</rt></ruby>？', $furigana);
+        $this->assertEquals('アッ、<ruby><rb>太郎</rb><rp>(</rp><rt>たろう</rt><rp>)</rp></ruby>！<ruby><rb>久</rb><rp>(</rp><rt>ひさ</rt><rp>)</rp></ruby>しぶり！<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？', $furigana);
     }
 
     /**
@@ -342,7 +342,7 @@ class FuriganaTest extends TestCase
 
         $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals('7<ruby>時<rt>じ</rt></ruby>', $furigana);
+        $this->assertEquals('7<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -356,6 +356,6 @@ class FuriganaTest extends TestCase
 
         $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals('７<ruby>時<rt>じ</rt></ruby>', $furigana);
+        $this->assertEquals('７<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>', $furigana);
     }
 }

@@ -276,7 +276,7 @@ class LimelightResultsTest extends TestCase
     {
         $string = self::$results->toFurigana()->lemmas();
 
-        $this->AssertEquals('<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>く。', $string);
+        $this->AssertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>く。', $string);
     }
 
     /**
@@ -372,6 +372,6 @@ class LimelightResultsTest extends TestCase
     {
         $furigana = self::$results->plugin('Furigana');
 
-        $this->AssertEquals('<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聴<rt>き</rt></ruby>きます。', $furigana);
+        $this->AssertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます。', $furigana);
     }
 }

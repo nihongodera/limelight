@@ -35,7 +35,7 @@ class PluginTest extends TestCase
             $furigana .= $word->plugin('Furigana');
         }
 
-        $this->assertEquals('<ruby>燃<rt>も</rt></ruby>える', $furigana);
+        $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
     /**

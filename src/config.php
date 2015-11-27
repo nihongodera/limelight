@@ -23,9 +23,9 @@ return [
     |
     */
     'Furigana' => [
-        'furigana_wrapper' => '<rt>{{}}</rt>',
+        'furigana_wrapper' => '<rp>(</rp><rt>{{}}</rt><rp>)</rp>',
         'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
-        'kanji_wrapper' => '',
+        'kanji_wrapper' => '<rb>{{}}</rb>',
         'word_wrapper' => '',
     ],
 

@@ -16,6 +16,8 @@ trait ResultsHelpers
      */
     public function plugin($pluginName)
     {
+        $pluginName = ucfirst($pluginName);
+        
         if (isset($this->pluginData[$pluginName])) {
             return $this->pluginData[$pluginName];
         }

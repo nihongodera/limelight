@@ -63,7 +63,7 @@ echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
 > Hiragana: にわでらいむをそだてています。   
 > Katakana: ニワデライムヲソダテテイマス。  
 > Romanji: Niwa de raimu o sodateteimasu.   
-> Furigana: <ruby>庭<rt>にわ</rt></ruby>でライムを<ruby>育<rt>そだ</rt></ruby>てています。   
+> Furigana: <ruby><rb>庭</rb><rp>(</rp><rt>にわ</rt><rp>)</rp></ruby>でライムを<ruby><rb>育</rb><rp>(</rp><rt>そだ</rt><rp>)</rp></ruby>てています。     
    
 Get individual words off the LimelightResults object by selecting them by either word or index and using methods availabel on the returned [LimelightWord](https://github.com/nihongodera/limelight/wiki/LimelightWord) object.
 ```php

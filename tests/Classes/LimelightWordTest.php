@@ -177,7 +177,7 @@ class LimelightWordTest extends TestCase
     {
         $furigana = self::$results->findIndex(0)->plugin('Furigana');
 
-        $this->AssertEquals('<ruby>東京<rt>とうきょう</rt></ruby>', $furigana);
+        $this->AssertEquals('<ruby><rb>東京</rb><rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -225,7 +225,7 @@ class LimelightWordTest extends TestCase
     {
         $pronunciation = self::$results->findIndex(6)->toFurigana()->lemma();
 
-        $this->assertEquals('<ruby>食<rt>た</rt></ruby>べる', $pronunciation);
+        $this->assertEquals('<ruby><rb>食</rb><rp>(</rp><rt>た</rt><rp>)</rp></ruby>べる', $pronunciation);
     }
 
     /**
