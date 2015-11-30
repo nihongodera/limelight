@@ -111,9 +111,9 @@ class Config
     {
         if (function_exists('config') && config('limelight') !== null) {
             $this->configFile = config('limelight');
+        } else {
+            $this->configFile = include dirname(__DIR__).'/config.php';
         }
-
-        $this->configFile = include dirname(__DIR__).'/config.php';
     }
 
     /**

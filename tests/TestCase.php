@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\tests;
+namespace Limelight\Tests;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {

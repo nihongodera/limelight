@@ -3,7 +3,7 @@
     "type": "project",
     "description": "A php Japanese language text analyzer and parser.",
     "keywords": ["japanese", "language", "mecab", "furigana", "kanji", "romanji", "parse"],
-    "homepage": "https://github.com/zachleigh/limelight",
+    "homepage": "https://github.com/nihongodera/limelight",
     "license": "MIT",
     "authors": [
         {
