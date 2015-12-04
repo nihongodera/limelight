@@ -20,6 +20,8 @@ class Romanji extends Plugin
         $romanjiString = '';
 
         foreach ($this->words as $word) {
+            $spaces = true;
+
             $hiraganaWord = mb_convert_kana($word->reading, 'c');
 
             $romanjiWord = $style->handle($hiraganaWord, $word);

@@ -4,6 +4,7 @@ namespace Limelight;
 
 use Limelight\Parse\Parser;
 use Limelight\Config\Config;
+use Limelight\Parse\NoParser;
 use Limelight\Parse\Tokenizer;
 use Limelight\Parse\TokenParser;
 
@@ -43,6 +44,20 @@ class Limelight
         $parser = new Parser($this->mecab, $tokenizer, $tokenParser);
 
         return $parser->handle($text, $runPlugins);
+    }
+
+    /**
+     * Run given text through plugins without mecab parsing. Kanji input will fail.
+     *
+     * @param string $text
+     *
+     * @return Limelight\Classes\LimelightResults/ InvalidInputException
+     */
+    public function noParse($text)
+    {
+        $noParser = new NoParser();
+
+        return $noParser->handle($text);
     }
 
     /**

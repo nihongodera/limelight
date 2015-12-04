@@ -3,13 +3,13 @@
 namespace Limelight\Parse;
 
 use Limelight\Mecab\Mecab;
-use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
+use Limelight\Helpers\PluginHelper;
 use Limelight\Classes\LimelightResults;
-use Limelight\Exceptions\PluginNotFoundException;
 
 class Parser
 {
+    use PluginHelper;
+
     /**
      * @var implements Limelight\Mecab\Mecab
      */
@@ -58,58 +58,5 @@ class Parser
         $pluginResults = ($runPlugins ? $this->runPlugins($text, $node, $tokens, $words) : null);
 
         return new LimelightResults($text, $words, $pluginResults);
-    }
-
-    /**
-     * Run all registered plugins.
-     *
-     * @param string $text
-     * @param Node   $node
-     * @param array  $tokens
-     * @param array  $words
-     *
-     * @return array
-     */
-    private function runPlugins($text, $node, $tokens, $words)
-    {
-        $pluginResults = [];
-
-        $config = Config::getInstance();
-
-        $plugins = $config->getPlugins();
-
-        foreach ($plugins as $plugin => $namespace) {
-            $this->validatePlugin($namespace);
-
-            $pluginClass = new $namespace($text, $node, $tokens, $words);
-
-            $pluginResults[$plugin] = $this->firePlugin($pluginClass);
-        }
-
-        return $pluginResults;
-    }
-
-    /**
-     * Validate plugin class exists.
-     *
-     * @param string $namespace
-     */
-    private function validatePlugin($namespace)
-    {
-        if (!class_exists($namespace)) {
-            throw new PluginNotFoundException("Plugin {$namespace} not found.");
-        }
-    }
-
-    /**
-     * Fire the plugin.
-     *
-     * @param Plugin $plugin
-     *
-     * @return mixed
-     */
-    private function firePlugin(Plugin $plugin)
-    {
-        return $plugin->handle();
     }
 }

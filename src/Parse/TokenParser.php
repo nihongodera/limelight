@@ -32,7 +32,7 @@ class TokenParser
     /**
      * Parse the text by filtering through the tokens.
      *
-     * @return [type] [description]
+     * @return array
      */
     public function parseTokens($tokens)
     {
@@ -98,6 +98,26 @@ class TokenParser
     }
 
     /**
+     * Update current if reading does not exist.
+     *
+     * @param array $current
+     *
+     * @return array
+     */
+    private function updateCurrent($current)
+    {
+        $current['lemma'] = $current['literal'];
+
+        $katakana = mb_convert_kana($current['literal'], 'C');
+
+        $current['reading'] = $katakana;
+
+        $current['pronunciation'] = $katakana;
+
+        return $current;
+    }
+
+    /**
      * Append current word to last word in words array.
      *
      * @param array                  $current
@@ -126,9 +146,9 @@ class TokenParser
     /**
      * Make new word and append it to words array.
      *
-     * @param array $current
-     * @param array $properties
-     * @param  Converter $converter
+     * @param array     $current
+     * @param array     $properties
+     * @param Converter $converter
      */
     private function makeNewWord($current, $properties, Converter $converter)
     {
