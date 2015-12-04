@@ -2,6 +2,7 @@
 
 namespace Limelight\Helpers;
 
+use Limelight\Mecab\Node;
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
 
@@ -11,29 +12,53 @@ trait PluginHelper
      * Run all registered plugins.
      *
      * @param string $text
-     * @param Node   $node
-     * @param array  $tokens
-     * @param array  $words
+     * @param Node/null   $node
+     * @param array/null  $tokens
+     * @param array/null  $words
+     * @param array  $pluginWhiteList
      *
      * @return array
      */
-    protected function runPlugins($text, $node, $tokens, $words)
+    protected function runPlugins($text, $node, $tokens, $words, $pluginWhiteList = [])
     {
         $pluginResults = [];
 
         $config = Config::getInstance();
 
-        $plugins = $config->getPlugins();
+        $allPlugins = $config->getPlugins();
 
-        foreach ($plugins as $plugin => $namespace) {
-            $this->validatePlugin($namespace);
+        foreach ($allPlugins as $plugin => $namespace) {
+            if ($this->isWhiteListed($plugin, $pluginWhiteList)) {
+                $this->validatePlugin($namespace);
 
-            $pluginClass = new $namespace($text, $node, $tokens, $words);
+                $pluginClass = new $namespace($text, $node, $tokens, $words);
 
-            $pluginResults[$plugin] = $this->firePlugin($pluginClass);
+                $pluginResults[$plugin] = $this->firePlugin($pluginClass);
+            }
         }
 
         return $pluginResults;
+    }
+
+    /**
+     * Whitelist is empty or plugin is in white list.
+     *
+     * @param string $plugin
+     * @param array  $pluginWhiteList
+     *
+     * @return bool
+     */
+    private function isWhiteListed($plugin, array $pluginWhiteList)
+    {
+        if (empty($pluginWhiteList)) {
+            return true;
+        }
+
+        array_map(function ($value) {
+            return ucfirst($value);
+        }, $pluginWhiteList);
+
+        return in_array($plugin, $pluginWhiteList);
     }
 
     /**

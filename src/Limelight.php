@@ -50,14 +50,15 @@ class Limelight
      * Run given text through plugins without mecab parsing. Kanji input will fail.
      *
      * @param string $text
+     * @param array  $pluginWhiteList [Plugins to run]
      *
      * @return Limelight\Classes\LimelightResults/ InvalidInputException
      */
-    public function noParse($text)
+    public function noParse($text, $pluginWhiteList = ['Furigana', 'Romanji'])
     {
         $noParser = new NoParser();
 
-        return $noParser->handle($text);
+        return $noParser->handle($text, $pluginWhiteList);
     }
 
     /**

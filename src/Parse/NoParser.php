@@ -19,10 +19,11 @@ class NoParser
      * Handle the no-parse for given text.
      *
      * @param string $text
+     * @param array  $pluginWhiteList
      *
      * @return LimelightResults
      */
-    public function handle($text)
+    public function handle($text, array $pluginWhiteList)
     {
         if ($this->hasKanji($text)) {
             throw new InvalidInputException('Text must not contain kanji.');
@@ -38,7 +39,7 @@ class NoParser
 
         $words = [new LimelightWord($token, $properties, $converter)];
 
-        $pluginResults = $this->runPlugins($text, null, $token, $words);
+        $pluginResults = $this->runPlugins($text, null, $token, $words, $pluginWhiteList);
 
         return new LimelightResults($text, $words, $pluginResults);
     }

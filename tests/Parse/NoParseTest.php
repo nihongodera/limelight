@@ -21,8 +21,6 @@ class NoParseTest extends TestCase
     }
 
     /**
-     * It parses kana text.
-     *
      * @test
      */
     public function it_parses_kana_text()
@@ -33,8 +31,6 @@ class NoParseTest extends TestCase
     }
 
     /**
-     * It gets romanji for kana text.
-     *
      * @test
      */
     public function it_gets_romanji_for_kana_text()
@@ -45,8 +41,26 @@ class NoParseTest extends TestCase
     }
 
     /**
-     * It throws exception for kanji input.
-     *
+     * @test
+     */
+    public function it_doesnt_run_plugins_not_in_given_whitelist()
+    {
+        $results = self::$limelight->noParse('ねんがっぴ', ['Furigana']);
+
+        $this->assertEquals('', $results->plugin('romanji'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_capitalizes_items_in_whitelist()
+    {
+        $results = self::$limelight->noParse('ねんがっぴ', ['furigana']);
+
+        $this->assertEquals('', $results->plugin('romanji'));
+    }
+
+    /**
      * @test
      * @expectedException Limelight\Exceptions\InvalidInputException
      * @expectedExceptionMessage Text must not contain kanji.
