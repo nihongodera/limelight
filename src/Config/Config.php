@@ -38,9 +38,7 @@ class Config
      */
     public function get($string)
     {
-        if (function_exists('config') && config('limelight.'.$string) !== null) {
-            return config('limelight.'.$string);
-        } elseif (isset($this->configFile[$string])) {
+        if (isset($this->configFile[$string])) {
             return $this->configFile[$string];
         }
 

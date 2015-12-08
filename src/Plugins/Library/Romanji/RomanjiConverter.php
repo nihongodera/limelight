@@ -80,7 +80,13 @@ abstract class RomanjiConverter
                 continue;
             }
 
-            $convertedChar = (isset($this->conversions[$charToConvert]) ? $this->conversions[$charToConvert] : '');
+            if (isset($this->conversions[$charToConvert])) {
+                $convertedChar = $this->conversions[$charToConvert];
+            } elseif (preg_match("/[0-9.!?,;:]$/", $charToConvert)) {
+                $convertedChar = $charToConvert;
+            } else {
+                $convertedChar = '';
+            }
 
             if ($convertedChar === 'n') {
                 $convertedChar = $this->convertN($next, $convertedChar);

@@ -47,4 +47,18 @@ class RomanjiTest extends TestCase
 
         $this->assertEquals('Ōsaka', $conversion);
     }
+
+    /**
+     * It sllows English punctuation to remain.
+     *
+     * @test
+     */
+    public function it_allows_english_punctuation_to_remain_when_noparse()
+    {
+        $results = self::$limelight->noParse('うれ.しい');
+
+        $conversion = $results->plugin('Romanji');
+
+        $this->assertEquals('Ure.shii', $conversion);
+    }
 }
