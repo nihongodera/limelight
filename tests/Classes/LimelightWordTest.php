@@ -303,4 +303,86 @@ class LimelightWordTest extends TestCase
 
         $this->assertEquals('test', $romanji);
     }
+
+    /**
+     * @test
+     */
+    public function it_shows_info_for_nonparsed_kana_words()
+    {
+        $config = Config::getInstance();
+
+        $config->resetConfig();
+
+        $results = self::$limelight->parse('ロマンティック');
+
+        $result = $results->all()[0];
+
+        $reading = $result->reading();
+        $pronunciation = $result->pronunciation();
+
+        $this->assertEquals('ロマンティック', $reading);
+        $this->assertEquals('ロマンティック', $pronunciation);
+    }
+
+    /**
+     * @test
+     */
+    public function it_converts_reading_to_kana_for_nonparsed_kana_words()
+    {
+        $results = self::$limelight->parse('ロマンティック');
+
+        $result = $results->all()[0];
+
+        $katakana = $result->toKatakana()->reading();
+        $hiragana = $result->toHiragana()->reading();
+
+        $this->assertEquals('ロマンティック', $katakana);
+        $this->assertEquals('ろまんてぃっく', $hiragana);
+    }
+
+    /**
+     * @test
+     */
+    public function it_converts_pronunciation_to_kana_for_nonparsed_kana_words()
+    {
+        $results = self::$limelight->parse('ロマンティック');
+
+        $result = $results->all()[0];
+
+        $katakana = $result->toKatakana()->pronunciation();
+        $hiragana = $result->toHiragana()->pronunciation();
+
+        $this->assertEquals('ロマンティック', $katakana);
+        $this->assertEquals('ろまんてぃっく', $hiragana);
+    }
+
+    /**
+     * @test
+     */
+    public function it_converts_lemma_to_kana_for_nonparsed_kana_words()
+    {
+        $results = self::$limelight->parse('ロマンティック');
+
+        $result = $results->all()[0];
+
+        $katakana = $result->toKatakana()->lemma();
+        $hiragana = $result->toHiragana()->lemma();
+
+        $this->assertEquals('ロマンティック', $katakana);
+        $this->assertEquals('ろまんてぃっく', $hiragana);
+    }
+
+    /**
+     * @test
+     */
+    public function it_converts_to_romanji_for_nonparsed_kana_words()
+    {
+        $results = self::$limelight->parse('ロマンティック');
+
+        $result = $results->all()[0];
+
+        $romanji = $result->toRomanji()->reading();
+
+        $this->assertEquals('Romanthikku', $romanji);
+    }
 }

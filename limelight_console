@@ -7,3 +7,9 @@ use Limelight\Limelight;
 require __DIR__ . '/vendor/autoload.php';
 
 $limelight = new Limelight();
+
+$results = $limelight->parse('ロマンティック');
+
+$result = $results->all()[0];
+
+var_dump($result->romanji());

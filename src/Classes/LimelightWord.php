@@ -2,12 +2,15 @@
 
 namespace Limelight\Classes;
 
+use Limelight\Limelight;
 use Limelight\Helpers\Converter;
 use Limelight\Helpers\ResultsHelpers;
+use Limelight\Helpers\JapaneseHelpers;
 
 class LimelightWord
 {
     use ResultsHelpers;
+    use JapaneseHelpers;
 
     /**
      * Raw mecab data for word.
@@ -91,6 +94,8 @@ class LimelightWord
         $this->setProperties($token, $properties);
 
         $this->converter = $converter;
+
+        $this->setMissingParameters();
     }
 
     /**
@@ -378,5 +383,23 @@ class LimelightWord
             'furigana' => (isset($this->pluginData['Furigana']) ? $this->pluginData['Furigana'] : null),
             'romanji' => (isset($this->pluginData['Romanji']) ? $this->pluginData['Romanji'] : null),
         ];
+    }
+
+    /**
+     * Set missing parameters for kana words that were not parsed.
+     */
+    private function setMissingParameters()
+    {
+        if (!$this->hasKanji($this->word) && !isset($this->reading)) {
+            $this->reading = $this->word;
+
+            $this->pronunciation = $this->word;
+
+            $limelight = new Limelight();
+
+            $results = $limelight->noParse($this->word());
+
+            $this->setPluginData('Romanji', $results->toRomanji()->words());
+        }
     }
 }
