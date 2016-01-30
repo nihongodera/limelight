@@ -62,6 +62,13 @@ class LimelightWord
     private $grammar;
 
     /**
+     * True if word was successfully parsed.
+     *
+     * @var boolean
+     */
+    private $parsed = false;
+
+    /**
      * Results from plugins.
      *
      * @var array
@@ -230,6 +237,16 @@ class LimelightWord
     }
 
     /**
+     * Return true if word was successfully parsed.
+     *
+     * @return bool
+     */
+    public function parsed()
+    {
+        return $this->parsed;
+    }
+
+    /**
      * Set $this->conversionFlag to hiragana.
      *
      * @return $this
@@ -348,6 +365,10 @@ class LimelightWord
         $this->partOfSpeech = $properties['partOfSpeech'];
 
         $this->grammar = $properties['grammar'];
+
+        if (!is_null($this->reading)) {
+            $this->parsed = true;
+        }
     }
 
     /**

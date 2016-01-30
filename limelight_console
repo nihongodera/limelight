@@ -6,10 +6,20 @@ use Limelight\Limelight;
 
 require __DIR__ . '/vendor/autoload.php';
 
+$input = $argv[1];
+
+$method = (isset($argv[2]) ? $argv[2] : null);
+
+$flag = (isset($argv[3]) ? $argv[3] : null);
+
 $limelight = new Limelight();
 
-$results = $limelight->parse('ロマンティック');
+$results = $limelight->parse($input);
 
-$result = $results->all()[0];
-
-var_dump($result->romanji());
+if ($method && $flag) {
+    echo $results->$flag()->$method() . "\n";
+} else if ($method) {
+    echo $results->$method() . "\n";
+} else {
+    var_dump($results);
+}
