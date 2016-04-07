@@ -1,12 +1,12 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji;
+namespace Limelight\Plugins\Library\Romaji;
 
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
 use Limelight\Exceptions\PluginErrorException;
 
-class Romanji extends Plugin
+class Romaji extends Plugin
 {
     /**
      * Run the plugin.
@@ -17,43 +17,43 @@ class Romanji extends Plugin
     {
         $style = $this->makeStyleClass();
 
-        $romanjiString = '';
+        $romajiString = '';
 
         foreach ($this->words as $word) {
             $spaces = true;
 
             $hiraganaWord = mb_convert_kana($word->reading, 'c');
 
-            $romanjiWord = $style->handle($hiraganaWord, $word);
+            $romajiWord = $style->handle($hiraganaWord, $word);
 
-            $word->setPluginData('Romanji', $romanjiWord);
+            $word->setPluginData('Romaji', $romajiWord);
 
             if ($word->partOfSpeech !== 'symbol') {
-                $romanjiString .= ' ';
+                $romajiString .= ' ';
             }
 
-            $romanjiString .= $romanjiWord;
+            $romajiString .= $romajiWord;
         }
 
-        $romanjiString = trim($romanjiString);
+        $romajiString = trim($romajiString);
 
-        return $this->uppercaseFirst($romanjiString);
+        return $this->uppercaseFirst($romajiString);
     }
 
     /**
      * Make decorator class from config value.
      *
-     * @return RomanjiConverter/PluginErrorException
+     * @return RomajiConverter/PluginErrorException
      */
     private function makeStyleClass()
     {
         $config = Config::getInstance();
 
-        $options = $config->get('Romanji');
+        $options = $config->get('Romaji');
 
         $style = $this->underscoreToCamelCase($options['style']);
 
-        $styleClass = 'Limelight\\Plugins\\Library\\Romanji\\Styles\\'.ucfirst($style);
+        $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\'.ucfirst($style);
 
         if (class_exists($styleClass)) {
             return new $styleClass();

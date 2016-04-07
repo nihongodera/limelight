@@ -79,16 +79,16 @@ class Converter
     }
 
     /**
-     * Convert to romanji.
+     * Convert to romaji.
      *
      * @param string $property
      * @param array  $wordData
      *
      * @return string
      */
-    private function romanji($property, array $wordData)
+    private function romaji($property, array $wordData)
     {
-        return $this->convertPlugin($property, $wordData, 'romanji');
+        return $this->convertPlugin($property, $wordData, 'romaji');
     }
 
     /**

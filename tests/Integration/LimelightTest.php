@@ -112,13 +112,13 @@ class LimelightTest extends TestCase
     {
         $limelight = self::$limelight;
 
-        $limelight->setConfig('test', 'Romanji', 'style');
+        $limelight->setConfig('test', 'Romaji', 'style');
 
         $config = Config::getInstance();
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertContains('test', $romanji);
+        $this->assertContains('test', $romaji);
 
         $config->resetConfig();
     }

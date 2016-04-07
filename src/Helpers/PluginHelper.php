@@ -5,6 +5,7 @@ namespace Limelight\Helpers;
 use Limelight\Mecab\Node;
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
+use Limelight\Exceptions\PluginNotFoundException;
 
 trait PluginHelper
 {

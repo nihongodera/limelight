@@ -172,15 +172,15 @@ class LimelightResults
     }
 
     /**
-     * Set $this->conversionFlag to romanji.
+     * Set $this->conversionFlag to romaji.
      *
      * @return $this
      */
-    public function toRomanji()
+    public function toRomaji()
     {
-        $this->checkPlugin('romanji');
+        $this->checkPlugin('romaji');
 
-        $this->conversionFlag = 'romanji';
+        $this->conversionFlag = 'romaji';
 
         return $this;
     }
@@ -278,7 +278,7 @@ class LimelightResults
                 $string = substr($string, 0, -1);
             }
 
-            $string .= $word->$property().($space === true || $this->conversionFlag === 'romanji' ? $divider : '');
+            $string .= $word->$property().($space === true || $this->conversionFlag === 'romaji' ? $divider : '');
         }
 
         $this->conversionFlag = null;
@@ -295,7 +295,7 @@ class LimelightResults
      */
     private function isNonLemmaPlugin($property)
     {
-        return ($this->conversionFlag === 'furigana' || $this->conversionFlag === 'romanji') && $property !== 'lemma';
+        return ($this->conversionFlag === 'furigana' || $this->conversionFlag === 'romaji') && $property !== 'lemma';
     }
 
     /**

@@ -110,21 +110,21 @@ class ConfigTest extends TestCase
     {
         $config = Config::getInstance();
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertEquals('hepburn_modified', $romanji['style']);
+        $this->assertEquals('hepburn_modified', $romaji['style']);
 
-        $config->set('hepburn_traditional', 'Romanji', 'style');
+        $config->set('hepburn_traditional', 'Romaji', 'style');
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertEquals('hepburn_traditional', $romanji['style']);
+        $this->assertEquals('hepburn_traditional', $romaji['style']);
 
         $config->resetConfig();
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertEquals('hepburn_modified', $romanji['style']);
+        $this->assertEquals('hepburn_modified', $romaji['style']);
     }
 
     /**
@@ -134,15 +134,15 @@ class ConfigTest extends TestCase
     {
         $config = Config::getInstance();
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertEquals('hepburn_modified', $romanji['style']);
+        $this->assertEquals('hepburn_modified', $romaji['style']);
 
-        $config->set('hepburn_traditional', 'Romanji', 'style');
+        $config->set('hepburn_traditional', 'Romaji', 'style');
 
-        $romanji = $config->get('Romanji');
+        $romaji = $config->get('Romaji');
 
-        $this->assertEquals('hepburn_traditional', $romanji['style']);
+        $this->assertEquals('hepburn_traditional', $romaji['style']);
     }
 
     /**

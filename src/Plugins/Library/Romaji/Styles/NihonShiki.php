@@ -1,13 +1,13 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji\Styles;
+namespace Limelight\Plugins\Library\Romaji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiConverter;
+use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
-class KunreiShiki extends RomanjiConverter
+class NihonShiki extends RomajiConverter
 {
     /**
-     * Romanji library.
+     * Romaji library.
      *
      * @var array
      */
@@ -33,9 +33,7 @@ class KunreiShiki extends RomanjiConverter
      * @var array
      */
     protected $particleConversions = [
-        'ha' => 'wa',
-        'he' => 'e',
-        'wo' => 'o',
+
     ];
 
     /**
@@ -64,7 +62,7 @@ class KunreiShiki extends RomanjiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/KunreiShiki.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/NihonShiki.php';
     }
 
     /**

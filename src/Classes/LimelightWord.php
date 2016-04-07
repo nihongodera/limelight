@@ -76,7 +76,7 @@ class LimelightWord
     private $pluginData = [];
 
     /**
-     * Converter for hiragana/katakana/romanji/furigana.
+     * Converter for hiragana/katakana/romaji/furigana.
      *
      * @var Limelight\Helpers\Converter
      */
@@ -271,15 +271,15 @@ class LimelightWord
     }
 
     /**
-     * Set $this->conversionFlag to romanji.
+     * Set $this->conversionFlag to romaji.
      *
      * @return $this
      */
-    public function toRomanji()
+    public function toRomaji()
     {
-        $this->checkPlugin('romanji');
+        $this->checkPlugin('romaji');
 
-        $this->conversionFlag = 'romanji';
+        $this->conversionFlag = 'romaji';
 
         return $this;
     }
@@ -402,7 +402,7 @@ class LimelightWord
             'reading' => $this->reading,
             'pronunciation' => $this->pronunciation,
             'furigana' => (isset($this->pluginData['Furigana']) ? $this->pluginData['Furigana'] : null),
-            'romanji' => (isset($this->pluginData['Romanji']) ? $this->pluginData['Romanji'] : null),
+            'romaji' => (isset($this->pluginData['Romaji']) ? $this->pluginData['Romaji'] : null),
         ];
     }
 
@@ -420,7 +420,7 @@ class LimelightWord
 
             $results = $limelight->noParse($this->word());
 
-            $this->setPluginData('Romanji', $results->toRomanji()->words());
+            $this->setPluginData('Romaji', $results->toRomaji()->words());
         }
     }
 }

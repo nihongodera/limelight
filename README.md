@@ -8,7 +8,7 @@
   - Find dictionary entries (lemmas) for conjugated words
   - Get readings and pronunciations for words
   - Build fuirgana for words
-  - Convert Japanese to romanji (English lettering)
+  - Convert Japanese to romaji (English lettering)
 
 ### Quick Guide
   - [Install Limelight](#install-limelight)
@@ -51,7 +51,7 @@ echo 'Lemmas: ' . $results->lemmas() . "\n";
 echo 'Parts of speech: ' . $results->partsOfSpeech() . "\n";
 echo 'Hiragana: ' . $results->toHiragana()->words() . "\n";
 echo 'Katakana: ' . $results->toKatakana()->words() . "\n";
-echo 'Romanji: ' . $results->toRomanji()->words() . "\n";
+echo 'Romaji: ' . $results->toRomaji()->words() . "\n";
 echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
 ```
 > **Output:**    
@@ -62,7 +62,7 @@ echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
 > Parts of speech: noun postposition noun postposition verb symbol   
 > Hiragana: にわでらいむをそだてています。   
 > Katakana: ニワデライムヲソダテテイマス。  
-> Romanji: Niwa de raimu o sodateteimasu.   
+> Romaji: Niwa de raimu o sodateteimasu.   
 > Furigana: <ruby><rb>庭</rb><rp>(</rp><rt>にわ</rt><rp>)</rp></ruby>でライムを<ruby><rb>育</rb><rp>(</rp><rt>そだ</rt><rp>)</rp></ruby>てています。     
    
 Get individual words off the LimelightResults object by selecting them by either word or index and using methods available on the returned [LimelightWord](https://github.com/nihongodera/limelight/wiki/LimelightWord) object.
@@ -73,7 +73,7 @@ $word1 = $results->findIndex(2);
 
 $word2 = $results->findWord('庭');
 
-echo $word1->toRomanji()->word() . "\n";
+echo $word1->toRomaji()->word() . "\n";
 
 echo $word2->toFurigana()->word() . "\n";
 ```

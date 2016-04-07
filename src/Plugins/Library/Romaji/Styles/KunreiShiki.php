@@ -1,13 +1,13 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji\Styles;
+namespace Limelight\Plugins\Library\Romaji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiConverter;
+use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
-class HepburnModified extends RomanjiConverter
+class KunreiShiki extends RomajiConverter
 {
     /**
-     * Romanji library.
+     * Romaji library.
      *
      * @var array
      */
@@ -44,7 +44,7 @@ class HepburnModified extends RomanjiConverter
      * @var array
      */
     protected $tsuConversions = [
-        'c' => 't',
+
     ];
 
     /**
@@ -53,10 +53,10 @@ class HepburnModified extends RomanjiConverter
      * @var array
      */
     protected $verbCombos = [
-        'a' => 'ā',
-        'u' => 'ū',
-        'e' => 'ē',
-        'o' => 'ō',
+        'a' => 'â',
+        'u' => 'û',
+        'e' => 'ê',
+        'o' => 'ô',
     ];
 
     /**
@@ -64,7 +64,7 @@ class HepburnModified extends RomanjiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/KunreiShiki.php';
     }
 
     /**

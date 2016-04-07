@@ -54,7 +54,7 @@ class Limelight
      *
      * @return Limelight\Classes\LimelightResults/ InvalidInputException
      */
-    public function noParse($text, $pluginWhiteList = ['Romanji'])
+    public function noParse($text, $pluginWhiteList = ['Romaji'])
     {
         $noParser = new NoParser();
 

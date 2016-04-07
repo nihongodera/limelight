@@ -1,13 +1,13 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji\Styles;
+namespace Limelight\Plugins\Library\Romaji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiConverter;
+use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
-class HepburnTraditional extends RomanjiConverter
+class HepburnModified extends RomajiConverter
 {
     /**
-     * Romanji library.
+     * Romaji library.
      *
      * @var array
      */
@@ -19,15 +19,12 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $nConversions = [
-        'b' => 'm',
-        'm' => 'm',
-        'p' => 'm',
-        'a' => 'n-',
-        'i' => 'n-',
-        'u' => 'n-',
-        'e' => 'n-',
-        'o' => 'n-',
-        'y' => 'n-',
+        'a' => 'n\'',
+        'i' => 'n\'',
+        'u' => 'n\'',
+        'e' => 'n\'',
+        'o' => 'n\'',
+        'y' => 'n\'',
     ];
 
     /**
@@ -38,6 +35,7 @@ class HepburnTraditional extends RomanjiConverter
     protected $particleConversions = [
         'ha' => 'wa',
         'he' => 'e',
+        'wo' => 'o',
     ];
 
     /**
@@ -55,7 +53,9 @@ class HepburnTraditional extends RomanjiConverter
      * @var array
      */
     protected $verbCombos = [
+        'a' => 'ā',
         'u' => 'ū',
+        'e' => 'ē',
         'o' => 'ō',
     ];
 

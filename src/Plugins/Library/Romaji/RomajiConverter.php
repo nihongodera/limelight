@@ -1,8 +1,8 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji;
+namespace Limelight\Plugins\Library\Romaji;
 
-abstract class RomanjiConverter
+abstract class RomajiConverter
 {
     /**
      * Number of index values to eat.
@@ -40,7 +40,7 @@ abstract class RomanjiConverter
     abstract protected function handle($string, $word);
 
     /**
-     * Convert string to romanji.
+     * Convert string to romaji.
      *
      * @param string        $string
      * @param LimelightWord $word
@@ -74,7 +74,7 @@ abstract class RomanjiConverter
 
             $charToConvert = $this->findCombos($char, $next, $nextNext);
 
-            if ($char === 'っ' && $this->canBeRomanji($next)) {
+            if ($char === 'っ' && $this->canBeRomaji($next)) {
                 $results .= $this->convertSmallTsu($next);
 
                 continue;
@@ -122,7 +122,7 @@ abstract class RomanjiConverter
         if ($this->isEdible($next)) {
             $combo = $current.$next;
 
-            if ($this->canBeRomanji($combo)) {
+            if ($this->canBeRomaji($combo)) {
                 $current = $combo;
 
                 $current = $this->findCombos($combo, $nextNext);
@@ -153,7 +153,7 @@ abstract class RomanjiConverter
      *
      * @return bool
      */
-    private function canBeRomanji($value)
+    private function canBeRomaji($value)
     {
         return in_array($value, array_keys($this->conversions));
     }
@@ -167,9 +167,9 @@ abstract class RomanjiConverter
      */
     private function convertSmallTsu($next)
     {
-        $nextRomanji = $this->conversions[$next];
+        $nextRomaji = $this->conversions[$next];
 
-        $nextChar = preg_split('//u', $nextRomanji, -1, PREG_SPLIT_NO_EMPTY)[0];
+        $nextChar = preg_split('//u', $nextRomaji, -1, PREG_SPLIT_NO_EMPTY)[0];
 
         if (in_array($nextChar, array_keys($this->tsuConversions))) {
             return $this->tsuConversions[$nextChar];
@@ -188,9 +188,9 @@ abstract class RomanjiConverter
      */
     private function convertN($next, $convertedChar)
     {
-        $nextRomanji = (isset($this->conversions[$next]) ? $this->conversions[$next] : null);
+        $nextRomaji = (isset($this->conversions[$next]) ? $this->conversions[$next] : null);
 
-        $nextChar = substr($nextRomanji, 0, 1);
+        $nextChar = substr($nextRomaji, 0, 1);
 
         if (in_array($nextChar, array_keys($this->nConversions))) {
             return $this->nConversions[$nextChar];
@@ -285,17 +285,17 @@ abstract class RomanjiConverter
     /**
      * Capitalize proper nouns.
      *
-     * @param string        $romanji
+     * @param string        $romaji
      * @param LimelightWord $word
      *
      * @return string
      */
-    private function upperCaseNames($romanji, $word)
+    private function upperCaseNames($romaji, $word)
     {
         if ($word->partOfSpeech === 'proper noun') {
-            return mb_convert_case($romanji, MB_CASE_TITLE, 'UTF-8');
+            return mb_convert_case($romaji, MB_CASE_TITLE, 'UTF-8');
         }
 
-        return $romanji;
+        return $romaji;
     }
 }

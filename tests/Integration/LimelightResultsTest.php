@@ -202,9 +202,9 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      */
-    public function it_can_convert_to_romanji()
+    public function it_can_convert_to_romaji()
     {
-        $string = self::$results->toRomanji()->words();
+        $string = self::$results->toRomaji()->words();
 
         $this->AssertEquals('Ongaku o kikimasu.', $string);
     }
@@ -212,9 +212,9 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      */
-    public function it_can_build_a_romanji_string_with_spaces()
+    public function it_can_build_a_romaji_string_with_spaces()
     {
-        $string = self::$results->toRomanji()->words(true);
+        $string = self::$results->toRomaji()->words(true);
 
         $this->AssertEquals('Ongaku o kikimasu.', $string);
     }
@@ -222,9 +222,9 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      */
-    public function it_can_build_a_romanji_string_with_dividing_char()
+    public function it_can_build_a_romaji_string_with_dividing_char()
     {
-        $string = self::$results->toRomanji()->words(true, '-');
+        $string = self::$results->toRomaji()->words(true, '-');
 
         $this->AssertEquals('Ongaku-o-kikimasu.', $string);
     }
@@ -242,15 +242,15 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      * @expectedException Limelight\Exceptions\PluginNotFoundException
-     * @expectedExceptionMessage Plugin Romanji not found in config.php
+     * @expectedExceptionMessage Plugin Romaji not found in config.php
      */
     public function it_throws_exception_when_plugin_not_registered()
     {
         $config = Config::getInstance();
 
-        $config->erase('plugins', 'Romanji');
+        $config->erase('plugins', 'Romaji');
 
-        $string = self::$results->toRomanji()->words();
+        $string = self::$results->toRomaji()->words();
     }
 
     /**

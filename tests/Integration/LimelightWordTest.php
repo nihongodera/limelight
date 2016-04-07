@@ -33,9 +33,9 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_plugin_data_by_method_call()
     {
-        $romanji = self::$results->findIndex(0)->romanji();
+        $romaji = self::$results->findIndex(0)->romaji();
 
-        $this->assertEquals('Tōkyō', $romanji);
+        $this->assertEquals('Tōkyō', $romaji);
     }
 
     /**
@@ -43,9 +43,9 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_plugin_data_by_property_call()
     {
-        $romanji = self::$results->findIndex(0)->romanji;
+        $romaji = self::$results->findIndex(0)->romaji;
 
-        $this->assertEquals('Tōkyō', $romanji);
+        $this->assertEquals('Tōkyō', $romaji);
     }
 
     /**
@@ -179,9 +179,9 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_convert_to_romanji()
+    public function it_can_convert_to_romaji()
     {
-        $pronunciation = self::$results->findIndex(8)->toRomanji()->word();
+        $pronunciation = self::$results->findIndex(8)->toRomaji()->word();
 
         $this->assertEquals('oishikatta', $pronunciation);
     }
@@ -199,15 +199,15 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      * @expectedException Limelight\Exceptions\PluginNotFoundException
-     * @expectedExceptionMessage Plugin Romanji not found in config.php
+     * @expectedExceptionMessage Plugin Romaji not found in config.php
      */
     public function it_throws_exception_when_plugin_not_registered()
     {
         $config = Config::getInstance();
 
-        $config->erase('plugins', 'Romanji');
+        $config->erase('plugins', 'Romaji');
 
-        $string = self::$results->toRomanji()->words();
+        $string = self::$results->toRomaji()->words();
     }
 
     /**
@@ -253,15 +253,15 @@ class LimelightWordTest extends TestCase
     {
         $wordObject = self::$results->findIndex(0);
 
-        $romanji = $wordObject->romanji;
+        $romaji = $wordObject->romaji;
 
-        $this->assertEquals('Tōkyō', $romanji);
+        $this->assertEquals('Tōkyō', $romaji);
 
-        $wordObject->setPluginData('Romanji', 'test');
+        $wordObject->setPluginData('Romaji', 'test');
 
-        $romanji = $wordObject->romanji;
+        $romaji = $wordObject->romaji;
 
-        $this->assertEquals('test', $romanji);
+        $this->assertEquals('test', $romaji);
     }
 
     /**
@@ -335,15 +335,15 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_to_romanji_for_nonparsed_kana_words()
+    public function it_converts_to_romaji_for_nonparsed_kana_words()
     {
         $results = self::$limelight->parse('ロマンティック');
 
         $result = $results->all()[0];
 
-        $romanji = $result->toRomanji()->reading();
+        $romaji = $result->toRomaji()->reading();
 
-        $this->assertEquals('Romanthikku', $romanji);
+        $this->assertEquals('Romanthikku', $romaji);
     }
 
     /**

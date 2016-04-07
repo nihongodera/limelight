@@ -24,14 +24,14 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get romanji string for results.
+     * Get romaji string for results.
      *
-     * @param RomanjiConverter $converter
+     * @param RomajiConverter $converter
      * @param LimelightResults $results
      *
      * @return string
      */
-    protected function getRomanjiConversion($converter, $results)
+    protected function getRomajiConversion($converter, $results)
     {
         $conversion = '';
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace Limelight\Plugins\Library\Romanji\Styles;
+namespace Limelight\Plugins\Library\Romaji\Styles;
 
-use Limelight\Plugins\Library\Romanji\RomanjiConverter;
+use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
-class NihonShiki extends RomanjiConverter
+class HepburnTraditional extends RomajiConverter
 {
     /**
-     * Romanji library.
+     * Romaji library.
      *
      * @var array
      */
@@ -19,12 +19,15 @@ class NihonShiki extends RomanjiConverter
      * @var array
      */
     protected $nConversions = [
-        'a' => 'n\'',
-        'i' => 'n\'',
-        'u' => 'n\'',
-        'e' => 'n\'',
-        'o' => 'n\'',
-        'y' => 'n\'',
+        'b' => 'm',
+        'm' => 'm',
+        'p' => 'm',
+        'a' => 'n-',
+        'i' => 'n-',
+        'u' => 'n-',
+        'e' => 'n-',
+        'o' => 'n-',
+        'y' => 'n-',
     ];
 
     /**
@@ -33,7 +36,8 @@ class NihonShiki extends RomanjiConverter
      * @var array
      */
     protected $particleConversions = [
-
+        'ha' => 'wa',
+        'he' => 'e',
     ];
 
     /**
@@ -42,7 +46,7 @@ class NihonShiki extends RomanjiConverter
      * @var array
      */
     protected $tsuConversions = [
-
+        'c' => 't',
     ];
 
     /**
@@ -51,10 +55,8 @@ class NihonShiki extends RomanjiConverter
      * @var array
      */
     protected $verbCombos = [
-        'a' => 'â',
-        'u' => 'û',
-        'e' => 'ê',
-        'o' => 'ô',
+        'u' => 'ū',
+        'o' => 'ō',
     ];
 
     /**
@@ -62,7 +64,7 @@ class NihonShiki extends RomanjiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/NihonShiki.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
     }
 
     /**

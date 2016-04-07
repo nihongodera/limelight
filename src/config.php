@@ -11,7 +11,7 @@ return [
     */
     'plugins' => [
         'Furigana' => 'Limelight\Plugins\Library\Furigana\Furigana',
-        'Romanji' => 'Limelight\Plugins\Library\Romanji\Romanji'
+        'Romaji' => 'Limelight\Plugins\Library\Romaji\Romaji'
     ],
 
     /*
@@ -29,7 +29,7 @@ return [
         'word_wrapper' => '',
     ],
 
-    'Romanji' => [
+    'Romaji' => [
         'style' => 'hepburn_modified'
     ],
 

@@ -33,11 +33,11 @@ class NoParseTest extends TestCase
     /**
      * @test
      */
-    public function it_gets_romanji_for_kana_text()
+    public function it_gets_romaji_for_kana_text()
     {
         $results = self::$limelight->noParse('ねんがっぴ');
 
-        $this->assertEquals('Nengappi', $results->plugin('romanji'));
+        $this->assertEquals('Nengappi', $results->plugin('romaji'));
     }
 
     /**
@@ -47,7 +47,7 @@ class NoParseTest extends TestCase
     {
         $results = self::$limelight->noParse('ねんがっぴ', ['Furigana']);
 
-        $this->assertEquals('', $results->plugin('romanji'));
+        $this->assertEquals('', $results->plugin('romaji'));
     }
 
     /**
@@ -57,7 +57,7 @@ class NoParseTest extends TestCase
     {
         $results = self::$limelight->noParse('ねんがっぴ', ['furigana']);
 
-        $this->assertEquals('', $results->plugin('romanji'));
+        $this->assertEquals('', $results->plugin('romaji'));
     }
 
     /**
