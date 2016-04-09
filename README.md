@@ -19,7 +19,11 @@
   - [Sources, Contributions, and Contributing](#sources-contributions-and-contributing)
 
 ### Install Limelight
-[Install MeCab and the php extension php-mecab](https://github.com/nihongodera/php-mecab-documentation) on your system.  
+##### Requirements
+  - php > 5.6
+
+
+[Install MeCab and the php extension php-mecab](https://github.com/nihongodera/php-mecab-documentation) on your system.   
   
 Install Limelight through composer.
 ```

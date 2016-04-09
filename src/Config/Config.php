@@ -98,6 +98,7 @@ class Config
 
             return $instance;
         } catch (\Exception $e) {
+            var_dump($e->getTrace());
             throw new InternalErrorException("Class {$fullClassName} could not be instantiated.");
         }
     }
@@ -136,9 +137,9 @@ class Config
 
     /**
      * Erase config value entirely.
-     * 
-     * @param  string $key1 
-     * @param  string $key2 
+     *
+     * @param  string $key1
+     * @param  string $key2
      */
     public function erase($key1, $key2)
     {
@@ -170,7 +171,7 @@ class Config
      * @param string $fullClassName
      * @param string $interface
      *
-     * @return  null/InternalErrorException 
+     * @return  null/InternalErrorException
      */
     private function validateClass($fullClassName, $interface)
     {
