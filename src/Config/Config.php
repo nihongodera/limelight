@@ -98,7 +98,6 @@ class Config
 
             return $instance;
         } catch (\Exception $e) {
-            var_dump($e->getTrace());
             throw new InternalErrorException("Class {$fullClassName} could not be instantiated.");
         }
     }
@@ -124,10 +123,14 @@ class Config
      *
      * @return bool/InvalidInputException
      */
-    public function set($value, $key1, $key2)
+    public function set($value, $key1, $key2 = null)
     {
         if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
             $this->configFile[$key1][$key2] = $value;
+
+            return true;
+        } elseif (isset($this->configFile[$key1]) && is_null($key2)) {
+            $this->configFile[$key1] = $value;
 
             return true;
         }

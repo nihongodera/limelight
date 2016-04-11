@@ -28,8 +28,6 @@ class InvalidInputException extends LimelightException
      */
     public function __toString()
     {
-        $this->handle();
-        
-        return '';
+        return $this->handle();
     }
 }

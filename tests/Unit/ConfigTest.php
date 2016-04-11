@@ -143,6 +143,8 @@ class ConfigTest extends TestCase
         $romaji = $config->get('Romaji');
 
         $this->assertEquals('hepburn_traditional', $romaji['style']);
+
+        $config->resetConfig();
     }
 
     /**
@@ -155,5 +157,7 @@ class ConfigTest extends TestCase
         $config = Config::getInstance();
 
         $config->set('test', 'sldkfj', 'lkfsd');
+
+        $config->resetConfig();
     }
 }

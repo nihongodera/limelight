@@ -2,6 +2,8 @@
 
 namespace Limelight\Exceptions;
 
+use Limelight\Config\Config;
+
 class LimelightException extends \Exception
 {
     /**
@@ -17,15 +19,35 @@ class LimelightException extends \Exception
     ];
 
     /**
+     * Construct.
+     *
+     * @param string $message
+     */
+    public function __construct($message = 'Requested plugin not found.')
+    {
+        $config = Config::getInstance();
+
+        $this->debug = $config->get('debug');
+
+        parent::__construct($message);
+    }
+
+    /**
      * Handle exception.
      *
-     * @return exit
+     * @return string
      */
     public function handle()
     {
-        echo  __CLASS__.': '. $this->red("{$this->message}\n");
+        if ($this->debug) {
+            echo __CLASS__.': '. $this->red("{$this->message}\n");
 
-        $this->printTrace();
+            $this->printTrace();
+
+            return '';
+        }
+
+        return __CLASS__.': '. $this->red("{$this->message}\n");
     }
 
     /**
@@ -44,7 +66,7 @@ class LimelightException extends \Exception
         foreach ($trace as $layer) {
             $number = $this->blue($count . '. ');
 
-            $file = (isset($layer['file']) ?: null);
+            $file = (isset($layer['file']) ? $layer['file'] : null);
 
             $line = (isset($layer['line']) ? $this->green(' line '.$layer['line']) : null);
 
@@ -52,7 +74,7 @@ class LimelightException extends \Exception
 
             $function = $this->green($layer['function']);
 
-            $type = $layer['type'];
+            $type = ' '.$layer['type'];
 
             $output = $number.$class.$type.$function.' in '.$file.$line;
 
