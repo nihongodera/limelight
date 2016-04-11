@@ -102,6 +102,16 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      */
+    public function it_can_build_a_word_string_from_words_when_get_is_called()
+    {
+        $string = self::$results->get();
+
+        $this->AssertEquals('音楽を聴きます。', $string);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_build_a_word_string_with_spaces()
     {
         $string = self::$results->words(true);

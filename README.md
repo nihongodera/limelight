@@ -85,7 +85,12 @@ echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
 > Hiragana: にわでらいむをそだてています。   
 > Katakana: ニワデライムヲソダテテイマス。  
 > Romaji: Niwa de raimu o sodateteimasu.   
-> Furigana: <ruby><rb>庭</rb><rp>(</rp><rt>にわ</rt><rp>)</rp></ruby>でライムを<ruby><rb>育</rb><rp>(</rp><rt>そだ</rt><rp>)</rp></ruby>てています。     
+> Furigana: <ruby><rb>庭</rb><rp>(</rp><rt>にわ</rt><rp>)</rp></ruby>でライムを<ruby><rb>育</rb><rp>(</rp><rt>そだ</rt><rp>)</rp></ruby>てています。   
+
+Note: instead of calling words() you can call get().  
+```
+$results->toRomaji()->get();
+```
    
 Get individual words off the LimelightResults object by selecting them by either word or index and using methods available on the returned [LimelightWord](https://github.com/nihongodera/limelight/wiki/LimelightWord) object.
 ```php
@@ -104,6 +109,11 @@ echo $word2->toFurigana()->word() . "\n";
 > <ruby>庭<rt>にわ</rt></ruby>   
    
 Notice that methods on the LimelightResults object and the LimelightWord object follow the same conventions, but LimelightResults methods are plural (word**s**()) while LimelightWord methods are singular (word()).
+
+Note: instead of calling word() you can call get().  
+```
+$word1->toRomaji()->get();
+```
   
 Alternatively, loop through all the words on the LimelightResults object using the next() method.
 ```php

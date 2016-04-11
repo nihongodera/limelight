@@ -99,6 +99,16 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
+    public function it_can_get_word_when_get_called()
+    {
+        $word = self::$results->findIndex(0)->get();
+
+        $this->assertEquals('東京', $word);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_get_lemma()
     {
         $lemma = self::$results->findIndex(0)->lemma();

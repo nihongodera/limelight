@@ -100,6 +100,22 @@ class LimelightResults
     /**
      * Get all words combined as a string.
      *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
+     *
+     * @return string
+     */
+    public function get($spaces = false, $divider = ' ')
+    {
+        return $this->words($spaces, $divider);
+    }
+
+    /**
+     * Get all words combined as a string.
+     *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
+     *
      * @return string
      */
     public function words($spaces = false, $divider = ' ')
@@ -109,6 +125,9 @@ class LimelightResults
 
     /**
      * Get all lemmas combined as a string.
+     *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
      *
      * @return string
      */
@@ -120,6 +139,9 @@ class LimelightResults
     /**
      * Get all readings combined as a string.
      *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
+     *
      * @return string
      */
     public function readings($spaces = false, $divider = ' ')
@@ -130,6 +152,9 @@ class LimelightResults
     /**
      * Get all pronunciations combined as a string.
      *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
+     *
      * @return string
      */
     public function pronunciations($spaces = false, $divider = ' ')
@@ -139,6 +164,9 @@ class LimelightResults
 
     /**
      * Get all partsOfSpeech combined as a space sseerated string.
+     *
+     * @param bool   $spaces  [put divider between words]
+     * @param string $divider
      *
      * @return string
      */
@@ -209,7 +237,7 @@ class LimelightResults
         $count = count($this->words);
 
         for ($i = 0; $i < $count; ++$i) {
-            yield ($this->words[$i]);
+            yield $this->words[$i];
         }
     }
 
@@ -314,8 +342,8 @@ class LimelightResults
     /**
      * Cut last char if its is divider.
      * 
-     * @param  string $string 
-     * @param  string $divider
+     * @param string $string
+     * @param string $divider
      * 
      * @return string
      */

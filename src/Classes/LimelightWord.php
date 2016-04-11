@@ -165,6 +165,16 @@ class LimelightWord
      *
      * @return string
      */
+    public function get()
+    {
+        return $this->word();
+    }
+
+    /**
+     * Get word.
+     *
+     * @return string
+     */
     public function word()
     {
         if (!is_null($this->conversionFlag)) {
