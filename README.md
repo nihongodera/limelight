@@ -22,8 +22,26 @@
 ##### Requirements
   - php > 5.6
 
+Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.
+##### Linux Ubuntu Users
+Use the install script included in this repository.    
+Download the script:
+```
+curl -O https://raw.githubusercontent.com/nihongodera/limelight/master/install_mecab_php-mecab.sh
+```
+Make the file executable:
+```
+chmod +x install_mecab_php-mecab.sh
+```
+Execute the script:
+```
+./install_mecab_php-mecab.sh
+```
+For information about what the script does, see [here](https://github.com/nihongodera/limelight/wiki/Install-Script).
 
-[Install MeCab and the php extension php-mecab](https://github.com/nihongodera/php-mecab-documentation) on your system.   
+##### Other Systems
+
+Please see [this page](https://github.com/nihongodera/php-mecab-documentation) to learn more about installing on your system.   
   
 Install Limelight through composer.
 ```

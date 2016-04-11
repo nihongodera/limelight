@@ -6,7 +6,7 @@ use Limelight\Limelight;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$input = $argv[1];
+$input = (isset($argv[1]) ?: 'こんにちは！');
 
 $method = (isset($argv[2]) ? $argv[2] : null);
 

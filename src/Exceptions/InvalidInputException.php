@@ -2,7 +2,7 @@
 
 namespace Limelight\Exceptions;
 
-class InvalidInputException extends \Exception
+class InvalidInputException extends LimelightException
 {
     /**
      * @var string
@@ -28,6 +28,8 @@ class InvalidInputException extends \Exception
      */
     public function __toString()
     {
-        return __CLASS__.": {$this->message}\n";
+        $this->handle();
+        
+        return '';
     }
 }

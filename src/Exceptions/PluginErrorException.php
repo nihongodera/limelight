@@ -2,7 +2,7 @@
 
 namespace Limelight\Exceptions;
 
-class PluginErrorException extends \Exception
+class PluginErrorException extends LimelightException
 {
     /**
      * @var string
@@ -28,6 +28,8 @@ class PluginErrorException extends \Exception
      */
     public function __toString()
     {
-        return __CLASS__.": {$this->message}\n";
+        $this->handle();
+
+        return '';
     }
 }

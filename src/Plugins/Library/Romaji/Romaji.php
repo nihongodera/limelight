@@ -55,11 +55,15 @@ class Romaji extends Plugin
 
         $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\'.ucfirst($style);
 
-        if (class_exists($styleClass)) {
-            return new $styleClass();
-        }
+        try {
+            if (class_exists($styleClass)) {
+                return new $styleClass();
+            }
 
-        throw new PluginErrorException("Style {$style} does not exist.  Check config.php file.");
+            throw new PluginErrorException("Style {$style} does not exist.  Check config.php file.");
+        } catch (PluginErrorException $e) {
+            $e->handle();
+        }
     }
 
     /**
