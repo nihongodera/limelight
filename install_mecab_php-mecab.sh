@@ -8,8 +8,7 @@ NC="\033[0m"
 
 START=$PWD
 
-MECAB=`php -m | grep -i mecab`
-HASMECAB=$(expr "${MECAB}" == "mecab")
+HASMECAB=$(php -r 'echo extension_loaded("mecab");')
 
 echo "${GREEN}Installing dependencies...${NC}"
 sudo apt-get install mecab mecab-ipadic-utf8 mecab-utils libmecab-dev unzip build-essential php5-dev
@@ -38,4 +37,4 @@ else
     exit 1
 
 fi
-echo "${GREEN}Install completed.${NC}"
+echo "${GREEN}Install complete.${NC}"
