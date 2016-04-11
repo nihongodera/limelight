@@ -81,10 +81,10 @@ class PhpMecab implements Mecab
     public function split($string)
     {
         if (isset($this->options['dictionary'])) {
-            return $this->mecab->split($string, $this->options['dictionary']);
+            return mecab_split($string, $this->options['dictionary']);
         }
 
-        return $this->mecab->split($string);
+        return mecab_split($string);
     }
 
     /**
@@ -96,7 +96,7 @@ class PhpMecab implements Mecab
     {
         $options = $this->buildOptions();
 
-        $mecab = new \MeCab_Tagger($options);
+        $mecab = new \MeCab\Tagger($options);
 
         return $mecab;
     }

@@ -22,7 +22,10 @@
 ##### Requirements
   - php > 5.6
 
-Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.
+Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.   
+!!Important!!   
+php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
+
 ##### Linux Ubuntu Users
 Use the install script included in this repository.    
 Download the script:

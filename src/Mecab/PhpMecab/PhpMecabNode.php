@@ -16,7 +16,7 @@ class PhpMecabNode implements Node
      *
      * @param MeCab_Node $node
      */
-    public function __construct(\MeCab_Node $node)
+    public function __construct(\MeCab\Node $node)
     {
         $this->node = $node;
     }
