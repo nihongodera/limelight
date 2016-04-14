@@ -30,7 +30,7 @@ elif [ -d /etc/php5/mods-available ] ; then
 
     cd $START
     rm master.zip
-    rm -rf php-mecab-master
+    rm -rf "php-mecab-master"
 
 else
     echo "${RED}Unable to install php-mecab.${NC}"

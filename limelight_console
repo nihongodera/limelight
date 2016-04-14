@@ -23,3 +23,6 @@ if ($method && $flag) {
 } else {
     var_dump($results);
 }
+$tagger = new \MeCab\Tagger();
+$class = new ReflectionClass($tagger);
+var_dump($class->getMethods());
