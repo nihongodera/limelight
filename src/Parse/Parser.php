@@ -3,6 +3,7 @@
 namespace Limelight\Parse;
 
 use Limelight\Mecab\Mecab;
+use Limelight\Events\Dispatcher;
 use Limelight\Helpers\PluginHelper;
 use Limelight\Classes\LimelightResults;
 
@@ -11,7 +12,7 @@ class Parser
     use PluginHelper;
 
     /**
-     * @var implements Limelight\Mecab\Mecab
+     * @var Limelight\Mecab\Mecab
      */
     private $mecab;
 
@@ -26,17 +27,23 @@ class Parser
     private $tokenParser;
 
     /**
+     * @var Limelight\Events\Dispatcher
+     */
+    private $dispatcher;
+
+    /**
      * Construct.
      *
      * @param Mecab       $mecab
      * @param Tokenizer   $tokenizer
      * @param TokenParser $tokenParser
      */
-    public function __construct(Mecab $mecab, Tokenizer $tokenizer, TokenParser $tokenParser)
+    public function __construct(Mecab $mecab, Tokenizer $tokenizer, TokenParser $tokenParser, Dispatcher $dispatcher)
     {
         $this->mecab = $mecab;
         $this->tokenizer = $tokenizer;
         $this->tokenParser = $tokenParser;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -57,6 +64,10 @@ class Parser
 
         $pluginResults = ($runPlugins ? $this->runPlugins($text, $node, $tokens, $words) : null);
 
-        return new LimelightResults($text, $words, $pluginResults);
+        $results = new LimelightResults($text, $words, $pluginResults);
+
+        $this->dispatcher->fire('ParseWasSuccessful', $results);
+
+        return $results;
     }
 }

@@ -3,6 +3,7 @@
 namespace Limelight\Parse;
 
 use Limelight\Limelight;
+use Limelight\Events\Dispatcher;
 use Limelight\Helpers\Converter;
 use Limelight\Helpers\PluginHelper;
 use Limelight\Classes\LimelightWord;
@@ -14,6 +15,27 @@ class NoParser
 {
     use PluginHelper;
     use JapaneseHelpers;
+
+    /**
+     * @var Limelight\Limelight
+     */
+    private $limelight;
+
+    /**
+     * @var Limelight\Events\Dispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * Construct.
+     *
+     * @param Dispatcher $dispatcher
+     */
+    public function __construct(Limelight $limelight, Dispatcher $dispatcher)
+    {
+        $this->limelight = $limelight;
+        $this->dispatcher = $dispatcher;
+    }
 
     /**
      * Handle the no-parse for given text.
@@ -29,9 +51,7 @@ class NoParser
             throw new InvalidInputException('Text must not contain kanji.');
         }
 
-        $limelight = new Limelight();
-
-        $converter = new Converter($limelight);
+        $converter = new Converter($this->limelight);
 
         $token = $this->buildToken($text);
 
@@ -39,9 +59,15 @@ class NoParser
 
         $words = [new LimelightWord($token, $properties, $converter)];
 
+        $this->dispatcher->fire('WordWasCreated', $words[0]);
+
         $pluginResults = $this->runPlugins($text, null, $token, $words, $pluginWhiteList);
 
-        return new LimelightResults($text, $words, $pluginResults);
+        $results = new LimelightResults($text, $words, $pluginResults);
+
+        $this->dispatcher->fire('ParseWasSuccessful', $results);
+
+        return $results;
     }
 
     /**

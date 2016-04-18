@@ -16,7 +16,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Furigana Options
+    | Furigana Plugin Options
     |--------------------------------------------------------------------------
     |
     | Define the way that furigana is created. Item is placed where double
@@ -34,7 +34,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Romaji Options
+    | Romaji Plugin Options
     |--------------------------------------------------------------------------
     |
     | Determines the type of romaji to use. Options are: 'hepburn_modified',
@@ -43,6 +43,26 @@ return [
     */
     'Romaji' => [
         'style' => 'hepburn_modified'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event Listeners
+    |--------------------------------------------------------------------------
+    |
+    | Register listeners for events fired by Limelight. 'WordWasCreated' is
+    | fired after a LimelightWord object is created. 'ParseWasSuccessful' is
+    | fired after the LimelightResults object is created. Register listeners
+    | using their full namespace.
+    |
+    */
+    'listeners' => [
+        'WordWasCreated' => [
+            //
+        ],
+        'ParseWasSuccessful' => [
+            //
+        ]
     ],
 
     /*
@@ -79,8 +99,8 @@ return [
     | Debug
     |--------------------------------------------------------------------------
     |
-    | Set package debug mode. When true, stack traces will print.
+    | Set package debug mode. When true, stack traces will print in terminal.
     |
     */
-   'debug' => false
+    'debug' => false
 ];

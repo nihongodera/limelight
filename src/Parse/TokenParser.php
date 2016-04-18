@@ -3,12 +3,23 @@
 namespace Limelight\Parse;
 
 use Limelight\Limelight;
+use Limelight\Events\Dispatcher;
 use Limelight\Helpers\Converter;
 use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class TokenParser
 {
+    /**
+     * @var Limelight\Limelight
+     */
+    private $limelight;
+
+    /**
+     * @var Limelight\Events\Dispatcher
+     */
+    private $dispatcher;
+
     /**
      * @var array
      */
@@ -30,15 +41,24 @@ class TokenParser
     ];
 
     /**
+     * Construct.
+     *
+     * @param Limelight $limelight [description]
+     */
+    public function __construct(Limelight $limelight, Dispatcher $dispatcher)
+    {
+        $this->limelight = $limelight;
+        $this->dispatcher = $dispatcher;
+    }
+
+    /**
      * Parse the text by filtering through the tokens.
      *
      * @return array
      */
     public function parseTokens($tokens)
     {
-        $limelight = new Limelight();
-
-        $converter = new Converter($limelight);
+        $converter = new Converter($this->limelight);
 
         $registry = POSRegistry::getInstance();
 
@@ -153,6 +173,8 @@ class TokenParser
     private function makeNewWord($current, $properties, Converter $converter)
     {
         $word = new LimelightWord($current, $properties, $converter);
+
+        $this->dispatcher->fire('WordWasCreated', $word);
 
         $this->words[] = $word;
     }

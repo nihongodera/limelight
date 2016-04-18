@@ -59,7 +59,7 @@ class Tokenizer
         '副詞' => 'fukushi',
         '接続助詞' => 'setsuzokujoshi',
         '形容詞' => 'keiyoushi',
-        
+
         // Secondary part of speech, inflection types
         '非自立' => 'hijiritsu',
         '副詞可能' => 'fukushikanou',

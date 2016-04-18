@@ -122,4 +122,92 @@ class LimelightTest extends TestCase
 
         $config->resetConfig();
     }
+
+    /**
+     * @test
+     */
+    public function it_fires_event_that_resets_config_after_word_is_created()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'WordWasCreated');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['WordWasCreated'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->parse('出来るかな。。。');
+
+        $this->assertEquals([], $config->get('listeners')['WordWasCreated']);
+
+        $config->resetConfig();
+    }
+
+    /**
+     * @test
+     */
+    public function it_fires_event_that_sets_new_listener_after_results_object_is_created()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'ParseWasSuccessful');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['ParseWasSuccessful'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->parse('出来るかな。。。');
+
+        $listeners = $config->get('listeners');
+
+        $this->assertEquals([], $listeners['ParseWasSuccessful']);
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $listeners['WordWasCreated'][0]);
+
+        $config->resetConfig();
+    }
+
+    /**
+     * @test
+     */
+    public function it_fires_event_that_resets_config_after_word_is_created_in_noparse()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'WordWasCreated');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['WordWasCreated'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->noParse('できるかな。。。');
+
+        $this->assertEquals([], $config->get('listeners')['WordWasCreated']);
+
+        $config->resetConfig();
+    }
+
+    /**
+     * @test
+     */
+    public function it_fires_event_that_sets_new_listener_after_results_object_is_created_in_noparse()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'ParseWasSuccessful');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['ParseWasSuccessful'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->noParse('できるかな。。。');
+
+        $listeners = $config->get('listeners');
+
+        $this->assertEquals([], $listeners['ParseWasSuccessful']);
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $listeners['WordWasCreated'][0]);
+        
+        $config->resetConfig();
+    }
 }

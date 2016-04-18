@@ -6,7 +6,7 @@ use Limelight\Limelight;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$input = (isset($argv[1]) ?: 'こんにちは！');
+$input = (isset($argv[1]) ? $argv[1]: 'こんにちは');
 
 $method = (isset($argv[2]) ? $argv[2] : null);
 
@@ -23,6 +23,3 @@ if ($method && $flag) {
 } else {
     var_dump($results);
 }
-$tagger = new \MeCab\Tagger();
-$class = new ReflectionClass($tagger);
-var_dump($class->getMethods());

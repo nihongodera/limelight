@@ -6,6 +6,7 @@ use Limelight\Parse\Parser;
 use Limelight\Config\Config;
 use Limelight\Parse\NoParser;
 use Limelight\Parse\Tokenizer;
+use Limelight\Events\Dispatcher;
 use Limelight\Parse\TokenParser;
 
 class Limelight
@@ -20,11 +21,20 @@ class Limelight
     private $mecab;
 
     /**
+     * Dispatcher for eventing.
+     *
+     * @var Limelight\Events\Dispatcher
+     */
+    private $dispatcher;
+
+    /**
      * Boot.
      */
     public function __construct()
     {
         $config = Config::getInstance();
+
+        $this->dispatcher = new Dispatcher($config->get('listeners'));
 
         $this->mecab = $config->make('Limelight\Mecab\Mecab');
     }
@@ -41,9 +51,9 @@ class Limelight
     {
         $tokenizer = new Tokenizer();
 
-        $tokenParser = new TokenParser();
+        $tokenParser = new TokenParser($this, $this->dispatcher);
 
-        $parser = new Parser($this->mecab, $tokenizer, $tokenParser);
+        $parser = new Parser($this->mecab, $tokenizer, $tokenParser, $this->dispatcher);
 
         return $parser->handle($text, $runPlugins);
     }
@@ -58,13 +68,13 @@ class Limelight
      */
     public function noParse($text, $pluginWhiteList = ['Romaji'])
     {
-        $noParser = new NoParser();
+        $noParser = new NoParser($this, $this->dispatcher);
 
         return $noParser->handle($text, $pluginWhiteList);
     }
 
     /**
-     * Dynamically set config values.
+     * Dynamically set config values. Could be dangerous, be careful.
      *
      * @param string $value
      * @param string $key1

@@ -9,7 +9,7 @@ class Config
 {
     /**
      * config.php.
-     *q
+     *
      * @var array
      */
     private $configFile;
