@@ -7,7 +7,7 @@ use Limelight\Exceptions\InvalidInputException;
 
 class LimelightResults
 {
-    use ResultsHelpers;
+    use CollectionMethods, ResultsHelpers;
 
     /**
      * The original input.
@@ -341,10 +341,10 @@ class LimelightResults
 
     /**
      * Cut last char if its is divider.
-     * 
+     *
      * @param string $string
      * @param string $divider
-     * 
+     *
      * @return string
      */
     private function cutLast($string, $divider)
