@@ -60,6 +60,14 @@ class Dispatcher
     }
 
     /**
+     * Clear all registered listeners.
+     */
+    public function clearListeners()
+    {
+        $this->registeredListeners = [];
+    }
+
+    /**
      * Get all registered listeners.
      *
      * @return array

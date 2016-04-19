@@ -19,11 +19,13 @@
   - [Sources, Contributions, and Contributing](#sources-contributions-and-contributing)
 
 ### Install Limelight
-##### Requirements
+#### Requirements
   - php > 5.6
 
+#### Dependencies
 Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.   
-!!Important!!   
+       
+**Important**    
 php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
 
 ##### Linux Ubuntu Users
@@ -45,7 +47,8 @@ For information about what the script does, see [here](https://github.com/nihong
 ##### Other Systems
 
 Please see [this page](https://github.com/nihongodera/php-mecab-documentation) to learn more about installing on your system.   
-  
+    
+#### Install Limelight
 Install Limelight through composer.
 ```
 composer require nihongodera/limelight

@@ -142,4 +142,26 @@ class ParseTest extends TestCase
 
          $this->assertCount(450, $words);
     }
+
+    /**
+     * @test
+     */
+    public function it_fires_single_event_when_word_is_not_parsed()
+    {
+        $this->clearLog();
+
+        $limelight = new Limelight();
+
+        $limelight->dispatcher()->addListeners(['Limelight\Tests\Stubs\TestListener'], 'WordWasCreated');
+
+        $results = $limelight->parse('ケータイ');
+
+        $log = $this->readLog();
+
+        $this->assertEquals('WordWasCreated fired. ケータイ', $log);
+
+        $this->clearLog();
+
+        $limelight->dispatcher()->clearListeners();
+    }
 }

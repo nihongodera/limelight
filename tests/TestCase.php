@@ -4,6 +4,8 @@ namespace Limelight\Tests;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    protected $logPath = __DIR__.'/Stubs/test.log';
+
     /**
      * Assert MecabNode object equals expected array.
      *
@@ -42,5 +44,23 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         return $conversion;
+    }
+
+    /**
+     * Clear the test.log file.
+     */
+    protected function clearLog()
+    {
+        file_put_contents($this->logPath, '');
+    }
+
+    /**
+     * Read test.log file.
+     *
+     * @return string
+     */
+    protected function readLog()
+    {
+        return file_get_contents($this->logPath);
     }
 }

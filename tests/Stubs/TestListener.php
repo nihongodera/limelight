@@ -11,18 +11,16 @@ class TestListener implements LimelightListener
 {
     public function handle($payload)
     {
-        $config = Config::getInstance();
+        $path = __DIR__.'/test.log';
 
         if ($payload instanceof LimelightWord) {
-            $config->resetConfig();
+            $message = 'WordWasCreated fired. '.$payload->get();
 
-            return;
+            return file_put_contents($path, $message, FILE_APPEND);
         } elseif ($payload instanceof LimelightResults) {
-            $config->resetConfig();
+            $message = 'ParseWasSuccessful fired.'.$payload->get();
 
-            $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'WordWasCreated');
-
-            return;
+            return file_put_contents($path, $message, FILE_APPEND);
         }
 
         return (is_null($payload) ? 'It works!' : "Payload says {$payload}");

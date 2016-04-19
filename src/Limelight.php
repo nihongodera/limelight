@@ -63,7 +63,7 @@ class Limelight
      *
      * @param string $text
      * @param array  $pluginWhiteList [Plugins to run]
-     * @param bool   $fireEvents [When false, events will not be fired]
+     * @param bool   $supressEvents   [When true, events will not be fired]
      *
      * @return Limelight\Classes\LimelightResults/ InvalidInputException
      */
@@ -94,5 +94,15 @@ class Limelight
         $config = Config::getInstance();
 
         $config->set($value, $key1, $key2);
+    }
+
+    /**
+     * Get the attached dispatcher instance.
+     *
+     * @return Dispatcher
+     */
+    public function dispatcher()
+    {
+        return $this->dispatcher;
     }
 }

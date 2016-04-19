@@ -169,6 +169,28 @@ class EventTest extends TestCase
 
     /**
      * @test
+     */
+    public function dispatcher_clears_all_registered_events()
+    {
+        $dispatcher = $this->buildDispatcher();
+
+        $listener = new TestListener();
+
+        $dispatcher->addListeners($listener, 'WordWasCreated');
+
+        $registeredListeners = $dispatcher->getListeners();
+
+        $this->assertInstanceOf('Limelight\Tests\Stubs\TestListener', $registeredListeners['WordWasCreated'][0]);
+
+        $dispatcher->clearListeners();
+
+        $registeredListeners = $dispatcher->getListeners();
+
+        $this->assertEquals([], $registeredListeners);
+    }
+
+    /**
+     * @test
      *
      * @expectedException Limelight\Exceptions\EventErrorException
      * @expectedExceptionMessage Class I\Dont\Exist does not exist.
