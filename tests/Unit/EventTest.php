@@ -135,6 +135,40 @@ class EventTest extends TestCase
 
     /**
      * @test
+     */
+    public function dispatcher_can_be_supressed()
+    {
+        $dispatcher = $this->buildDispatcher();
+
+        $dispatcher->toggleEvents(true);
+
+        $listener = new TestListener();
+
+        $dispatcher->addListeners($listener, 'WordWasCreated');
+
+        $result = $dispatcher->fire('WordWasCreated');
+
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function dispatcher_toggles_event_supression()
+    {
+        $dispatcher = $this->buildDispatcher();
+
+        $supressEvents = $dispatcher->toggleEvents(true);
+
+        $this->assertTrue($supressEvents);
+
+        $supressEvents = $dispatcher->toggleEvents(true);
+
+        $this->assertFalse($supressEvents);
+    }
+
+    /**
+     * @test
      *
      * @expectedException Limelight\Exceptions\EventErrorException
      * @expectedExceptionMessage Class I\Dont\Exist does not exist.

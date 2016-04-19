@@ -83,6 +83,11 @@ class LimelightWord
     private $converter;
 
     /**
+     * @var Limelight\Limelight
+     */
+    private $limelight;
+
+    /**
      * Flag for calling Converter.
      *
      * @var null/string
@@ -96,11 +101,13 @@ class LimelightWord
      * @param array     $properties
      * @param Converter $converter
      */
-    public function __construct($token, $properties, Converter $converter)
+    public function __construct($token, $properties, Converter $converter, Limelight $limelight)
     {
         $this->setProperties($token, $properties);
 
         $this->converter = $converter;
+
+        $this->limelight = $limelight;
 
         $this->setMissingParameters();
     }
@@ -426,9 +433,7 @@ class LimelightWord
 
             $this->pronunciation = $this->word;
 
-            $limelight = new Limelight();
-
-            $results = $limelight->noParse($this->word());
+            $results = $this->limelight->noParse($this->word(), ['Romaji'], true);
 
             $this->setPluginData('Romaji', $results->toRomaji()->words());
         }

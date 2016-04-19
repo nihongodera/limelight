@@ -57,7 +57,7 @@ class NoParser
 
         $properties = $this->buildProperties();
 
-        $words = [new LimelightWord($token, $properties, $converter)];
+        $words = [new LimelightWord($token, $properties, $converter, $this->limelight)];
 
         $this->dispatcher->fire('WordWasCreated', $words[0]);
 

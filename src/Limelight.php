@@ -63,14 +63,21 @@ class Limelight
      *
      * @param string $text
      * @param array  $pluginWhiteList [Plugins to run]
+     * @param bool   $fireEvents [When false, events will not be fired]
      *
      * @return Limelight\Classes\LimelightResults/ InvalidInputException
      */
-    public function noParse($text, $pluginWhiteList = ['Romaji'])
+    public function noParse($text, $pluginWhiteList = ['Romaji'], $supressEvents = false)
     {
+        $this->dispatcher->toggleEvents($supressEvents);
+
         $noParser = new NoParser($this, $this->dispatcher);
 
-        return $noParser->handle($text, $pluginWhiteList);
+        $results = $noParser->handle($text, $pluginWhiteList);
+
+        $this->dispatcher->toggleEvents($supressEvents);
+
+        return $results;
     }
 
     /**

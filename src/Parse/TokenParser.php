@@ -172,7 +172,7 @@ class TokenParser
      */
     private function makeNewWord($current, $properties, Converter $converter)
     {
-        $word = new LimelightWord($current, $properties, $converter);
+        $word = new LimelightWord($current, $properties, $converter, $this->limelight);
 
         $this->dispatcher->fire('WordWasCreated', $word);
 

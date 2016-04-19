@@ -14,6 +14,13 @@ class Dispatcher
     protected $registeredListeners = [];
 
     /**
+     * When false, events are fired.
+     *
+     * @var boolean
+     */
+    protected $supressEvents = false;
+
+    /**
      * Construct.
      *
      * @param array $configListeners
@@ -72,7 +79,7 @@ class Dispatcher
      */
     public function fire($eventName, $payload = null)
     {
-        if (isset($this->registeredListeners[$eventName])) {
+        if (isset($this->registeredListeners[$eventName]) && $this->supressEvents === false) {
             $listeners = $this->registeredListeners[$eventName];
 
             return array_map(function (LimelightListener $listener) use ($payload) {
@@ -81,5 +88,23 @@ class Dispatcher
         }
 
         return false;
+    }
+
+    /**
+     * Turn eventing on/off.
+     *
+     * @param  bool $supressEvents
+     *
+     * @return bool
+     */
+    public function toggleEvents($supressEvents)
+    {
+        if ($supressEvents === true && $this->supressEvents === false) {
+            $this->supressEvents = true;
+        } elseif ($supressEvents === true && $this->supressEvents === true) {
+            $this->supressEvents = false;
+        }
+
+        return $this->supressEvents;
     }
 }

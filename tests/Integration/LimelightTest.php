@@ -210,4 +210,48 @@ class LimelightTest extends TestCase
         
         $config->resetConfig();
     }
+
+    /**
+     * @test
+     */
+    public function it_doesnt_fires_event_when_supressed_in_noparse()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'WordWasCreated');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['WordWasCreated'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->noParse('できるかな。。。', ['Romaji'], true);
+
+        $this->assertEquals(['Limelight\Tests\Stubs\TestListener'], $config->get('listeners')['WordWasCreated']);
+
+        $config->resetConfig();
+    }
+
+    /**
+     * @test
+     */
+    public function it_turns_events_back_on_after_running_noparse_with_event_supression()
+    {
+        $config = Config::getInstance();
+
+        $config->set(['Limelight\Tests\Stubs\TestListener'], 'listeners', 'WordWasCreated');
+
+        $this->assertEquals('Limelight\Tests\Stubs\TestListener', $config->get('listeners')['WordWasCreated'][0]);
+
+        $limelight = new Limelight();
+
+        $results = $limelight->noParse('できるかな。。。', ['Romaji'], true);
+
+        $this->assertEquals(['Limelight\Tests\Stubs\TestListener'], $config->get('listeners')['WordWasCreated']);
+
+        $results = $limelight->parse('出来るかな。。。');
+
+        $this->assertEquals([], $config->get('listeners')['WordWasCreated']);
+
+        $config->resetConfig();
+    }
 }
