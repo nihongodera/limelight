@@ -5,37 +5,37 @@ namespace Limelight\Classes;
 use Limelight\Helpers\ResultsHelpers;
 use Limelight\Exceptions\InvalidInputException;
 
-class LimelightResults
+class LimelightResults extends Collection
 {
-    use CollectionMethods, ResultsHelpers;
+    use ResultsHelpers;
 
     /**
      * The original input.
      *
      * @var string
      */
-    private $text;
+    protected $text;
 
     /**
      * Array of words returned from parser.
      *
      * @var array
      */
-    private $words;
+    protected $words;
 
     /**
      * Results from plugins.
      *
      * @var array
      */
-    private $pluginData = [];
+    protected $pluginData = [];
 
     /**
      * Flag for calling Converter on LimelightWord.
      *
      * @var null/string
      */
-    private $conversionFlag = null;
+    protected $conversionFlag = null;
 
     /**
      * Construct.
@@ -75,16 +75,6 @@ class LimelightResults
         }
 
         return $string;
-    }
-
-    /**
-     * Get all words.
-     *
-     * @return $this
-     */
-    public function all()
-    {
-        return $this->words;
     }
 
     /**

@@ -17,63 +17,63 @@ class LimelightWord
      *
      * @var array
      */
-    private $rawMecab;
+    public $rawMecab;
 
     /**
      * The word.
      *
      * @var string
      */
-    private $word;
+    public $word;
 
     /**
      * Dictionary entry for word.
      *
      * @var string
      */
-    private $lemma;
+    public $lemma;
 
     /**
      * Word reading.
      *
      * @var string
      */
-    private $reading;
+    public $reading;
 
     /**
      * Word pronunciation.
      *
      * @var string
      */
-    private $pronunciation;
+    public $pronunciation;
 
     /**
      * Word part of speech.
      *
      * @var string
      */
-    private $partOfSpeech;
+    public $partOfSpeech;
 
     /**
      * Grammar for word.
      *
      * @var string
      */
-    private $grammar;
+    public $grammar;
 
     /**
      * True if word was successfully parsed.
      *
      * @var boolean
      */
-    private $parsed = false;
+    public $parsed = false;
 
     /**
      * Results from plugins.
      *
      * @var array
      */
-    private $pluginData = [];
+    public $pluginData = [];
 
     /**
      * Converter for hiragana/katakana/romaji/furigana.
