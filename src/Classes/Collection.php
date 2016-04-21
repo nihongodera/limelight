@@ -24,6 +24,24 @@ abstract class Collection implements ArrayAccess
     {
         return $this->words;
     }
+
+    /**
+     * Chunk the underlying collection array.
+     *
+     * @param  int   $size
+     *
+     * @return static
+     */
+    public function chunk($size)
+    {
+        $chunks = [];
+
+        foreach (array_chunk($this->words, $size, true) as $chunk) {
+            $chunks[] = new static($this->text, $chunk, $this->pluginData);
+        }
+
+        return new static($this->text, $chunks, $this->pluginData);
+    }
     
     /**
      * Count the number of items on the object.
@@ -304,6 +322,25 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Create a collection of all elements that do not pass a given truth test.
+     *
+     * @param  callable|mixed  $callback
+     *
+     * @return static
+     */
+    public function reject($callback)
+    {
+        if ($this->useAsCallable($callback)) {
+            return $this->filter(function ($value, $key) use ($callback) {
+                return ! $callback($value, $key);
+            });
+        }
+        return $this->filter(function ($item) use ($callback) {
+            return $item != $callback;
+        });
+    }
+
+    /**
      * Get and remove the first item from the collection.
      *
      * @return mixed
@@ -311,5 +348,103 @@ abstract class Collection implements ArrayAccess
     public function shift()
     {
         return array_shift($this->words);
+    }
+
+    /**
+     * Slice the underlying collection array.
+     *
+     * @param  int   $offset
+     * @param  int   $length
+     *
+     * @return static
+     */
+    public function slice($offset, $length = null)
+    {
+        return new static($this->text, array_slice($this->words, $offset, $length, true), $this->pluginData);
+    }
+
+    /**
+     * Splice a portion of the underlying collection array.
+     *
+     * @param  int  $offset
+     * @param  int|null  $length
+     * @param  mixed  $replacement
+     *
+     * @return static
+     */
+    public function splice($offset, $length = null, $replacement = [])
+    {
+        if (func_num_args() == 1) {
+            return new static($this->text, array_splice($this->words, $offset), $this->pluginData);
+        }
+
+        return new static($this->text, array_splice($this->words, $offset, $length, $replacement), $this->pluginData);
+    }
+
+    /**
+     * Take the first or last {$limit} items.
+     *
+     * @param  int  $limit
+     *
+     * @return static
+     */
+    public function take($limit)
+    {
+        if ($limit < 0) {
+            return $this->slice($limit, abs($limit));
+        }
+
+        return $this->slice(0, $limit);
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_map(function ($value) {
+            return $value instanceof Arrayable ? $value->toArray() : $value;
+        }, $this->words);
+    }
+
+    /**
+     * Transform each item in the collection using a callback.
+     *
+     * @param  callable  $callback
+     *
+     * @return $this
+     */
+    public function transform(callable $callback)
+    {
+        $this->words = $this->map($callback)->all();
+
+        return $this;
+    }
+
+    /**
+     * Return only unique items from the collection array.
+     *
+     * @param  string|callable|null  $key
+     * @return static
+     */
+    public function unique($key = null)
+    {
+        if (is_null($key)) {
+            return new static($this->text, array_unique($this->words, SORT_REGULAR), $this->pluginData);
+        }
+
+        $key = $this->valueRetriever($key);
+
+        $exists = [];
+
+        return $this->reject(function ($item) use ($key, &$exists) {
+            if (in_array($id = $key($item), $exists)) {
+                return true;
+            }
+
+            $exists[] = $id;
+        });
     }
 }

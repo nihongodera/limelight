@@ -23,6 +23,34 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * chunk()
+     */
+    
+    /**
+     * @test
+     */
+    public function chunk_chunks_items()
+    {
+        $results = $this->getResults()->merge($this->getResults());
+
+        $chunks = $results->chunk(3);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $chunks);
+
+        $chunk1 = $chunks->pull(0);
+
+        $chunk2 = $chunks->pull(1);
+
+        $chunk3 = $chunks->pull(2);
+
+        $this->assertEquals(['音楽', 'を', '聴きます'], $chunk1->pluck('word')->all());
+
+        $this->assertEquals(['。', '音楽', 'を'], $chunk2->pluck('word')->all());
+
+        $this->assertEquals(['聴きます', '。'], $chunk3->pluck('word')->all());
+    }
+
+    /**
      * count()
      */
 
@@ -342,6 +370,22 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * reject()
+     */
+    
+    /**
+     * @test
+     */
+    public function reject_rejects_items_that_return_true_in_callback()
+    {
+        $answer = $this->getResults()->reject(function ($value, $key) {
+            return $value->partOfSpeech !== 'verb';
+        });
+
+        $this->assertEquals(['聴きます'], $answer->pluck('word')->all());
+    }
+
+    /**
      * shift()
      */
     
@@ -360,15 +404,183 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * Get the collection of items as a plain array.
-     *
-     * @return array
+     * slice()
      */
-    public function toArray()
+    
+    /**
+     * @test
+     */
+    public function slice_slices_array_at_given_index()
     {
-        return array_map(function ($value) {
-            return $value instanceof Arrayable ? $value->toArray() : $value;
-        }, $this->words);
+        $results = $this->getResults();
+
+        $answer = $results->slice(2);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。'], $results->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function slice_limits_size_of_return()
+    {
+        $results = $this->getResults();
+
+        $answer = $results->slice(2, 1);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['聴きます'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * splice()
+     */
+    
+    /**
+     * @test
+     */
+    public function splice_splices_at_given_index()
+    {
+        $results = $this->getResults();
+
+        $answer = $results->splice(2);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽', 'を'], $results->pluck('word')->all());
+
+        $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function splice_limits_size_of_return()
+    {
+        $results = $this->getResults()->merge($this->getResults());
+
+        $answer = $results->splice(2, 2);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。'], $results->pluck('word')->all());
+
+        $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function splice_replaces_items()
+    {
+        $results = $this->getResults();
+
+         $answer = $results->splice(2, 1, $this->getResults()->all());
+
+         $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+         $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。', '。'], $results->pluck('word')->all());
+    }
+
+    /**
+     * take()
+     */
+
+    /**
+     * @test
+     */
+    public function take_takes_items_from_the_front()
+    {
+        $answer = $this->getResults()->take(2);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽', 'を'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function take_takes_items_from_the_back()
+    {
+        $answer = $this->getResults()->take(-2);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * transform()
+     */
+    
+    /**
+     * @test
+     */
+    public function transform_transforms_items()
+    {
+        $results = $this->getResults();
+
+        $results->transform(function ($item, $key) {
+            return $item->word;
+        });
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $results);
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。'], $results->all());
+    }
+
+    /**
+     * unique()
+     */
+    
+    /**
+     * @test
+     */
+    public function unique_returns_unique_items()
+    {
+        $results = $this->getResults()->merge($this->getResults());
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。', '音楽', 'を', '聴きます', '。'], $results->pluck('word')->all());
+
+        $unique = $results->unique();
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。'], $unique->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function unique_return_unique_items_for_given_key()
+    {
+        $results = $this->getResults()->merge(self::$limelight->parse('行く'));
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。', '行く'], $results->pluck('word')->all());
+
+        $unique = $results->unique('partOfSpeech');
+
+        $this->assertEquals(['音楽', 'を', '聴きます', '。'], $unique->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function unique_returns_unique_for_callback()
+    {
+        $results = self::$limelight->parse('行く 行きます 行った 帰る 買う');
+
+        $this->assertEquals(['行く', '行きます', '行った', '帰る', '買う'], $results->pluck('word')->all());
+
+        $unique = $results->unique(function ($item) {
+            return $item->lemma;
+        });
+
+        $this->assertEquals(['行く', '行った', '帰る', '買う'], $unique->pluck('word')->all());
     }
 
     /**

@@ -351,6 +351,18 @@ trait Arr
     }
 
     /**
+     * Determine if the given value is callable, but not a string.
+     *
+     * @param  mixed  $value
+     *
+     * @return bool
+     */
+    protected function useAsCallable($value)
+    {
+        return ! is_string($value) && is_callable($value);
+    }
+
+    /**
      * Return the default value of the given value.
      *
      * @param  mixed  $value
@@ -359,5 +371,23 @@ trait Arr
     protected function value($value)
     {
         return $value instanceof Closure ? $value() : $value;
+    }
+
+    /**
+     * Get a value retrieving callback.
+     *
+     * @param  string  $value
+     *
+     * @return callable
+     */
+    protected function valueRetriever($value)
+    {
+        if ($this->useAsCallable($value)) {
+            return $value;
+        }
+
+        return function ($item) use ($value) {
+            return $this->dataGet($item, $value);
+        };
     }
 }
