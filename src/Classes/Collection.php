@@ -36,6 +36,20 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Get all items except for those with the specified keys.
+     *
+     * @param  mixed  $keys
+     *
+     * @return static
+     */
+    public function except($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        return new static($this->text, $this->arrExcept($this->words, $keys), $this->pluginData);
+    }
+
+    /**
      * Run a filter over each of the items.
      *
      * @param  callable|null  $callback
@@ -72,6 +86,22 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Remove an item from the collection by key.
+     *
+     * @param  string|array  $keys
+     *
+     * @return $this
+     */
+    public function forget($keys)
+    {
+        foreach ((array) $keys as $key) {
+            $this->offsetUnset($key);
+        }
+
+        return $this;
+    }
+
+    /**
      * Concatenate values of a given key as a string.
      *
      * @param  string  $value
@@ -99,6 +129,19 @@ abstract class Collection implements ArrayAccess
     {
         return empty($this->words);
     }
+
+    /**
+     * Get the last item from the collection.
+     *
+     * @param  callable|null  $callback
+     * @param  mixed  $default
+     *
+     * @return mixed
+     */
+    public function last(callable $callback = null, $default = null)
+    {
+        return $this->arrLast($this->words, $callback, $default);
+    }
     
     /**
      * Run a map over each of the items.
@@ -114,6 +157,18 @@ abstract class Collection implements ArrayAccess
         $items = array_map($callback, $this->words, $keys);
 
         return new static($this->text, array_combine($keys, $items), $this->pluginData);
+    }
+
+    /**
+     * Merge the collection with the given items.
+     *
+     * @param  mixed  $items
+     *
+     * @return static
+     */
+    public function merge($items)
+    {
+        return new static($this->text, array_merge($this->words, $this->getArrayableItems($items)), $this->pluginData);
     }
 
     /**
@@ -170,6 +225,20 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Get the items with the specified keys.
+     *
+     * @param  mixed  $keys
+     *
+     * @return static
+     */
+    public function only($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        return new static($this->text, $this->arrOnly($this->words, $keys), $this->pluginData);
+    }
+
+    /**
      * Get the values of a given key.
      *
      * @param  string  $value
@@ -180,6 +249,44 @@ abstract class Collection implements ArrayAccess
     public function pluck($value, $key = null)
     {
         return new static($this->text, $this->arrPluck($this->words, $value, $key), $this->pluginData);
+    }
+
+    /**
+     * Get and remove the last item from the collection.
+     *
+     * @return mixed
+     */
+    public function pop()
+    {
+        return array_pop($this->words);
+    }
+
+    /**
+     * Push an item onto the beginning of the collection.
+     *
+     * @param  mixed  $value
+     * @param  mixed  $key
+     *
+     * @return $this
+     */
+    public function prepend($value, $key = null)
+    {
+        $this->words = $this->arrPrepend($this->words, $value, $key);
+
+        return $this;
+    }
+
+    /**
+     * Get and remove an item from the collection.
+     *
+     * @param  mixed  $key
+     * @param  mixed  $default
+     *
+     * @return mixed
+     */
+    public function pull($key, $default = null)
+    {
+        return $this->arrPull($this->words, $key, $default);
     }
 
     /**
@@ -197,70 +304,12 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
-     * Get an item from an array or object using "dot" notation.
+     * Get and remove the first item from the collection.
      *
-     * @param  mixed   $target
-     * @param  string|array  $key
-     * @param  mixed   $default
      * @return mixed
      */
-    protected function dataGet($target, $key, $default = null)
+    public function shift()
     {
-        if (is_null($key)) {
-            return $target;
-        }
-
-        $key = is_array($key) ? $key : explode('.', $key);
-
-        while (($segment = array_shift($key)) !== null) {
-            if ($segment === '*') {
-                if ($target instanceof LimelightResults) {
-                    $target = $target->all();
-                } elseif (! is_array($target)) {
-                    return value($default);
-                }
-
-                $result = $this->arrPluck($target, $key);
-
-                return in_array('*', $key) ? $this->arrCollapse($result) : $result;
-            }
-            if ($this->arrAccessible($target) && $this->arrExists($target, $segment)) {
-                $target = $target[$segment];
-            } elseif (is_object($target) && isset($target->{$segment})) {
-                $target = $target->{$segment};
-            } else {
-                return $this->value($default);
-            }
-        }
-
-        return $target;
-    }
-
-    /**
-     * Explode the "value" and "key" arguments passed to "pluck".
-     *
-     * @param  string|array  $value
-     * @param  string|array|null  $key
-     *
-     * @return array
-     */
-    protected function explodePluckParameters($value, $key)
-    {
-        $value = is_string($value) ? explode('.', $value) : $value;
-
-        $key = is_null($key) || is_array($key) ? $key : explode('.', $key);
-
-        return [$value, $key];
-    }
-
-    /**
-     * Return the default value of the given value.
-     *
-     * @param  mixed  $value
-     * @return mixed
-     */
-    protected function value($value)
-    {
-        return $value instanceof Closure ? $value() : $value;
+        return array_shift($this->words);
     }
 }
