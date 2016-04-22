@@ -3,10 +3,12 @@
 namespace Limelight\Classes;
 
 use ArrayAccess;
+use JsonSerializable;
 use Limelight\Helpers\Arr;
 use Limelight\Classes\LimelightResults;
+use Limelight\Helpers\Contracts\Arrayable;
 
-abstract class Collection implements ArrayAccess
+abstract class Collection implements ArrayAccess, JsonSerializable
 {
     use Arr;
 
@@ -51,6 +53,42 @@ abstract class Collection implements ArrayAccess
     public function count()
     {
         return count($this->words);
+    }
+
+    /**
+     * Get the items in the collection that are not present in the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function diff($items)
+    {
+        return new static($this->text, array_diff($this->words, $this->getArrayableItems($items)), $this->pluginData);
+    }
+
+    /**
+     * Create a new collection consisting of every n-th element.
+     *
+     * @param  int  $step
+     * @param  int  $offset
+     *
+     * @return static
+     */
+    public function every($step, $offset = 0)
+    {
+        $new = [];
+
+        $position = 0;
+
+        foreach ($this->words as $item) {
+            if ($position % $step === $offset) {
+                $new[] = $item;
+            }
+
+            $position++;
+        }
+
+        return new static($this->text, $new, $this->pluginData);
     }
 
     /**
@@ -104,6 +142,18 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Get a flattened array of the items in the collection.
+     *
+     * @param  int  $depth
+     *
+     * @return static
+     */
+    public function flatten($depth = INF)
+    {
+        return new static($this->text, $this->arrFlatten($this->words, $depth), $this->pluginData);
+    }
+
+    /**
      * Remove an item from the collection by key.
      *
      * @param  string|array  $keys
@@ -117,6 +167,39 @@ abstract class Collection implements ArrayAccess
         }
 
         return $this;
+    }
+
+    /**
+     * Group an associative array by a field or using a callback.
+     *
+     * @param  callable|string  $groupBy
+     * @param  bool  $preserveKeys
+     *
+     * @return static
+     */
+    public function groupBy($groupBy, $preserveKeys = false)
+    {
+        $groupBy = $this->valueRetriever($groupBy);
+
+        $results = [];
+
+        foreach ($this->words as $key => $value) {
+            $groupKeys = $groupBy($value, $key);
+
+            if (! is_array($groupKeys)) {
+                $groupKeys = [$groupKeys];
+            }
+
+            foreach ($groupKeys as $groupKey) {
+                if (! array_key_exists($groupKey, $results)) {
+                    $results[$groupKey] = new static($this->text, [], $this->pluginData);
+                }
+
+                $results[$groupKey]->offsetSet($preserveKeys ? $key : null, $value);
+            }
+        }
+
+        return new static($this->text, $results, $this->pluginData);
     }
 
     /**
@@ -139,6 +222,18 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Intersect the collection with the given items.
+     *
+     * @param  mixed  $items
+     *
+     * @return static
+     */
+    public function intersect($items)
+    {
+        return new static($this->text, array_intersect($this->words, $this->getArrayableItems($items)), $this->pluginData);
+    }
+
+    /**
      * Determine if the collection is empty or not.
      *
      * @return bool
@@ -146,6 +241,16 @@ abstract class Collection implements ArrayAccess
     public function isEmpty()
     {
         return empty($this->words);
+    }
+
+    /**
+     * Get the keys of the collection items.
+     *
+     * @return static
+     */
+    public function keys()
+    {
+        return new static($this->text, array_keys($this->words), $this->pluginData);
     }
 
     /**
@@ -410,6 +515,18 @@ abstract class Collection implements ArrayAccess
     }
 
     /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int  $options
+     *
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->jsonSerialize(), $options);
+    }
+
+    /**
      * Transform each item in the collection using a callback.
      *
      * @param  callable  $callback
@@ -446,5 +563,106 @@ abstract class Collection implements ArrayAccess
 
             $exists[] = $id;
         });
+    }
+
+    /**
+     * Reset the keys on the underlying array.
+     *
+     * @return static
+     */
+    public function values()
+    {
+        return new static($this->text, array_values($this->words), $this->pluginData);
+    }
+
+    /**
+     * Filter items by the given key value pair.
+     *
+     * @param  string  $key
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     *
+     * @return static
+     */
+    public function where($key, $operator, $value = null)
+    {
+        if (func_num_args() == 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+        return $this->filter($this->operatorForWhere($key, $operator, $value));
+    }
+
+    /**
+     * Zip the collection together with one or more arrays.
+     *
+     * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
+     *      => [[1, 4], [2, 5], [3, 6]]
+     *
+     * @param  mixed ...$items
+     *
+     * @return static
+     */
+    public function zip($items)
+    {
+        $arrayableItems = array_map(function ($items) {
+            return $this->getArrayableItems($items);
+        }, func_get_args());
+
+        $params = array_merge([function () {
+            return new static($this->text, func_get_args(), $this->pluginData);
+        }, $this->words], $arrayableItems);
+
+        return new static($this->text, call_user_func_array('array_map', $params), $this->pluginData);
+    }
+
+    /**
+     * Convert the object into something JSON serializable.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_map(function ($value) {
+            if ($value instanceof JsonSerializable) {
+                return $value->jsonSerialize();
+            } elseif ($value instanceof Jsonable) {
+                return json_decode($value->toJson(), true);
+            } elseif ($value instanceof Arrayable) {
+                return $value->toArray();
+            } else {
+                return $value;
+            }
+        }, $this->words);
+    }
+
+    /**
+     * Get an operator checker callback.
+     *
+     * @param  string  $key
+     * @param  string  $operator
+     * @param  mixed  $value
+     *
+     * @return \Closure
+     */
+    protected function operatorForWhere($key, $operator, $value)
+    {
+        return function ($item) use ($key, $operator, $value) {
+            $retrieved = $this->dataGet($item, $key);
+
+            switch ($operator) {
+                default:
+                case '=':
+                case '==':  return $retrieved == $value;
+                case '!=':
+                case '<>':  return $retrieved != $value;
+                case '<':   return $retrieved < $value;
+                case '>':   return $retrieved > $value;
+                case '<=':  return $retrieved <= $value;
+                case '>=':  return $retrieved >= $value;
+                case '===': return $retrieved === $value;
+                case '!==': return $retrieved !== $value;
+            }
+        };
     }
 }

@@ -3,9 +3,11 @@
 namespace Limelight\Classes;
 
 use Limelight\Helpers\ResultsHelpers;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Exceptions\InvalidInputException;
 
-class LimelightResults extends Collection
+class LimelightResults extends Collection implements Arrayable, Jsonable
 {
     use ResultsHelpers;
 

@@ -63,6 +63,46 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * diff()
+     */
+    
+    /**
+     * @test
+     */
+    public function diff_finds_items_that_are_different()
+    {
+        $answer = $this->getResults()->diff($this->getResults()->forget(0));
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * every()
+     */
+    
+    /**
+     * @test
+     */
+    public function every_returns_every_nth_item()
+    {
+        $answer = $this->getResults()->every(2);
+
+        $this->assertEquals(['音楽', '聴きます'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function every_returns_every_nth_item_with_offset()
+    {
+        $answer = $this->getResults()->every(2, 1);
+
+        $this->assertEquals(['を', '。'], $answer->pluck('word')->all());
+    }
+
+    /**
      * except()
      */
     
@@ -143,6 +183,31 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * flatten()
+     */
+    
+    /**
+     * @test
+     */
+    public function flatten_flattens_item()
+    {
+        $answer = $this->getResults()->pluck('pluginData')->flatten();
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals([
+            '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
+            'ongaku',
+            'を',
+            'o',
+            '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
+            'kikimasu',
+            '。',
+            '.'
+        ], $answer->all());
+    }
+
+    /**
      * forget()
      */
     
@@ -159,6 +224,60 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * groupBy()
+     */
+    
+    /**
+     * @test
+     */
+    public function groupby_groups_items_by_key()
+    {
+        $answer = $this->getResults()->merge($this->getResults())->groupBy('partOfSpeech');
+
+        $nouns = $answer->pull('noun');
+
+        $postpositions = $answer->pull('postposition');
+
+        $verbs = $answer->pull('verb');
+
+        $symbols = $answer->pull('symbol');
+
+        $this->assertEquals(['音楽', '音楽'], $nouns->pluck('word')->all());
+
+        $this->assertEquals(['を', 'を'], $postpositions->pluck('word')->all());
+
+        $this->assertEquals(['聴きます', '聴きます'], $verbs->pluck('word')->all());
+
+        $this->assertEquals(['。', '。'], $symbols->pluck('word')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function groupby_groups_items_using_callback()
+    {
+        $answer = $this->getResults()->merge($this->getResults())->groupBy(function ($item, $key) {
+            return substr($item->partOfSpeech, 0, 1);
+        });
+
+        $nouns = $answer->pull('n');
+
+        $postpositions = $answer->pull('p');
+
+        $verbs = $answer->pull('v');
+
+        $symbols = $answer->pull('s');
+
+        $this->assertEquals(['音楽', '音楽'], $nouns->pluck('word')->all());
+
+        $this->assertEquals(['を', 'を'], $postpositions->pluck('word')->all());
+
+        $this->assertEquals(['聴きます', '聴きます'], $verbs->pluck('word')->all());
+
+        $this->assertEquals(['。', '。'], $symbols->pluck('word')->all());
+    }
+
+    /**
      * implode()
      */
     
@@ -170,6 +289,22 @@ class CollectionMethodsTest extends TestCase
         $answer = $this->getResults()->implode('word');
 
         $this->assertEquals('音楽を聴きます。', $answer);
+    }
+
+    /**
+     * intersect()
+     */
+    
+    /**
+     * @test
+     */
+    public function intersect_intersects_collections()
+    {
+        $answer = $this->getResults()->intersect($this->getResults()->forget(1)->forget(2));
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽', '。'], $answer->pluck('word')->all());
     }
 
     /**
@@ -194,6 +329,20 @@ class CollectionMethodsTest extends TestCase
         $empty = self::$limelight->parse('')->isEmpty();
 
         $this->assertTrue($empty);
+    }
+
+    /**
+     * keys()
+     */
+    
+    /**
+     * @test
+     */
+    public function keys_returns_keys()
+    {
+        $keys = $this->getResults()->keys();
+
+        $this->assertEquals([0, 1, 2, 3], $keys->all());
     }
 
     /**
@@ -516,6 +665,74 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
+     * toArray()
+     */
+    
+    /**
+     * @test
+     */
+    public function toarray_returns_array_with_public_properties()
+    {
+        $answer = $this->getResults()->toArray();
+
+        $this->assertTrue(is_array($answer));
+
+        $this->assertArrayHasKey('rawMecab', $answer[0]);
+
+        $this->assertArrayHasKey('word', $answer[0]);
+
+        $this->assertArrayHasKey('lemma', $answer[0]);
+
+        $this->assertArrayHasKey('reading', $answer[0]);
+
+        $this->assertArrayHasKey('pronunciation', $answer[0]);
+
+        $this->assertArrayHasKey('partOfSpeech', $answer[0]);
+
+        $this->assertArrayHasKey('grammar', $answer[0]);
+
+        $this->assertArrayHasKey('parsed', $answer[0]);
+
+        $this->assertArrayHasKey('pluginData', $answer[0]);
+    }
+
+    /**
+     * toJson()
+     */
+    
+    /**
+     * @test
+     */
+    public function tojson_return_json_with_public_properties()
+    {
+        $json = $this->getResults()->toJson();
+
+        $this->assertTrue(is_string($json));
+
+        $array = json_decode($json);
+
+        $this->assertTrue(is_array($array));
+
+        $this->assertObjectHasAttribute('rawMecab', $array[0]);
+
+        $this->assertObjectHasAttribute('word', $array[0]);
+
+        $this->assertObjectHasAttribute('lemma', $array[0]);
+
+        $this->assertObjectHasAttribute('reading', $array[0]);
+
+        $this->assertObjectHasAttribute('pronunciation', $array[0]);
+
+        $this->assertObjectHasAttribute('partOfSpeech', $array[0]);
+
+        $this->assertObjectHasAttribute('grammar', $array[0]);
+
+        $this->assertObjectHasAttribute('parsed', $array[0]);
+
+        $this->assertObjectHasAttribute('pluginData', $array[0]);
+    }
+
+    /**
      * transform()
      */
     
@@ -581,6 +798,64 @@ class CollectionMethodsTest extends TestCase
         });
 
         $this->assertEquals(['行く', '行った', '帰る', '買う'], $unique->pluck('word')->all());
+    }
+
+    /**
+     * values()
+     */
+
+    /**
+     * @test
+     */
+    public function values_resets_values()
+    {
+        $modified = $this->getResults()->forget(1);
+
+        $this->assertEquals([0, 2, 3], $modified->keys()->all());
+
+        $reset = $modified->values();
+
+        $this->assertEquals([0, 1, 2], $reset->keys()->all());
+    }
+
+    /**
+     * where()
+     */
+
+    /**
+     * @test
+     */
+    public function where_finds_items_meeting_conditions()
+    {
+        $answer = $this->getResults()->where('word', '音楽');
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $this->assertEquals(['音楽'], $answer->pluck('word')->all());
+    }
+
+    /**
+     * zip()
+     */
+    
+    /**
+     * @test
+     */
+    public function zip_zips_collections_together()
+    {
+        $answer = $this->getResults()->zip([1, 2, 3, 4]);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+
+        $all = $answer->all();
+
+        $this->assertEquals(1, $all[0][1]);
+
+        $this->assertEquals(2, $all[1][1]);
+
+        $this->assertEquals(3, $all[2][1]);
+
+        $this->assertEquals(4, $all[3][1]);
     }
 
     /**

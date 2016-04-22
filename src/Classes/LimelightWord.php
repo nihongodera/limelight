@@ -6,11 +6,12 @@ use Limelight\Limelight;
 use Limelight\Helpers\Converter;
 use Limelight\Helpers\ResultsHelpers;
 use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Contracts\Arrayable;
 
-class LimelightWord
+class LimelightWord implements Arrayable, Jsonable
 {
-    use ResultsHelpers;
-    use JapaneseHelpers;
+    use ResultsHelpers, JapaneseHelpers;
 
     /**
      * Raw mecab data for word.
@@ -155,6 +156,37 @@ class LimelightWord
                "Lemma:\t\t{$this->lemma}\n".
                "Reading:\t{$this->reading}\n".
                "Pronunciation:\t{$this->pronunciation}\n";
+    }
+
+    /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $publicProperties = (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
+
+        $return = [];
+
+        foreach ($publicProperties as $object) {
+            $value = $object->name;
+
+            $return[$value] = $this->$value;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param  int  $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray());
     }
 
     /**
