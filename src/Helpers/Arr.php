@@ -200,7 +200,7 @@ trait Arr
             if ($this->arrAccessible($array) && $this->arrExists($array, $segment)) {
                 $array = $array[$segment];
             } else {
-                return value($default);
+                return $this->value($default);
             }
         }
 

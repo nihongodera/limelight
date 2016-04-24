@@ -2,9 +2,29 @@
 
 namespace Limelight\Tests;
 
+use Limelight\Limelight;
+
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Path to test logs.
+     *
+     * @var string
+     */
     protected $logPath = __DIR__.'/Stubs/test.log';
+
+    /**
+     * @var Limelight\Limelight
+     */
+    protected static $limelight;
+
+    /**
+     * Set Limelight on object.
+     */
+    public static function setUpBeforeClass()
+    {
+        self::$limelight = new Limelight();
+    }
 
     /**
      * Assert MecabNode object equals expected array.
@@ -37,7 +57,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         $conversion = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $reading = mb_convert_kana($word->reading, 'c');
 
             $conversion .= $converter->handle($reading, $word);
@@ -62,5 +82,15 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected function readLog()
     {
         return file_get_contents($this->logPath);
+    }
+
+    /**
+     * Parse test phrase and return LimelightResults.
+     *
+     * @return LimelightResults
+     */
+    protected function getResults()
+    {
+        return self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
     }
 }

@@ -5,7 +5,6 @@ namespace Limelight\Classes;
 use Limelight\Helpers\ResultsHelpers;
 use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
-use Limelight\Exceptions\InvalidInputException;
 
 class LimelightResults extends Collection implements Arrayable, Jsonable
 {
@@ -33,13 +32,6 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
     protected $pluginData = [];
 
     /**
-     * Flag for calling Converter on LimelightWord.
-     *
-     * @var null/string
-     */
-    protected $conversionFlag = null;
-
-    /**
      * Construct.
      *
      * @param string     $text
@@ -51,16 +43,6 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
         $this->text = $text;
         $this->words = $words;
         $this->pluginData = $pluginData;
-    }
-
-    /**
-     * Call generator if invoked as function.
-     *
-     * @return function
-     */
-    public function __invoke()
-    {
-        return $this->next();
     }
 
     /**
@@ -77,6 +59,27 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
         }
 
         return $string;
+    }
+
+    /**
+     * Get values as string.
+     *
+     * @param string $value [value]
+     * @param string $glue  [word divider]
+     *
+     * @return string
+     */
+    public function string($value, $glue = null)
+    {
+        $string = $this->map(function ($item, $key) use ($value, $glue) {
+            if ($item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
+                return $item->$value;
+            }
+
+            return $glue.$item->$value;
+        });
+
+        return $this->cutFirst(implode('', $string->all()), $glue);
     }
 
     /**
@@ -97,22 +100,9 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      *
      * @return string
      */
-    public function get($spaces = false, $divider = ' ')
-    {
-        return $this->words($spaces, $divider);
-    }
-
-    /**
-     * Get all words combined as a string.
-     *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
-     */
     public function words($spaces = false, $divider = ' ')
     {
-        return $this->makePropertyString('word', $spaces, $divider);
+        return $this->pluck('word');
     }
 
     /**
@@ -125,7 +115,7 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      */
     public function lemmas($spaces = false, $divider = ' ')
     {
-        return $this->makePropertyString('lemma', $spaces, $divider);
+        return $this->pluck('lemma');
     }
 
     /**
@@ -138,7 +128,7 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      */
     public function readings($spaces = false, $divider = ' ')
     {
-        return $this->makePropertyString('reading', $spaces, $divider);
+        return $this->pluck('reading');
     }
 
     /**
@@ -151,7 +141,7 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      */
     public function pronunciations($spaces = false, $divider = ' ')
     {
-        return $this->makePropertyString('pronunciation', $spaces, $divider);
+        return $this->pluck('pronunciation');
     }
 
     /**
@@ -164,7 +154,7 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      */
     public function partsOfSpeech($spaces = true, $divider = ' ')
     {
-        return $this->makePropertyString('partOfSpeech', $spaces, $divider);
+        return $this->pluck('partOfSpeech');
     }
 
     /**
@@ -174,7 +164,13 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      */
     public function toHiragana()
     {
-        $this->conversionFlag = 'hiragana';
+        // $this->conversionFlag = 'hiragana';
+
+        $first = $this->first();
+
+        if ($first instanceof LimelightWord) {
+            var_dump(555);
+        }
 
         return $this;
     }
@@ -220,118 +216,6 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
     }
 
     /**
-     * Get next word.
-     *
-     * @return function
-     */
-    public function next()
-    {
-        $count = count($this->words);
-
-        for ($i = 0; $i < $count; ++$i) {
-            yield $this->words[$i];
-        }
-    }
-
-    /**
-     * Get single word, by word.
-     *
-     * @param string $string
-     *
-     * @return Limelight\Classes\LimelightWord/InvalidInputException
-     */
-    public function findWord($string)
-    {
-        foreach ($this->words as $word) {
-            if ($word->word() === $string) {
-                return $word;
-            }
-        }
-
-        throw new InvalidInputException("Word {$string} does not exist.");
-    }
-
-    /**
-     * Get single word by index.
-     *
-     * @param int $index
-     *
-     * @return Limelight\Classes\LimelightWord/InvalidInputException
-     */
-    public function findIndex($index)
-    {
-        $count = count($this->words);
-
-        if ($count <= $index) {
-            throw new InvalidInputException("Index {$index} does not exist. Results contain exactly {$count} item(s).");
-        }
-
-        return $this->words[$index];
-    }
-
-    /**
-     * Loop through words to make string of properties.
-     *
-     * @param string $property
-     * @param bool   $space    [should results be sparated by spaces?]
-     *
-     * @return string
-     */
-    private function makePropertyString($property, $space = false, $divider = ' ')
-    {
-        if ($this->isNonLemmaPlugin($property)) {
-            $string = $this->plugin(ucfirst($this->conversionFlag));
-
-            if ($divider !== ' ') {
-                $string = mb_ereg_replace(' ', $divider, $string);
-            }
-
-            return $string;
-        }
-
-        $string = '';
-
-        foreach ($this->words as $word) {
-            $word->setConversionFlag($this->conversionFlag);
-
-            if ($this->shouldTrim($word, $string, $property)) {
-                $string = substr($string, 0, -1);
-            }
-
-            $string .= $word->$property().($space === true || $this->conversionFlag === 'romaji' ? $divider : '');
-        }
-
-        $this->conversionFlag = null;
-
-        return $this->cutLast($string, $divider);
-    }
-
-    /**
-     * Property is not lemma and conversionFlag is a plugin.
-     *
-     * @param string $property
-     *
-     * @return bool
-     */
-    private function isNonLemmaPlugin($property)
-    {
-        return ($this->conversionFlag === 'furigana' || $this->conversionFlag === 'romaji') && $property !== 'lemma';
-    }
-
-    /**
-     * Results string should have last space trimmed.
-     *
-     * @param LimelightWord $word
-     * @param string        $string
-     *
-     * @return bool
-     */
-    private function shouldTrim($word, $string, $property)
-    {
-        return $word->partOfSpeech === 'symbol' && substr($string, -1) === ' ' && $property !== 'partOfSpeech';
-    }
-
-    /**
      * Cut last char if its is divider.
      *
      * @param string $string
@@ -339,10 +223,10 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
      *
      * @return string
      */
-    private function cutLast($string, $divider)
+    private function cutFirst($string, $divider)
     {
-        if (mb_substr($string, -1) === $divider) {
-            return mb_substr($string, 0, -1);
+        if (mb_substr($string, 0, 1) === $divider) {
+            return mb_substr($string, 1);
         }
 
         return $string;

@@ -3,12 +3,14 @@
 namespace Limelight\Classes;
 
 use ArrayAccess;
+use ArrayIterator;
 use JsonSerializable;
+use IteratorAggregate;
 use Limelight\Helpers\Arr;
 use Limelight\Classes\LimelightResults;
 use Limelight\Helpers\Contracts\Arrayable;
 
-abstract class Collection implements ArrayAccess, JsonSerializable
+abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggregate
 {
     use Arr;
 
@@ -614,6 +616,16 @@ abstract class Collection implements ArrayAccess, JsonSerializable
         }, $this->words], $arrayableItems);
 
         return new static($this->text, call_user_func_array('array_map', $params), $this->pluginData);
+    }
+
+    /**
+     * Get an iterator for the items.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->words);
     }
 
     /**

@@ -8,11 +8,6 @@ use Limelight\Tests\TestCase;
 class FuriganaTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
      * @var array
      */
     private static $lib;
@@ -36,7 +31,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -52,7 +47,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -68,7 +63,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -84,7 +79,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -100,7 +95,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -116,7 +111,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -132,7 +127,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -148,7 +143,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -164,7 +159,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -180,7 +175,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -196,7 +191,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -212,7 +207,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -228,7 +223,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -244,7 +239,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -260,7 +255,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -276,7 +271,7 @@ class FuriganaTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 

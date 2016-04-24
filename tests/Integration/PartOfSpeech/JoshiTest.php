@@ -8,26 +8,13 @@ use Limelight\Tests\TestCase;
 class JoshiTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
-     * Set Limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
-    /**
      * @test
      */
     public function it_changes_part_of_speech_to_postposition()
     {
         $results = self::$limelight->parse('を');
 
-        $this->assertEquals('postposition', $results->findIndex(0)->partOfSpeech());
+        $this->assertEquals('postposition', $results->pull(0)->partOfSpeech());
     }
 
     /**
@@ -37,7 +24,7 @@ class JoshiTest extends TestCase
     {
         $results = self::$limelight->parse('行けば');
 
-        $this->assertEquals('行けば', $results->words());
+        $this->assertEquals('行けば', $results->string('word'));
 
         $words = $results->all();
 

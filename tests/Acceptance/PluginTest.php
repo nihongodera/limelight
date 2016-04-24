@@ -29,7 +29,7 @@ class PluginTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 
@@ -45,7 +45,7 @@ class PluginTest extends TestCase
 
         $furigana = '';
 
-        foreach ($results->next() as $word) {
+        foreach ($results as $word) {
             $furigana .= $word->plugin('Furigana');
         }
 

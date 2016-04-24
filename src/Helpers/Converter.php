@@ -159,6 +159,6 @@ class Converter
     {
         $result = $this->limelight->parse($lemma);
 
-        return $result->findIndex(0);
+        return $result->pull(0);
     }
 }

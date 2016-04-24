@@ -9,11 +9,6 @@ use Limelight\Plugins\Library\Romaji\Styles\NihonShiki;
 class NihonShikiTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
      * @var Limelight\Plugins\Library\Romaji\Styles\NihonShiki
      */
     protected static $nihon;
@@ -23,8 +18,6 @@ class NihonShikiTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$limelight = new Limelight();
-
         self::$nihon = new NihonShiki();
     }
 

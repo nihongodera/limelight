@@ -27,7 +27,7 @@ class NoParseTest extends TestCase
     {
         $results = self::$limelight->noParse('できるかな。。。');
 
-        $this->assertEquals('できるかな。。。', $results->words());
+        $this->assertEquals('できるかな。。。', $results->string('word'));
     }
 
     /**

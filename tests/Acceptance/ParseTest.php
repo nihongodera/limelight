@@ -34,7 +34,7 @@ class ParseTest extends TestCase
     {
         $results = self::$limelight->parse('音楽を聴きます。');
 
-        $this->assertEquals('音楽を聴きます。', $results->words());
+        $this->assertEquals('音楽を聴きます。', $results->string('word'));
 
         $words = $results->all();
 
@@ -64,7 +64,7 @@ class ParseTest extends TestCase
     {
         $results = self::$limelight->parse('東京に行って、パスタを食べてしまった。');
 
-        $this->assertEquals('東京に行って、パスタを食べてしまった。', $results->words());
+        $this->assertEquals('東京に行って、パスタを食べてしまった。', $results->string('word'));
 
         $words = $results->all();
 
@@ -110,7 +110,7 @@ class ParseTest extends TestCase
     {
         $results = self::$limelight->parse('私はすき焼きが大好きです。だから、いつも食べています。');
 
-        $this->assertEquals('私はすき焼きが大好きです。だから、いつも食べています。', $results->words());
+        $this->assertEquals('私はすき焼きが大好きです。だから、いつも食べています。', $results->string('word'));
 
         $words = $results->all();
 
@@ -124,7 +124,7 @@ class ParseTest extends TestCase
     {
         $results = self::$limelight->parse('フキイldksf塩jkdfllsdf帰依kdサブ');
 
-        $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->words());
+        $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->string('word'));
 
         $words = $results->all();
     }
@@ -136,7 +136,7 @@ class ParseTest extends TestCase
     {
          $results = self::$limelight->parse(self::$lib['textOne']);
 
-         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->words());
+         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->string('word'));
 
          $words = $results->all();
 

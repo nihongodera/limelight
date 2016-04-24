@@ -9,11 +9,6 @@ use Limelight\Plugins\Library\Romaji\Styles\HepburnModified;
 class HepburnModifiedTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
      * @var Limelight\Plugins\Library\Romaji\Styles\HepburnModified
      */
     protected static $hepburn;
@@ -23,8 +18,6 @@ class HepburnModifiedTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$limelight = new Limelight();
-
         self::$hepburn = new HepburnModified();
     }
 

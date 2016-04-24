@@ -14,11 +14,11 @@ class TestListener implements LimelightListener
         $path = __DIR__.'/test.log';
 
         if ($payload instanceof LimelightWord) {
-            $message = 'WordWasCreated fired. '.$payload->get();
+            $message = 'WordWasCreated fired. '.$payload->word();
 
             return file_put_contents($path, $message, FILE_APPEND);
         } elseif ($payload instanceof LimelightResults) {
-            $message = 'ParseWasSuccessful fired.'.$payload->get();
+            $message = 'ParseWasSuccessful fired.'.$payload->string('word');
 
             return file_put_contents($path, $message, FILE_APPEND);
         }

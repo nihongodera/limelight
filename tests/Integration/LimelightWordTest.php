@@ -14,18 +14,11 @@ class LimelightWordTest extends TestCase
     protected static $limelight;
 
     /**
-     * @var Limelight\Classes\LimelightResults
-     */
-    protected static $results;
-
-    /**
      * Set static limelight on object.
      */
     public static function setUpBeforeClass()
     {
         self::$limelight = new Limelight();
-
-        self::$results = self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
     }
 
     /**
@@ -33,7 +26,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_plugin_data_by_method_call()
     {
-        $romaji = self::$results->findIndex(0)->romaji();
+        $romaji = $this->getResults()->pull(0)->romaji();
 
         $this->assertEquals('Tōkyō', $romaji);
     }
@@ -43,7 +36,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_plugin_data_by_property_call()
     {
-        $romaji = self::$results->findIndex(0)->romaji;
+        $romaji = $this->getResults()->pull(0)->romaji;
 
         $this->assertEquals('Tōkyō', $romaji);
     }
@@ -53,7 +46,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_property_by_property_name()
     {
-        $word = self::$results->findIndex(0)->word;
+        $word = $this->getResults()->pull(0)->word;
 
         $this->assertEquals('東京', $word);
     }
@@ -63,7 +56,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_prints_info_when_object_is_printed()
     {
-        $results = self::$results;
+        $results = $this->getResults();
 
         ob_start();
 
@@ -81,7 +74,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_raw_mecab_data()
     {
-        $rawMecab = self::$results->findIndex(0)->rawMecab();
+        $rawMecab = $this->getResults()->pull(0)->rawMecab();
 
         $this->assertEquals('東京', $rawMecab[0]['literal']);
     }
@@ -91,7 +84,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_word()
     {
-        $word = self::$results->findIndex(0)->word();
+        $word = $this->getResults()->pull(0)->word();
 
         $this->assertEquals('東京', $word);
     }
@@ -101,7 +94,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_word_when_get_called()
     {
-        $word = self::$results->findIndex(0)->get();
+        $word = $this->getResults()->pull(0)->get();
 
         $this->assertEquals('東京', $word);
     }
@@ -111,7 +104,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_lemma()
     {
-        $lemma = self::$results->findIndex(0)->lemma();
+        $lemma = $this->getResults()->pull(0)->lemma();
 
         $this->assertEquals('東京', $lemma);
     }
@@ -121,7 +114,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_reading()
     {
-        $reading = self::$results->findIndex(0)->reading();
+        $reading = $this->getResults()->pull(0)->reading();
 
         $this->assertEquals('トウキョウ', $reading);
     }
@@ -131,7 +124,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_pronunciation()
     {
-        $pronunciation = self::$results->findIndex(0)->pronunciation();
+        $pronunciation = $this->getResults()->pull(0)->pronunciation();
 
         $this->assertEquals('トーキョー', $pronunciation);
     }
@@ -141,7 +134,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_partOfSpeech()
     {
-        $partOfSpeech = self::$results->findIndex(0)->partOfSpeech();
+        $partOfSpeech = $this->getResults()->pull(0)->partOfSpeech();
 
         $this->assertEquals('proper noun', $partOfSpeech);
     }
@@ -151,7 +144,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_grammar()
     {
-        $grammar = self::$results->findIndex(0)->grammar();
+        $grammar = $this->getResults()->pull(0)->grammar();
 
         $this->assertEquals(null, $grammar);
     }
@@ -161,7 +154,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_get_plugin_data()
     {
-        $furigana = self::$results->findIndex(0)->plugin('Furigana');
+        $furigana = $this->getResults()->pull(0)->plugin('Furigana');
 
         $this->AssertEquals('<ruby><rb>東京</rb><rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>', $furigana);
     }
@@ -171,7 +164,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_hiragana()
     {
-        $reading = self::$results->findIndex(0)->toHiragana()->reading();
+        $reading = $this->getResults()->pull(0)->toHiragana()->reading();
 
         $this->assertEquals('とうきょう', $reading);
     }
@@ -181,7 +174,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_katakana()
     {
-        $pronunciation = self::$results->findIndex(8)->toKatakana()->word();
+        $pronunciation = $this->getResults()->pull(8)->toKatakana()->word();
 
         $this->assertEquals('オイシカッタ', $pronunciation);
     }
@@ -191,7 +184,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_romaji()
     {
-        $pronunciation = self::$results->findIndex(8)->toRomaji()->word();
+        $pronunciation = $this->getResults()->pull(8)->toRomaji()->word();
 
         $this->assertEquals('oishikatta', $pronunciation);
     }
@@ -201,7 +194,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_convert_to_furigana()
     {
-        $pronunciation = self::$results->findIndex(6)->toFurigana()->lemma();
+        $pronunciation = $this->getResults()->pull(6)->toFurigana()->lemma();
 
         $this->assertEquals('<ruby><rb>食</rb><rp>(</rp><rt>た</rt><rp>)</rp></ruby>べる', $pronunciation);
     }
@@ -217,7 +210,7 @@ class LimelightWordTest extends TestCase
 
         $config->erase('plugins', 'Romaji');
 
-        $string = self::$results->toRomaji()->words();
+        $string = $this->getResults()->toRomaji()->words();
     }
 
     /**
@@ -225,7 +218,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_append_to_property()
     {
-        $wordObject = self::$results->findIndex(0);
+        $wordObject = $this->getResults()->pull(0);
 
         $word = $wordObject->word;
 
@@ -243,7 +236,9 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_set_partOfSpeech()
     {
-        $wordObject = self::$results->findIndex(0);
+        Config::getInstance()->resetConfig();
+
+        $wordObject = $this->getResults()->pull(0);
 
         $partOfSpeech = $wordObject->partOfSpeech;
 
@@ -261,7 +256,7 @@ class LimelightWordTest extends TestCase
      */
     public function it_can_set_plugin_data()
     {
-        $wordObject = self::$results->findIndex(0);
+        $wordObject = $this->getResults()->pull(0);
 
         $romaji = $wordObject->romaji;
 
@@ -279,10 +274,6 @@ class LimelightWordTest extends TestCase
      */
     public function it_shows_info_for_nonparsed_kana_words()
     {
-        $config = Config::getInstance();
-
-        $config->resetConfig();
-
         $results = self::$limelight->parse('ロマンティック');
 
         $result = $results->all()[0];
@@ -378,5 +369,15 @@ class LimelightWordTest extends TestCase
         $result = $results->all()[0];
 
         $this->assertFalse($result->parsed());
+    }
+    
+    /**
+     * Parse test phrase and return LimelightResults.
+     *
+     * @return LimelightResults
+     */
+    protected function getResults()
+    {
+        return self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
     }
 }

@@ -366,13 +366,13 @@ class CollectionMethodsTest extends TestCase
      */
     public function last_gets_last_word_to_pass_truth_test()
     {
-        $first = $this->getResults()->last(function ($item, $key) {
+        $last = $this->getResults()->last(function ($item, $key) {
             return $item->word() === 'を';
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $first);
+        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $last);
 
-        $this->assertEquals('を', $first->word());
+        $this->assertEquals('を', $last->word());
     }
 
     /**

@@ -9,11 +9,6 @@ use Limelight\Plugins\Library\Romaji\Styles\KunreiShiki;
 class KunreiShikiTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
      * @var Limelight\Plugins\Library\Romaji\Styles\KunreiShiki
      */
     protected static $kunrei;
@@ -23,8 +18,6 @@ class KunreiShikiTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$limelight = new Limelight();
-
         self::$kunrei = new KunreiShiki();
     }
 

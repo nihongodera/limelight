@@ -8,19 +8,6 @@ use Limelight\Tests\TestCase;
 class RomajiTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
-     * Set static hepburn on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
-    /**
      * @test
      */
     public function it_stores_space_seperated_strings_on_object()

@@ -8,26 +8,13 @@ use Limelight\Tests\TestCase;
 class JodoushiTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    private static $limelight;
-
-    /**
-     * Set Limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
-    /**
      * @test
      */
     public function it_changes_partOfSpeech_to_postposition()
     {
         $results = self::$limelight->parse('です');
 
-        $this->assertEquals('postposition', $results->findIndex(0)->partOfSpeech());
+        $this->assertEquals('postposition', $results->pull(0)->partOfSpeech());
     }
 
     /**
@@ -41,7 +28,7 @@ class JodoushiTest extends TestCase
 
         $this->assertCount(2, $words);
 
-        $this->assertEquals('大好きです', $results->words());
+        $this->assertEquals('大好きです', $results->string('word'));
 
         $this->assertEquals('です', $words[1]->word());
     }
@@ -57,7 +44,7 @@ class JodoushiTest extends TestCase
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('したくない', $results->words());
+        $this->assertEquals('したくない', $results->string('word'));
     }
 
     /**
@@ -71,7 +58,7 @@ class JodoushiTest extends TestCase
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('見えません', $results->words());
+        $this->assertEquals('見えません', $results->string('word'));
     }
 
     /**
@@ -85,7 +72,7 @@ class JodoushiTest extends TestCase
 
         $this->assertCount(1, $words);
 
-        $this->assertEquals('作ろう', $results->words());
+        $this->assertEquals('作ろう', $results->string('word'));
     }
 
     /**
@@ -95,7 +82,7 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('楽しいだ');
 
-        $this->assertEquals('verb', $results->findIndex(1)->partOfSpeech());
+        $this->assertEquals('verb', $results->pull(1)->partOfSpeech());
     }
 
     /**
@@ -105,6 +92,6 @@ class JodoushiTest extends TestCase
     {
         $results = self::$limelight->parse('美味しいです');
 
-        $this->assertEquals('verb', $results->findIndex(1)->partOfSpeech());
+        $this->assertEquals('verb', $results->pull(1)->partOfSpeech());
     }
 }

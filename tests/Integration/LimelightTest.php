@@ -38,7 +38,7 @@ class LimelightTest extends TestCase
     {
         $results = self::$limelight->parse('出来るかな。。。');
 
-        $this->assertEquals('出来るかな。。。', $results->words());
+        $this->assertEquals('出来るかな。。。', $results->string('word'));
     }
 
     /**

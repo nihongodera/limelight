@@ -17,9 +17,9 @@ $limelight = new Limelight();
 $results = $limelight->parse($input);
 
 if ($method && $flag) {
-    echo $results->$flag()->$method() . "\n";
+    var_dump($results->$flag()->$method()) . "\n";
 } else if ($method) {
-    echo $results->$method() . "\n";
+    var_dump($results->$method()) . "\n";
 } else {
     var_dump($results);
 }
