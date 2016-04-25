@@ -144,8 +144,8 @@ class Furigana extends Plugin
     /**
      * Find valid furigana by walking hiragana array in reverse.
      * 
-     * @param  array $wordChars
-     * @param  array $hiraganaChars
+     * @param array $wordChars
+     * @param array $hiraganaChars
      * 
      * @return array
      */
@@ -278,8 +278,8 @@ class Furigana extends Plugin
     /**
      * Add furigana word to word object.
      *
-     * @param Word   $wordObject
-     * @param string $word
+     * @param LimelightWord $wordObject
+     * @param string        $word
      */
     private function addToWord($wordObject, $word)
     {

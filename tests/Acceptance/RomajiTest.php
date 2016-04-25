@@ -2,25 +2,11 @@
 
 namespace Limelight\tests\Acceptance;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class RomajiTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight and test libs on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * Reset config file.
      */
@@ -38,9 +24,9 @@ class RomajiTest extends TestCase
     {
         self::$limelight->setConfig('hepburn_modified', 'Romaji', 'style');
 
-        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。');
+        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。')->string('romaji', ' ');
 
-        $this->assertEquals('Kyō wa Shōta to issho ni Gunmaken ni itte, watashi no o nēsan to matcha o nomimashita.', $results->plugin('Romaji'));
+        $this->assertEquals('kyō wa Shōta to issho ni Gunmaken ni itte, watashi no o nēsan to matcha o nomimashita.', $results);
     }
 
     /**
@@ -50,9 +36,9 @@ class RomajiTest extends TestCase
     {
         self::$limelight->setConfig('hepburn_traditional', 'Romaji', 'style');
 
-        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。');
+        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。')->string('romaji', ' ');
 
-        $this->assertEquals('Kyō wa Shōta to issho ni Gummaken ni itte, watashi no o neesan to matcha wo nomimashita.', $results->plugin('Romaji'));
+        $this->assertEquals('kyō wa Shōta to issho ni Gummaken ni itte, watashi no o neesan to matcha wo nomimashita.', $results);
     }
 
     /**
@@ -62,9 +48,9 @@ class RomajiTest extends TestCase
     {
         self::$limelight->setConfig('kunrei_shiki', 'Romaji', 'style');
 
-        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。');
+        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。')->string('romaji', ' ');
 
-        $this->assertEquals('Kyô wa Syôta to issyo ni Gunmaken ni itte, watasi no o nêsan to mattya o nomimasita.', $results->plugin('Romaji'));
+        $this->assertEquals('kyô wa Syôta to issyo ni Gunmaken ni itte, watasi no o nêsan to mattya o nomimasita.', $results);
     }
 
     /**
@@ -74,8 +60,8 @@ class RomajiTest extends TestCase
     {
         self::$limelight->setConfig('nihon_shiki', 'Romaji', 'style');
 
-        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。');
+        $results = self::$limelight->parse('今日は翔太と一緒に群馬県に行って、私のお姉さんと抹茶を飲みました。')->string('romaji', ' ');
 
-        $this->assertEquals('Kyô ha Syôta to issyo ni Gunmaken ni itte, watasi no o nêsan to mattya wo nomimasita.', $results->plugin('Romaji'));
+        $this->assertEquals('kyô ha Syôta to issyo ni Gunmaken ni itte, watasi no o nêsan to mattya wo nomimasita.', $results);
     }
 }

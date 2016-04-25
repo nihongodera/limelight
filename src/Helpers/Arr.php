@@ -7,9 +7,14 @@ use Limelight\Classes\Collection;
 trait Arr
 {
     /**
+     * Methods in this trait adopted from Laravel Arr class.
+     * https://github.com/illuminate/support/blob/master/Arr.php
+     */
+    
+    /**
      * Determine whether the given value is array accessible.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
@@ -21,7 +26,7 @@ trait Arr
     /**
      * Collapse an array of arrays into a single array.
      *
-     * @param  array  $array
+     * @param array $array
      *
      * @return array
      */
@@ -32,7 +37,7 @@ trait Arr
         foreach ($array as $values) {
             if ($values instanceof LimelightResults) {
                 $values = $values->all();
-            } elseif (! is_array($values)) {
+            } elseif (!is_array($values)) {
                 continue;
             }
 
@@ -45,8 +50,8 @@ trait Arr
     /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param array        $array
+     * @param array|string $keys
      *
      * @return array
      */
@@ -60,8 +65,8 @@ trait Arr
     /**
      * Determine if the given key exists in the provided array.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|int  $key
+     * @param \ArrayAccess|array $array
+     * @param string|int         $key
      *
      * @return bool
      */
@@ -77,9 +82,9 @@ trait Arr
     /**
      * Return the first element in an array passing a given truth test.
      *
-     * @param  array  $array
-     * @param  callable|null  $callback
-     * @param  mixed  $default
+     * @param array         $array
+     * @param callable|null $callback
+     * @param mixed         $default
      *
      * @return mixed
      */
@@ -100,15 +105,15 @@ trait Arr
     /**
      * Flatten a multi-dimensional array into a single level.
      *
-     * @param  array  $array
-     * @param  int  $depth
+     * @param array $array
+     * @param int   $depth
      *
      * @return array
      */
     public function arrFlatten($array, $depth = INF)
     {
         $result = [];
-        
+
         foreach ($array as $item) {
             $item = $item instanceof Collection ? $item->all() : $item;
 
@@ -133,10 +138,8 @@ trait Arr
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
-     *
-     * @return void
+     * @param array        $array
+     * @param array|string $keys
      */
     public function arrForget(&$array, $keys)
     {
@@ -156,7 +159,7 @@ trait Arr
             }
 
             $parts = explode('.', $key);
-            
+
             $array = &$original;
 
             while (count($parts) > 1) {
@@ -176,15 +179,15 @@ trait Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param \ArrayAccess|array $array
+     * @param string             $key
+     * @param mixed              $default
      *
      * @return mixed
      */
     public function arrGet($array, $key, $default = null)
     {
-        if (! $this->arrAccessible($array)) {
+        if (!$this->arrAccessible($array)) {
             return value($default);
         }
 
@@ -210,9 +213,9 @@ trait Arr
     /**
      * Return the last element in an array passing a given truth test.
      *
-     * @param  array  $array
-     * @param  callable|null  $callback
-     * @param  mixed  $default
+     * @param array         $array
+     * @param callable|null $callback
+     * @param mixed         $default
      *
      * @return mixed
      */
@@ -228,8 +231,8 @@ trait Arr
     /**
      * Get a subset of the items from the given array.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param array        $array
+     * @param array|string $keys
      *
      * @return array
      */
@@ -241,9 +244,9 @@ trait Arr
     /**
      * Pluck an array of values from an array.
      *
-     * @param  array  $array
-     * @param  string|array  $value
-     * @param  string|array|null  $key
+     * @param array             $array
+     * @param string|array      $value
+     * @param string|array|null $key
      *
      * @return array
      */
@@ -271,9 +274,9 @@ trait Arr
     /**
      * Push an item onto the beginning of an array.
      *
-     * @param  array  $array
-     * @param  mixed  $value
-     * @param  mixed  $key
+     * @param array $array
+     * @param mixed $value
+     * @param mixed $key
      *
      * @return array
      */
@@ -284,15 +287,16 @@ trait Arr
         } else {
             $array = [$key => $value] + $array;
         }
+
         return $array;
     }
 
     /**
      * Get a value from the array, and remove it.
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param array  $array
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -308,9 +312,10 @@ trait Arr
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed   $target
-     * @param  string|array  $key
-     * @param  mixed   $default
+     * @param mixed        $target
+     * @param string|array $key
+     * @param mixed        $default
+     *
      * @return mixed
      */
     protected function dataGet($target, $key, $default = null)
@@ -325,7 +330,7 @@ trait Arr
             if ($segment === '*') {
                 if ($target instanceof LimelightResults) {
                     $target = $target->all();
-                } elseif (! is_array($target)) {
+                } elseif (!is_array($target)) {
                     return value($default);
                 }
 
@@ -348,7 +353,8 @@ trait Arr
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  mixed  $items
+     * @param mixed $items
+     *
      * @return array
      */
     protected function getArrayableItems($items)
@@ -371,8 +377,8 @@ trait Arr
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param  string|array  $value
-     * @param  string|array|null  $key
+     * @param string|array      $value
+     * @param string|array|null $key
      *
      * @return array
      */
@@ -388,19 +394,20 @@ trait Arr
     /**
      * Determine if the given value is callable, but not a string.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
     protected function useAsCallable($value)
     {
-        return ! is_string($value) && is_callable($value);
+        return !is_string($value) && is_callable($value);
     }
 
     /**
      * Return the default value of the given value.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return mixed
      */
     protected function value($value)
@@ -411,7 +418,7 @@ trait Arr
     /**
      * Get a value retrieving callback.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return callable
      */

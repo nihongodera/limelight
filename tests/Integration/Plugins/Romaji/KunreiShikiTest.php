@@ -2,7 +2,6 @@
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 use Limelight\Plugins\Library\Romaji\Styles\KunreiShiki;
 
@@ -18,6 +17,8 @@ class KunreiShikiTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         self::$kunrei = new KunreiShiki();
     }
 

@@ -4,14 +4,15 @@ namespace Limelight\Classes;
 
 use Limelight\Limelight;
 use Limelight\Helpers\Converter;
-use Limelight\Helpers\ResultsHelpers;
+use Limelight\Helpers\PluginHelper;
 use Limelight\Helpers\JapaneseHelpers;
 use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
+use Limelight\Helpers\Contracts\Convertable;
 
-class LimelightWord implements Arrayable, Jsonable
+class LimelightWord implements Arrayable, Convertable, Jsonable
 {
-    use ResultsHelpers, JapaneseHelpers;
+    use PluginHelper, JapaneseHelpers;
 
     /**
      * Raw mecab data for word.
@@ -65,7 +66,7 @@ class LimelightWord implements Arrayable, Jsonable
     /**
      * True if word was successfully parsed.
      *
-     * @var boolean
+     * @var bool
      */
     public $parsed = false;
 
@@ -77,36 +78,19 @@ class LimelightWord implements Arrayable, Jsonable
     public $pluginData = [];
 
     /**
-     * Converter for hiragana/katakana/romaji/furigana.
-     *
-     * @var Limelight\Helpers\Converter
-     */
-    private $converter;
-
-    /**
      * @var Limelight\Limelight
      */
     private $limelight;
 
     /**
-     * Flag for calling Converter.
-     *
-     * @var null/string
-     */
-    private $conversionFlag = null;
-
-    /**
      * Construct.
      *
-     * @param array     $token
-     * @param array     $properties
-     * @param Converter $converter
+     * @param array $token
+     * @param array $properties
      */
-    public function __construct($token, $properties, Converter $converter, Limelight $limelight)
+    public function __construct($token, $properties, Limelight $limelight)
     {
         $this->setProperties($token, $properties);
-
-        $this->converter = $converter;
 
         $this->limelight = $limelight;
 
@@ -133,7 +117,7 @@ class LimelightWord implements Arrayable, Jsonable
      *
      * @param string $name
      *
-     * @return string/array
+     * @return string|array
      */
     public function __get($name)
     {
@@ -145,17 +129,13 @@ class LimelightWord implements Arrayable, Jsonable
     }
 
     /**
-     * Print word info.
+     * Print JSON.
      *
      * @return string
      */
     public function __toString()
     {
-        return "Word:\t\t{$this->word}\n".
-               "Part of Speech:\t{$this->partOfSpeech}\n".
-               "Lemma:\t\t{$this->lemma}\n".
-               "Reading:\t{$this->reading}\n".
-               "Pronunciation:\t{$this->pronunciation}\n";
+        return $this->toJson();
     }
 
     /**
@@ -165,7 +145,7 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function toArray()
     {
-        $publicProperties = (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $publicProperties = $this->getPublicProperties();
 
         $return = [];
 
@@ -181,12 +161,33 @@ class LimelightWord implements Arrayable, Jsonable
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int  $options
+     * @param int $options
+     *
      * @return string
      */
     public function toJson($options = 0)
     {
         return json_encode($this->toArray());
+    }
+
+    /**
+     * Convert word properties to given format.
+     *
+     * @param string $format
+     *
+     * @return static
+     */
+    public function convert($format)
+    {
+        $publicProperties = $this->getPublicProperties();
+
+        foreach ($publicProperties as $object) {
+            $value = $object->name;
+
+            $this->$value = Converter::convert($this->$value, $format);
+        }
+
+        return $this;
     }
 
     /**
@@ -216,10 +217,6 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function word()
     {
-        if (!is_null($this->conversionFlag)) {
-            return $this->callConverter('word');
-        }
-
         return $this->word;
     }
 
@@ -230,10 +227,6 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function lemma()
     {
-        if (!is_null($this->conversionFlag)) {
-            return $this->callConverter('lemma');
-        }
-
         return $this->lemma;
     }
 
@@ -244,10 +237,6 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function reading()
     {
-        if (!is_null($this->conversionFlag)) {
-            return $this->callConverter('reading');
-        }
-
         return $this->reading;
     }
 
@@ -258,10 +247,6 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function pronunciation()
     {
-        if (!is_null($this->conversionFlag)) {
-            return $this->callConverter('pronunciation');
-        }
-
         return $this->pronunciation;
     }
 
@@ -296,15 +281,45 @@ class LimelightWord implements Arrayable, Jsonable
     }
 
     /**
+     * Get plugin data by plugin name.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function plugin($name)
+    {
+        return $this->getPluginData($name);
+    }
+
+    /**
+     * Get romaji if set.
+     *
+     * @return string
+     */
+    public function romaji()
+    {
+        return $this->getPluginData('romaji');
+    }
+
+    /**
+     * Get furigana if set.
+     *
+     * @return string
+     */
+    public function furigana()
+    {
+        return $this->getPluginData('furigana');
+    }
+
+    /**
      * Set $this->conversionFlag to hiragana.
      *
      * @return $this
      */
     public function toHiragana()
     {
-        $this->conversionFlag = 'hiragana';
-
-        return $this;
+        return $this->convert('hiragana');
     }
 
     /**
@@ -314,44 +329,24 @@ class LimelightWord implements Arrayable, Jsonable
      */
     public function toKatakana()
     {
-        $this->conversionFlag = 'katakana';
-
-        return $this;
+        return $this->convert('katakana');
     }
 
     /**
-     * Set $this->conversionFlag to romaji.
+     * Parse the lemma with Limelight.
      *
-     * @return $this
+     * @return LimelightWord
      */
-    public function toRomaji()
+    public function parseLemma()
     {
-        $this->checkPlugin('romaji');
-
-        $this->conversionFlag = 'romaji';
-
-        return $this;
-    }
-
-    /**
-     * Set $this->conversionFlag to furigana.
-     *
-     * @return $this
-     */
-    public function toFurigana()
-    {
-        $this->checkPlugin('furigana');
-
-        $this->conversionFlag = 'furigana';
-
-        return $this;
+        return $this->limelight->parse($this->lemma)->first();
     }
 
     /**
      * Append value to end of property.
      *
      * @param string       $property
-     * @param string/array $value
+     * @param string|array $value
      */
     public function appendTo($property, $value)
     {
@@ -384,13 +379,13 @@ class LimelightWord implements Arrayable, Jsonable
     }
 
     /**
-     * Set the conversionFlag.
+     * Get the objects public properties.
      *
-     * @param string $flag
+     * @return array
      */
-    public function setConversionFlag($flag)
+    private function getPublicProperties()
     {
-        $this->conversionFlag = $flag;
+        return (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
     }
 
     /**
@@ -421,41 +416,6 @@ class LimelightWord implements Arrayable, Jsonable
     }
 
     /**
-     * Call $this->converter.
-     *
-     * @param string $property [Property to convert]
-     *
-     * @return string
-     */
-    private function callConverter($property)
-    {
-        $dto = $this->getAllData();
-
-        $convertedString = $this->converter->convert($dto, $property, $this->conversionFlag);
-
-        $this->conversionFlag = null;
-
-        return $convertedString;
-    }
-
-    /**
-     * Build dto for conversion.
-     *
-     * @return array
-     */
-    private function getAllData()
-    {
-        return [
-            'word' => $this->word,
-            'lemma' => $this->lemma,
-            'reading' => $this->reading,
-            'pronunciation' => $this->pronunciation,
-            'furigana' => (isset($this->pluginData['Furigana']) ? $this->pluginData['Furigana'] : null),
-            'romaji' => (isset($this->pluginData['Romaji']) ? $this->pluginData['Romaji'] : null),
-        ];
-    }
-
-    /**
      * Set missing parameters for kana words that were not parsed.
      */
     private function setMissingParameters()
@@ -467,7 +427,7 @@ class LimelightWord implements Arrayable, Jsonable
 
             $results = $this->limelight->noParse($this->word(), ['Romaji'], true);
 
-            $this->setPluginData('Romaji', $results->toRomaji()->words());
+            $this->setPluginData('Romaji', $results->string('romaji'));
         }
     }
 }

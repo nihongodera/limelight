@@ -4,7 +4,6 @@ namespace Limelight\Parse;
 
 use Limelight\Limelight;
 use Limelight\Events\Dispatcher;
-use Limelight\Helpers\Converter;
 use Limelight\Helpers\PluginHelper;
 use Limelight\Classes\LimelightWord;
 use Limelight\Helpers\JapaneseHelpers;
@@ -44,6 +43,8 @@ class NoParser
      * @param array  $pluginWhiteList
      *
      * @return LimelightResults
+     *
+     * @throws InvalidInputException
      */
     public function handle($text, array $pluginWhiteList)
     {
@@ -51,13 +52,11 @@ class NoParser
             throw new InvalidInputException('Text must not contain kanji.');
         }
 
-        $converter = new Converter($this->limelight);
-
         $token = $this->buildToken($text);
 
         $properties = $this->buildProperties();
 
-        $words = [new LimelightWord($token, $properties, $converter, $this->limelight)];
+        $words = [new LimelightWord($token, $properties, $this->limelight)];
 
         $this->dispatcher->fire('WordWasCreated', $words[0]);
 

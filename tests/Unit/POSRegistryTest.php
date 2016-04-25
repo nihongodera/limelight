@@ -2,25 +2,11 @@
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class POSRegistryTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * @test
      */

@@ -2,7 +2,6 @@
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 use Limelight\Events\Dispatcher;

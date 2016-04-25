@@ -3,7 +3,6 @@
 namespace Limelight\Mecab\PhpMecab;
 
 use Limelight\Mecab\Mecab;
-use Limelight\Exceptions\InternalErrorException;
 
 class PhpMecab implements Mecab
 {

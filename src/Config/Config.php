@@ -34,7 +34,9 @@ class Config
      *
      * @param string $string [config.php key]
      *
-     * @return mixed/InvalidInputException
+     * @return mixed
+     *
+     * @throws InvalidInputException
      */
     public function get($string)
     {
@@ -75,7 +77,9 @@ class Config
      *
      * @param string $interface [full interface namespace]
      *
-     * @return class_instance/InternalErrorException
+     * @return class_instance
+     *
+     * @throws InternalErrorException
      */
     public function make($interface)
     {
@@ -121,7 +125,9 @@ class Config
      * @param string $key1
      * @param string $key1
      *
-     * @return bool/InvalidInputException
+     * @return bool
+     *
+     * @throws InvalidInputException
      */
     public function set($value, $key1, $key2 = null)
     {
@@ -141,8 +147,8 @@ class Config
     /**
      * Erase config value entirely.
      *
-     * @param  string $key1
-     * @param  string $key2
+     * @param string $key1
+     * @param string $key2
      */
     public function erase($key1, $key2)
     {
@@ -157,7 +163,9 @@ class Config
      * @param array  $bindings
      * @param string $interface
      *
-     * @return string/InternalErrorException
+     * @return string
+     *
+     * @throws InternalErrorException
      */
     private function getFullClassName(array $bindings, $interface)
     {
@@ -174,7 +182,7 @@ class Config
      * @param string $fullClassName
      * @param string $interface
      *
-     * @return  null/InternalErrorException
+     * @throws InternalErrorException
      */
     private function validateClass($fullClassName, $interface)
     {

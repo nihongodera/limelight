@@ -2,24 +2,10 @@
 
 namespace Limelight\tests\Acceptance;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class NoParseTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * @test
      */
@@ -37,27 +23,20 @@ class NoParseTest extends TestCase
     {
         $results = self::$limelight->noParse('ねんがっぴ');
 
-        $this->assertEquals('Nengappi', $results->plugin('romaji'));
+        $this->assertEquals('nengappi', $results->string('romaji'));
     }
 
     /**
      * @test
+     *
+     * @expectedException Limelight\Exceptions\PluginNotFoundException
+     * @expectedExceptionMessage Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?
      */
     public function it_doesnt_run_plugins_not_in_given_whitelist()
     {
         $results = self::$limelight->noParse('ねんがっぴ', ['Furigana']);
 
-        $this->assertEquals('', $results->plugin('romaji'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_capitalizes_items_in_whitelist()
-    {
-        $results = self::$limelight->noParse('ねんがっぴ', ['furigana']);
-
-        $this->assertEquals('', $results->plugin('romaji'));
+        $results->plugin('romaji');
     }
 
     /**

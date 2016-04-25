@@ -9,19 +9,6 @@ use Limelight\Tests\TestCase;
 class LimelightTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
-    /**
      * @test
      */
     public function it_can_be_instantiated()

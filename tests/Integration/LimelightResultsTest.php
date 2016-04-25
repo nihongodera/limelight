@@ -2,33 +2,12 @@
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 use Limelight\Classes\LimelightResults;
 
 class LimelightResultsTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * @var Limelight\Classes\LimelightResults
-     */
-    protected static $results;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-
-        self::$results = self::$limelight->parse('音楽を聴きます。');
-    }
-
     /**
      * @test
      */
@@ -44,9 +23,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_be_iterated_over()
     {
-        $results = self::$results;
-
-        foreach ($results as $result) {
+        foreach ($this->getResults() as $result) {
             $this->assertInstanceOf('Limelight\Classes\LimelightWord', $result);
         }
     }
@@ -54,19 +31,17 @@ class LimelightResultsTest extends TestCase
     /**
      * @test
      */
-    public function it_prints_info_when_object_printed()
+    public function it_prints_json_when_object_printed()
     {
-        $results = self::$results;
-
         ob_start();
 
-        echo $results;
+        echo $this->getResults()->only([0]);
 
         $output = ob_get_contents();
 
         ob_end_clean();
 
-        $this->assertContains('音楽', $output);
+        $this->assertJsonStringEqualsJsonString('[{"rawMecab":[{"type":"parsed","literal":"\u97f3\u697d","partOfSpeech1":"meishi","partOfSpeech2":"\u4e00\u822c","partOfSpeech3":"*","partOfSpeech4":"*","inflectionType":"*","inflectionForm":"*","lemma":"\u97f3\u697d","reading":"\u30aa\u30f3\u30ac\u30af","pronunciation":"\u30aa\u30f3\u30ac\u30af"}],"word":"\u97f3\u697d","lemma":"\u97f3\u697d","reading":"\u30aa\u30f3\u30ac\u30af","pronunciation":"\u30aa\u30f3\u30ac\u30af","partOfSpeech":"noun","grammar":null,"parsed":true,"pluginData":{"Furigana":"<ruby><rb>\u97f3\u697d<\/rb><rp>(<\/rp><rt>\u304a\u3093\u304c\u304f<\/rt><rp>)<\/rp><\/ruby>","Romaji":"ongaku"}}]', $output);
     }
 
     /**
@@ -74,9 +49,11 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_limelightword_objects()
     {
-        $words = self::$results->all();
+        $words = $this->getResults();
 
         $this->AssertCount(4, $words);
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $words->first());
     }
 
     /**
@@ -84,7 +61,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_original_input_string()
     {
-        $original = self::$results->original();
+        $original = $this->getResults()->original();
 
         $this->assertEquals('音楽を聴きます。', $original);
     }
@@ -94,7 +71,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_build_a_string()
     {
-        $string = self::$results->string('word');
+        $string = $this->getResults()->string('word');
 
         $this->assertEquals('音楽を聴きます。', $string);
     }
@@ -104,7 +81,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_build_a_string_divided_by_spaces()
     {
-        $string = self::$results->string('word', ' ');
+        $string = $this->getResults()->string('word', ' ');
 
         $this->assertEquals('音楽 を 聴きます。', $string);
     }
@@ -114,7 +91,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_build_a_string_divided_by_mb_spaces()
     {
-        $string = self::$results->string('word', ' ');
+        $string = $this->getResults()->string('word', ' ');
 
         $this->assertEquals('音楽 を 聴きます。', $string);
     }
@@ -124,7 +101,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_build_a_string_divided_by_nonspace_character()
     {
-        $string = self::$results->string('word', '|');
+        $string = $this->getResults()->string('word', '|');
 
         $this->assertEquals('音楽|を|聴きます|。', $string);
     }
@@ -134,7 +111,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_words()
     {
-        $words = self::$results->words()->all();
+        $words = $this->getResults()->words()->all();
 
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $words);
     }
@@ -144,7 +121,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_lemmas()
     {
-        $lemmas = self::$results->lemmas()->all();
+        $lemmas = $this->getResults()->lemmas()->all();
 
         $this->assertEquals(['音楽', 'を', '聴く', '。'], $lemmas);
     }
@@ -154,7 +131,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_readings()
     {
-        $readings = self::$results->readings()->all();
+        $readings = $this->getResults()->readings()->all();
 
         $this->assertEquals(['オンガク', 'ヲ', 'キキマス', '。'], $readings);
     }
@@ -164,7 +141,7 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_pronunciations()
     {
-        $pronunciations = self::$results->pronunciations()->all();
+        $pronunciations = $this->getResults()->pronunciations()->all();
 
         $this->assertEquals(['オンガク', 'ヲ', 'キキマス', '。'], $pronunciations);
     }
@@ -174,170 +151,154 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_all_parts_of_speech()
     {
-        $partsOfSpeech = self::$results->partsOfSpeech()->all();
+        $partsOfSpeech = $this->getResults()->partsOfSpeech()->all();
 
         $this->assertEquals(['noun', 'postposition', 'verb', 'symbol'], $partsOfSpeech);
     }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_convert_to_hiragana()
-    // {
-    //     $string = self::$results->toHiragana()->readings();
+    /**
+     * @test
+     */
+    public function it_can_get_romaji()
+    {
+        $romaji = $this->getResults()->romaji();
 
-    //     $this->assertEquals('おんがくをききます。', $string);
-    // }
+        $this->assertEquals(['ongaku', 'o', 'kikimasu', '.'], $romaji->all());
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_build_a_hiragana_string_with_spaces()
-    // {
-    //     $string = self::$results->toHiragana()->words(true);
+    /**
+     * @test
+     */
+    public function it_can_build_a_romaji_string_with_dividing_space()
+    {
+        $string = $this->getResults()->string('romaji', ' ');
 
-    //     $this->assertEquals('おんがく を ききます。', $string);
-    // }
+        $this->assertEquals('ongaku o kikimasu.', $string);
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_build_a_hiragana_string_with_dividing_char()
-    // {
-    //     $string = self::$results->toHiragana()->words(true, '-');
+    /**
+     * @test
+     */
+    public function it_can_build_a_romaji_string_with_dividing_char()
+    {
+        $string = $this->getResults()->string('romaji', '-');
 
-    //     $this->assertEquals('おんがく-を-ききます-。', $string);
-    // }
+        $this->assertEquals('ongaku-o-kikimasu-.', $string);
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_convert_to_katakana()
-    // {
-    //     $string = self::$results->toKatakana()->lemmas();
+    /**
+     * @test
+     */
+    public function it_can_get_furigana()
+    {
+        $furigana = $this->getResults()->furigana();
 
-    //     $this->assertEquals('オンガクヲキク。', $string);
-    // }
+        $this->assertEquals([
+            '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
+            'を',
+            '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
+            '。'
+        ], $furigana->all());
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_convert_to_romaji()
-    // {
-    //     $string = self::$results->toRomaji()->words();
+    /**
+     * @test
+     */
+    public function it_can_build_a_furigana_string()
+    {
+        $string = $this->getResults()->string('furigana');
 
-    //     $this->assertEquals('Ongaku o kikimasu.', $string);
-    // }
+        $this->assertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます。', $string);
+    }
 
-    // *
-    //  * @test
-     
-    // public function it_can_build_a_romaji_string_with_spaces()
-    // {
-    //     $string = self::$results->toRomaji()->words(true);
+    /**
+     * @test
+     */
+    public function it_can_convert_to_hiragana()
+    {
+        $results = $this->getResults()->toHiragana()->readings();
 
-    //     $this->assertEquals('Ongaku o kikimasu.', $string);
-    // }
+        $this->assertEquals(['おんがく', 'を', 'ききます', '。'], $results->all());
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_build_a_romaji_string_with_dividing_char()
-    // {
-    //     $string = self::$results->toRomaji()->words(true, '-');
+    /**
+     * @test
+     */
+    public function it_can_build_a_hiragana_string_with_spaces()
+    {
+        $string = $this->getResults()->toHiragana()->string('reading', ' ');
 
-    //     $this->assertEquals('Ongaku-o-kikimasu.', $string);
-    // }
+        $this->assertEquals('おんがく を ききます。', $string);
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_convert_to_furigana()
-    // {
-    //     $string = self::$results->toFurigana()->lemmas();
+    /**
+     * @test
+     */
+    public function it_can_build_a_hiragana_string_with_dividing_char()
+    {
+        $string = $this->getResults()->toHiragana()->string('reading', '-');
 
-    //     $this->assertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>く。', $string);
-    // }
+        $this->assertEquals('おんがく-を-ききます-。', $string);
+    }
 
-    // /**
-    //  * @test
-    //  * @expectedException Limelight\Exceptions\PluginNotFoundException
-    //  * @expectedExceptionMessage Plugin Romaji not found in config.php
-    //  */
-    // public function it_throws_exception_when_plugin_not_registered()
-    // {
-    //     $config = Config::getInstance();
+    /**
+     * @test
+     */
+    public function it_can_convert_to_katakana()
+    {
+        $string = $this->getResults()->toKatakana()->string('word');
 
-    //     $config->erase('plugins', 'Romaji');
+        $this->assertEquals('音楽ヲ聴キマス。', $string);
+    }
 
-    //     $string = self::$results->toRomaji()->words();
-    // }
+    /**
+     * @test
+     * @expectedException Limelight\Exceptions\PluginNotFoundException
+     * @expectedExceptionMessage Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?
+     */
+    public function it_throws_exception_when_plugin_not_registered()
+    {
+        $config = Config::getInstance();
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_get_words_from_generator_method()
-    // {
-    //     $results = self::$results;
+        $config->erase('plugins', 'Romaji');
 
-    //     $words = $results->all();
+        $string = $this->getResults()->romaji();
 
-    //     $count = 0;
+        $config->resetConfig();
+    }
 
-    //     foreach ($results->next() as $word) {
-    //         $this->assertEquals($words[$count], $word);
+    /**
+     * @test
+     */
+    public function it_can_get_plugin_data()
+    {
+        $furigana = $this->getResults()->plugin('Furigana')->all();
 
-    //         $count += 1;
-    //     }
-    // }
+        $this->assertEquals([
+            '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
+            'を',
+            '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
+            '。'
+        ], $furigana);
+    }
 
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_get_a_word_by_string()
-    // {
-    //     $word = self::$results->findWord('聴きます');
+    /**
+     * @test
+     */
+    public function it_puts_a_space_before_symbol_when_partofspeech()
+    {
+        $string = $this->getResults()->string('partOfSpeech', ' ');
 
-    //     $this->assertEquals('聴きます', $word->word());
-    // }
+        $this->assertEquals('noun postposition verb symbol', $string);
+    }
 
-    // /**
-    //  * @test
-    //  * @expectedException Limelight\Exceptions\InvalidInputException
-    //  * @expectedExceptionMessage Word 佐賀県 does not exist.
-    //  */
-    // public function it_throws_exception_for_an_invalid_string()
-    // {
-    //     $word = self::$results->findWord('佐賀県');
-    // }
-
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_get_a_word_by_index()
-    // {
-    //     $word = self::$results->findIndex(2);
-
-    //     $this->assertEquals('聴きます', $word->word());
-    // }
-
-    // /**
-    //  * @test
-    //  * @expectedException Limelight\Exceptions\InvalidInputException
-    //  * @expectedExceptionMessage Index 23 does not exist. Results contain exactly 4 item(s).
-    //  */
-    // public function it_throws_exception_for_an_invalid_index()
-    // {
-    //     $word = self::$results->findIndex(23);
-    // }
-
-    // /**
-    //  * @test
-    //  */
-    // public function it_can_get_plugin_data()
-    // {
-    //     $furigana = self::$results->plugin('Furigana');
-
-    //     $this->assertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます。', $furigana);
-    // }
+    /**
+     * Parse test phrase and return LimelightResults.
+     *
+     * @return LimelightResults
+     */
+    protected function getResults()
+    {
+        return self::$limelight->parse('音楽を聴きます。');
+    }
 }

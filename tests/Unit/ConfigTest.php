@@ -2,25 +2,11 @@
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class ConfigTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * Reset config file.
      */

@@ -40,14 +40,14 @@ class LimelightException extends \Exception
     public function handle()
     {
         if ($this->debug) {
-            echo __CLASS__.': '. $this->red("{$this->message}\n");
+            echo __CLASS__.': '.$this->red("{$this->message}\n");
 
             $this->printTrace();
 
             return '';
         }
 
-        return __CLASS__.': '. $this->red("{$this->message}\n");
+        return __CLASS__.': '.$this->red("{$this->message}\n");
     }
 
     /**
@@ -59,12 +59,12 @@ class LimelightException extends \Exception
 
         echo "\n";
 
-        echo $this->blue('1. ').'In '.$this->getFile(). $this->green(' line '.$this->getLine())."\n";
+        echo $this->blue('1. ').'In '.$this->getFile().$this->green(' line '.$this->getLine())."\n";
 
         $count = 2;
 
         foreach ($trace as $layer) {
-            $number = $this->blue($count . '. ');
+            $number = $this->blue($count.'. ');
 
             $file = (isset($layer['file']) ? $layer['file'] : null);
 

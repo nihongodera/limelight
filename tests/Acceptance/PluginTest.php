@@ -2,24 +2,10 @@
 
 namespace Limelight\tests\Acceptance;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class PluginTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * @test
      */
@@ -43,11 +29,7 @@ class PluginTest extends TestCase
     {
         $results = self::$limelight->parse('燃える', false);
 
-        $furigana = '';
-
-        foreach ($results as $word) {
-            $furigana .= $word->plugin('Furigana');
-        }
+        $furigana = $results->furigana();
 
         $this->assertEquals('', $furigana);
     }

@@ -17,6 +17,8 @@ class MecabTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+        
         $config = Config::getInstance();
 
         self::$mecab = $config->make('Limelight\Mecab\Mecab');

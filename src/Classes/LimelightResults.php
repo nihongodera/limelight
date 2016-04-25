@@ -2,13 +2,14 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Helpers\ResultsHelpers;
+use Limelight\Helpers\PluginHelper;
 use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
+use Limelight\Helpers\Contracts\Convertable;
 
-class LimelightResults extends Collection implements Arrayable, Jsonable
+class LimelightResults extends Collection implements Arrayable, Convertable, Jsonable
 {
-    use ResultsHelpers;
+    use PluginHelper;
 
     /**
      * The original input.
@@ -46,19 +47,13 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
     }
 
     /**
-     * Print result info.
+     * Print JSON.
      *
      * @return string
      */
     public function __toString()
     {
-        $string = '';
-
-        foreach ($this->words as $word) {
-            $string .= $word."\n";
-        }
-
-        return $string;
+        return $this->toJson();
     }
 
     /**
@@ -72,7 +67,7 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
     public function string($value, $glue = null)
     {
         $string = $this->map(function ($item, $key) use ($value, $glue) {
-            if ($item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
+            if ($value !== 'partOfSpeech' && $item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
                 return $item->$value;
             }
 
@@ -93,130 +88,113 @@ class LimelightResults extends Collection implements Arrayable, Jsonable
     }
 
     /**
-     * Get all words combined as a string.
+     * Get all words.
      *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
+     * @return static
      */
-    public function words($spaces = false, $divider = ' ')
+    public function words()
     {
         return $this->pluck('word');
     }
 
     /**
-     * Get all lemmas combined as a string.
+     * Get all lemmas.
      *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
+     * @return static
      */
-    public function lemmas($spaces = false, $divider = ' ')
+    public function lemmas()
     {
         return $this->pluck('lemma');
     }
 
     /**
-     * Get all readings combined as a string.
+     * Get all readings.
      *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
+     * @return static
      */
-    public function readings($spaces = false, $divider = ' ')
+    public function readings()
     {
         return $this->pluck('reading');
     }
 
     /**
-     * Get all pronunciations combined as a string.
+     * Get all pronunciations.
      *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
+     * @return static
      */
-    public function pronunciations($spaces = false, $divider = ' ')
+    public function pronunciations()
     {
         return $this->pluck('pronunciation');
     }
 
     /**
-     * Get all partsOfSpeech combined as a space sseerated string.
+     * Get all partsOfSpeech.
      *
-     * @param bool   $spaces  [put divider between words]
-     * @param string $divider
-     *
-     * @return string
+     * @return static
      */
-    public function partsOfSpeech($spaces = true, $divider = ' ')
+    public function partsOfSpeech()
     {
         return $this->pluck('partOfSpeech');
     }
 
     /**
-     * Set $this->conversionFlag to hiragana.
+     * Get romaji if data exists.
+     *
+     * @return static
+     *
+     * @throws PluginNotFoundException
+     */
+    public function romaji()
+    {
+        return $this->getPluginData('romaji');
+    }
+
+    /**
+     * Get furigana if data exists.
+     *
+     * @return static
+     *
+     * @throws PluginNotFoundException
+     */
+    public function furigana()
+    {
+        return $this->getPluginData('furigana');
+    }
+
+    /**
+     * Convert items to hiragana.
      *
      * @return $this
      */
     public function toHiragana()
     {
-        // $this->conversionFlag = 'hiragana';
-
-        $first = $this->first();
-
-        if ($first instanceof LimelightWord) {
-            var_dump(555);
-        }
-
-        return $this;
+        return $this->convert('hiragana');
     }
 
     /**
-     * Set $this->conversionFlag to katakana.
+     * Convert items to katakana.
      *
      * @return $this
      */
     public function toKatakana()
     {
-        $this->conversionFlag = 'katakana';
-
-        return $this;
+        return $this->convert('katakana');
     }
 
     /**
-     * Set $this->conversionFlag to romaji.
+     * Get plugin data from object.
      *
-     * @return $this
-     */
-    public function toRomaji()
-    {
-        $this->checkPlugin('romaji');
-
-        $this->conversionFlag = 'romaji';
-
-        return $this;
-    }
-
-    /**
-     * Set $this->conversionFlag to furigana.
+     * @param string $name [The name of the plugin]
      *
-     * @return $this
+     * @return mixed|bool
      */
-    public function toFurigana()
+    public function plugin($name)
     {
-        $this->checkPlugin('furigana');
-
-        $this->conversionFlag = 'furigana';
-
-        return $this;
+        return $this->getPluginData($name);
     }
 
     /**
-     * Cut last char if its is divider.
+     * Cut first char if its is divider.
      *
      * @param string $string
      * @param string $divider

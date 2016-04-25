@@ -8,11 +8,6 @@ use Limelight\Tests\TestCase;
 class ParseTest extends TestCase
 {
     /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
      * @var array
      */
     protected static $lib;
@@ -22,8 +17,8 @@ class ParseTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$limelight = new Limelight();
-
+        parent::setUpBeforeClass();
+        
         self::$lib = include 'tests/lib.php';
     }
 

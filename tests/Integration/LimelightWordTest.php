@@ -2,25 +2,11 @@
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class LimelightWordTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * @test
      */
@@ -54,19 +40,19 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_prints_info_when_object_is_printed()
+    public function it_returns_json_when_object_is_printed()
     {
-        $results = $this->getResults();
+        $word = $this->getResults()->pull(0);
 
         ob_start();
 
-        echo $results;
+        echo $word;
 
         $output = ob_get_contents();
 
         ob_end_clean();
 
-        $this->assertContains('東京', $output);
+        $this->assertJsonStringEqualsJsonString('{"rawMecab":[{"type":"parsed","literal":"\u6771\u4eac","partOfSpeech1":"meishi","partOfSpeech2":"koyuumeishi","partOfSpeech3":"\u5730\u57df","partOfSpeech4":"\u4e00\u822c","inflectionType":"*","inflectionForm":"*","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc"}],"word":"\u6771\u4eac","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc","partOfSpeech":"proper noun","grammar":null,"parsed":true,"pluginData":{"Furigana":"<ruby><rb>\u6771\u4eac<\/rb><rp>(<\/rp><rt>\u3068\u3046\u304d\u3087\u3046<\/rt><rp>)<\/rp><\/ruby>","Romaji":"T\u014dky\u014d"}}', $output);
     }
 
     /**
@@ -162,6 +148,26 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
+    public function it_can_get_romaji()
+    {
+        $romaji = $this->getResults()->pull(8)->romaji();
+
+        $this->assertEquals('oishikatta', $romaji);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_get_furigana()
+    {
+        $furigana = $this->getResults()->pull(6)->furigana();
+
+        $this->assertEquals('<ruby><rb>食</rb><rp>(</rp><rt>た</rt><rp>)</rp></ruby>べてしまった', $furigana);
+    }
+
+    /**
+     * @test
+     */
     public function it_can_convert_to_hiragana()
     {
         $reading = $this->getResults()->pull(0)->toHiragana()->reading();
@@ -181,28 +187,9 @@ class LimelightWordTest extends TestCase
 
     /**
      * @test
-     */
-    public function it_can_convert_to_romaji()
-    {
-        $pronunciation = $this->getResults()->pull(8)->toRomaji()->word();
-
-        $this->assertEquals('oishikatta', $pronunciation);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_convert_to_furigana()
-    {
-        $pronunciation = $this->getResults()->pull(6)->toFurigana()->lemma();
-
-        $this->assertEquals('<ruby><rb>食</rb><rp>(</rp><rt>た</rt><rp>)</rp></ruby>べる', $pronunciation);
-    }
-
-    /**
-     * @test
+     *
      * @expectedException Limelight\Exceptions\PluginNotFoundException
-     * @expectedExceptionMessage Plugin Romaji not found in config.php
+     * @expectedExceptionMessage Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?
      */
     public function it_throws_exception_when_plugin_not_registered()
     {
@@ -210,7 +197,21 @@ class LimelightWordTest extends TestCase
 
         $config->erase('plugins', 'Romaji');
 
-        $string = $this->getResults()->toRomaji()->words();
+        $string = $this->getResults()->romaji()->words();
+        
+        $config->resetConfig();
+    }
+
+    /**
+     * @test
+     */
+    public function it_parses_the_lemma()
+    {
+        $lemma = $this->getResults()->first()->parseLemma();
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $lemma);
+
+        $this->assertEquals('トウキョウ', $lemma->reading());
     }
 
     /**
@@ -279,9 +280,11 @@ class LimelightWordTest extends TestCase
         $result = $results->all()[0];
 
         $reading = $result->reading();
+
         $pronunciation = $result->pronunciation();
 
         $this->assertEquals('ロマンティック', $reading);
+
         $this->assertEquals('ロマンティック', $pronunciation);
     }
 
@@ -295,9 +298,11 @@ class LimelightWordTest extends TestCase
         $result = $results->all()[0];
 
         $katakana = $result->toKatakana()->reading();
+
         $hiragana = $result->toHiragana()->reading();
 
         $this->assertEquals('ロマンティック', $katakana);
+
         $this->assertEquals('ろまんてぃっく', $hiragana);
     }
 
@@ -311,38 +316,24 @@ class LimelightWordTest extends TestCase
         $result = $results->all()[0];
 
         $katakana = $result->toKatakana()->pronunciation();
+
         $hiragana = $result->toHiragana()->pronunciation();
 
         $this->assertEquals('ロマンティック', $katakana);
+
         $this->assertEquals('ろまんてぃっく', $hiragana);
     }
 
     /**
      * @test
      */
-    public function it_converts_lemma_to_kana_for_nonparsed_kana_words()
+    public function it_gets_romaji_for_nonparsed_kana_words()
     {
         $results = self::$limelight->parse('ロマンティック');
 
         $result = $results->all()[0];
 
-        $katakana = $result->toKatakana()->lemma();
-        $hiragana = $result->toHiragana()->lemma();
-
-        $this->assertEquals('ロマンティック', $katakana);
-        $this->assertEquals('ろまんてぃっく', $hiragana);
-    }
-
-    /**
-     * @test
-     */
-    public function it_converts_to_romaji_for_nonparsed_kana_words()
-    {
-        $results = self::$limelight->parse('ロマンティック');
-
-        $result = $results->all()[0];
-
-        $romaji = $result->toRomaji()->reading();
+        $romaji = $result->romaji();
 
         $this->assertEquals('Romanthikku', $romaji);
     }

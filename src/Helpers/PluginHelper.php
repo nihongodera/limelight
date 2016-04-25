@@ -5,18 +5,44 @@ namespace Limelight\Helpers;
 use Limelight\Mecab\Node;
 use Limelight\Config\Config;
 use Limelight\Plugins\Plugin;
+use Limelight\Classes\Collection;
 use Limelight\Exceptions\PluginNotFoundException;
 
 trait PluginHelper
 {
     /**
+     * Get data from pluginData.
+     *
+     * @param string $type [romaji, furigana]
+     *
+     * @return static
+     * @throws PluginNotFoundException
+     */
+    protected function getPluginData($type)
+    {
+        $type = ucfirst($type);
+
+        if (is_null($this->pluginData)) {
+            return;
+        } elseif (!isset($this->pluginData[$type])) {
+            throw new PluginNotFoundException("Plugin data for {$type} can not be found. Is the {$type} plugin registered in config?");
+        }
+
+        if ($this instanceof Collection) {
+            return $this->pluck('pluginData')->pluck($type);
+        } else {
+            return $this->pluginData[$type];
+        }
+    }
+
+    /**
      * Run all registered plugins.
      *
-     * @param string $text
-     * @param Node/null   $node
-     * @param array/null  $tokens
-     * @param array/null  $words
-     * @param array  $pluginWhiteList
+     * @param string     $text
+     * @param Node|null  $node
+     * @param array|null $tokens
+     * @param array|null $words
+     * @param array      $pluginWhiteList
      *
      * @return array
      */
@@ -66,6 +92,8 @@ trait PluginHelper
      * Validate plugin class exists.
      *
      * @param string $namespace
+     *
+     * @throws PluginNotFoundException
      */
     private function validatePlugin($namespace)
     {

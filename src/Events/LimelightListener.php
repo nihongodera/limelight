@@ -7,7 +7,7 @@ interface LimelightListener
     /**
      * Respond to event.
      *
-     * @param  object $payload
+     * @param object $payload
      */
     public function handle($payload);
 }

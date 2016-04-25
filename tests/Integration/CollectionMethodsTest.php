@@ -2,26 +2,12 @@
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 use Limelight\Classes\LimelightResults;
 
 class CollectionMethodsTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
-
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
-    {
-        self::$limelight = new Limelight();
-    }
-
     /**
      * chunk()
      */
@@ -48,6 +34,52 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['。', '音楽', 'を'], $chunk2->pluck('word')->all());
 
         $this->assertEquals(['聴きます', '。'], $chunk3->pluck('word')->all());
+    }
+
+    /**
+     * convert()
+     */
+    
+    /**
+     * @test
+     */
+    public function convert_converts_array_to_format()
+    {
+        $readings = $this->getResults()->pluck('reading')->convert('hiragana')->flatten();
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $readings);
+
+        $this->assertEquals(['おんがく', 'を', 'ききます', '。'], $readings->all());
+    }
+
+    /**
+     * @test
+     */
+    public function convert_converts_limelightword_to_format()
+    {
+        $converted = $this->getResults()->only(0)->convert('hiragana');
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $converted);
+
+        $word = $converted->first();
+
+        $this->assertEquals('おんがく', $word->reading);
+
+        $this->assertEquals('おんがく', $word->pronunciation);
+    }
+
+    /**
+     * @test
+     */
+    public function convert_converts_nested_arrays_to_format()
+    {
+        $converted = $this->getResults()->only(0)->convert('katakana');
+
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $converted);
+
+        $word = $converted->first();
+
+        $this->assertEquals('<ruby><rb>音楽</rb><rp>(</rp><rt>オンガク</rt><rp>)</rp></ruby>', $word->pluginData['Furigana']);
     }
 
     /**

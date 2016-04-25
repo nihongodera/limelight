@@ -4,7 +4,6 @@ namespace Limelight\Parse;
 
 use Limelight\Limelight;
 use Limelight\Events\Dispatcher;
-use Limelight\Helpers\Converter;
 use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
@@ -43,7 +42,8 @@ class TokenParser
     /**
      * Construct.
      *
-     * @param Limelight $limelight [description]
+     * @param Limelight  $limelight
+     * @param Dispatcher $dispatcher
      */
     public function __construct(Limelight $limelight, Dispatcher $dispatcher)
     {
@@ -54,12 +54,12 @@ class TokenParser
     /**
      * Parse the text by filtering through the tokens.
      *
+     * @param array $tokens
+     *
      * @return array
      */
     public function parseTokens($tokens)
     {
-        $converter = new Converter($this->limelight);
-
         $registry = POSRegistry::getInstance();
 
         $length = count($tokens);
@@ -82,7 +82,7 @@ class TokenParser
             if ($properties['attachToPrevious'] && count($this->words) > 0) {
                 $this->appendWordToLast($current, $properties, $previousWord);
             } else {
-                $this->makeNewWord($current, $properties, $converter);
+                $this->makeNewWord($current, $properties);
             }
 
             if ($properties['eatNext']) {
@@ -98,15 +98,15 @@ class TokenParser
     /**
      * Get properties for current token.
      *
-     * @param Limelight\Parse\POSRegistry $registry
-     * @param Limelight\Classes\Word      $previousWord
-     * @param array                       $previous
-     * @param array                       $current
-     * @param array                       $next
+     * @param POSRegistry        $registry
+     * @param LimelightWord|bool $previousWord
+     * @param array              $previous
+     * @param array              $current
+     * @param array              $next
      *
      * @return array
      */
-    private function getProperties($registry, $previousWord, $previous, $current, $next)
+    private function getProperties(POSRegistry $registry, $previousWord, $previous, $current, $next)
     {
         $className = ucfirst($current['partOfSpeech1']);
 
@@ -140,9 +140,9 @@ class TokenParser
     /**
      * Append current word to last word in words array.
      *
-     * @param array                  $current
-     * @param array                  $properties
-     * @param Limelight\Classes\Word $previousWord
+     * @param array              $current
+     * @param array              $properties
+     * @param LimelightWord|bool $previousWord
      */
     private function appendWordToLast($current, $properties, $previousWord)
     {
@@ -166,13 +166,12 @@ class TokenParser
     /**
      * Make new word and append it to words array.
      *
-     * @param array     $current
-     * @param array     $properties
-     * @param Converter $converter
+     * @param array $current
+     * @param array $properties
      */
-    private function makeNewWord($current, $properties, Converter $converter)
+    private function makeNewWord($current, $properties)
     {
-        $word = new LimelightWord($current, $properties, $converter, $this->limelight);
+        $word = new LimelightWord($current, $properties, $this->limelight);
 
         $this->dispatcher->fire('WordWasCreated', $word);
 

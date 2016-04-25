@@ -2,7 +2,6 @@
 
 namespace Limelight\tests\Integration\PartOfSpeech;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class DoushiTest extends TestCase

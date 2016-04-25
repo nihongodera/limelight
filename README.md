@@ -11,6 +11,7 @@
   - Convert Japanese to romaji (English lettering)
 
 ### Quick Guide
+  - [Version Notes](#version-notes)
   - [Install Limelight](#install-limelight)
   - [Initialize Limelight](#initialize-limelight)
   - [Parse Text](#parse-text)
@@ -18,15 +19,16 @@
   - [Full Documentation](#full-documentation)
   - [Sources, Contributions, and Contributing](#sources-contributions-and-contributing)
 
+### Version Notes
+  - April 25: The Limelight API changed in Version 1.6.0. The new API uses collection methods to give developers better control of Limelight parse results. Please see the [wiki](https://github.com/nihongodera/limelight/wiki) for the updated documentation.
+  - April 11: php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please update your bindings or use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
+
 ### Install Limelight
 #### Requirements
   - php > 5.6
 
 #### Dependencies
 Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.   
-       
-**Important**    
-php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
 
 ##### Linux Ubuntu Users
 Use the install script included in this repository.    
@@ -72,15 +74,15 @@ Get results for the entire text using methods available on [LimelightResults](ht
 ```php
 $results = $limelight->parse('庭でライムを育てています。');
 
-echo 'Words: ' . $results->words() . "\n";
-echo 'Readings: ' . $results->readings() . "\n";
-echo 'Pronunciations: ' . $results->pronunciations() . "\n";
-echo 'Lemmas: ' . $results->lemmas() . "\n";
-echo 'Parts of speech: ' . $results->partsOfSpeech() . "\n";
-echo 'Hiragana: ' . $results->toHiragana()->words() . "\n";
-echo 'Katakana: ' . $results->toKatakana()->words() . "\n";
-echo 'Romaji: ' . $results->toRomaji()->words() . "\n";
-echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
+echo 'Words: ' . $results->string('word') . "\n";
+echo 'Readings: ' . $results->string('reading') . "\n";
+echo 'Pronunciations: ' . $results->string('pronunciation') . "\n";
+echo 'Lemmas: ' . $results->string('lemma') . "\n";
+echo 'Parts of speech: ' . $results->string('partOfSpeech') . "\n";
+echo 'Hiragana: ' . $results->toHiragana()->string('word') . "\n";
+echo 'Katakana: ' . $results->toKatakana()->string('word') . "\n";
+echo 'Romaji: ' . $results->string('romaji', ' ') . "\n";
+echo 'Furigana: ' . $results->string('furigana') . "\n";
 ```
 > **Output:**    
 > Words: 庭でライムを育てています。   
@@ -90,42 +92,34 @@ echo 'Furigana: ' . $results->toFurigana()->words() . "\n";
 > Parts of speech: noun postposition noun postposition verb symbol   
 > Hiragana: にわでらいむをそだてています。   
 > Katakana: ニワデライムヲソダテテイマス。  
-> Romaji: Niwa de raimu o sodateteimasu.   
+> Romaji: niwa de raimu o sodateteimasu.   
 > Furigana: <ruby><rb>庭</rb><rp>(</rp><rt>にわ</rt><rp>)</rp></ruby>でライムを<ruby><rb>育</rb><rp>(</rp><rt>そだ</rt><rp>)</rp></ruby>てています。   
-
-Note: instead of calling words() you can call get().  
-```
-$results->toRomaji()->get();
-```
-   
-Get individual words off the LimelightResults object by selecting them by either word or index and using methods available on the returned [LimelightWord](https://github.com/nihongodera/limelight/wiki/LimelightWord) object.
+       
+Alter the collection of words however you like using the library of [collection methods](https://github.com/nihongodera/limelight/wiki/Collection-Methods).
+     
+Get individual words off the LimelightResults object by using one of several applicable [collection methods](https://github.com/nihongodera/limelight/wiki/Collection-Methods). Use methods available on the returned [LimelightWord](https://github.com/nihongodera/limelight/wiki/LimelightWord) object.
 ```php
 $results = $limelight->parse('庭でライムを育てています。');
 
-$word1 = $results->findIndex(2);
+$word1 = $results->pull(2);
 
-$word2 = $results->findWord('庭');
+$word2 = $results->where('word', '庭');
 
-echo $word1->toRomaji()->word() . "\n";
+echo $word1->string('romaji') . "\n";
 
-echo $word2->toFurigana()->word() . "\n";
+echo $word2->string('furigana') . "\n";
 ```
 > **Output:**  
 > raimu   
 > <ruby>庭<rt>にわ</rt></ruby>   
    
-Notice that methods on the LimelightResults object and the LimelightWord object follow the same conventions, but LimelightResults methods are plural (word**s**()) while LimelightWord methods are singular (word()).
-
-Note: instead of calling word() you can call get().  
-```
-$word1->toRomaji()->get();
-```
+Methods on the LimelightResults object and the LimelightWord object follow the same conventions, but LimelightResults methods are plural (word**s**()) while LimelightWord methods are singular (word()).
   
-Alternatively, loop through all the words on the LimelightResults object using the next() method.
+Alternatively, loop through all the words on the LimelightResults object.
 ```php
 $results = $limelight->parse('庭でライムを育てています。');
 
-foreach ($results->next() as $word) {
+foreach ($results as $word) {
     echo $word->word() . ' is a ' . $word->partOfSpeech() . ' read like ' . $word->reading() . "\n";
 }
 ```
@@ -146,7 +140,9 @@ Full documentation for Limelight can be found on the [Limelight Wiki page](https
 The Japanese parsing logic used in Limelight was adapted from Kimtaro's excellent Ruby program [Ve](https://github.com/Kimtaro/ve).  A big thank you to him and all the others who contributed on that project. 
    
 Limelight relies heavily on both [MeCab](http://taku910.github.io/mecab/) and [php-mecab](https://github.com/rsky/php-mecab).
-
+     
+Collection methods and methods in the Arr class were derived from Laravel's [collection](https://github.com/illuminate/support/blob/master/Collection.php) methods.
+    
 Contributors more than welcome.
   
 [Top](#contents)

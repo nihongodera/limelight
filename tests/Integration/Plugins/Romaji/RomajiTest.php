@@ -2,7 +2,6 @@
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class RomajiTest extends TestCase
@@ -14,9 +13,15 @@ class RomajiTest extends TestCase
     {
         $results = self::$limelight->parse('今週末山を登ります！');
 
-        $conversion = $results->plugin('Romaji');
+        $conversion = $results->plugin('Romaji')->all();
 
-        $this->assertEquals('Konshūmatsu yama o noborimasu!', $conversion);
+        $this->assertEquals([
+            'konshūmatsu',
+            'yama',
+            'o',
+            'noborimasu',
+            '!'
+        ], $conversion);
     }
 
     /**
@@ -26,9 +31,9 @@ class RomajiTest extends TestCase
     {
         $results = self::$limelight->parse('大阪');
 
-        $conversion = $results->plugin('Romaji');
+        $conversion = $results->plugin('Romaji')->all();
 
-        $this->assertEquals('Ōsaka', $conversion);
+        $this->assertEquals(['Ōsaka'], $conversion);
     }
 
     /**
@@ -38,8 +43,8 @@ class RomajiTest extends TestCase
     {
         $results = self::$limelight->noParse('うれ.しい');
 
-        $conversion = $results->plugin('Romaji');
+        $conversion = $results->plugin('Romaji')->all();
 
-        $this->assertEquals('Ure.shii', $conversion);
+        $this->assertEquals(['ure.shii'], $conversion);
     }
 }
