@@ -13,7 +13,6 @@
 ### Quick Guide
   - [Version Notes](#version-notes)
   - [Install Limelight](#install-limelight)
-  - [Initialize Limelight](#initialize-limelight)
   - [Parse Text](#parse-text)
   - [Get Results](#get-results)
   - [Full Documentation](#full-documentation)
@@ -24,13 +23,13 @@
   - April 11: php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please update your bindings or use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
 
 ### Install Limelight
-#### Requirements
+##### Requirements
   - php > 5.6
 
-#### Dependencies
+##### Dependencies
 Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.   
 
-##### Linux Ubuntu Users
+###### Linux Ubuntu Users
 Use the install script included in this repository.    
 Download the script:
 ```
@@ -46,23 +45,22 @@ Execute the script:
 ```
 For information about what the script does, see [here](https://github.com/nihongodera/limelight/wiki/Install-Script).
 
-##### Other Systems
+###### Other Systems
 
 Please see [this page](https://github.com/nihongodera/php-mecab-documentation) to learn more about installing on your system.   
     
-#### Install Limelight
+##### Install Limelight
 Install Limelight through composer.
 ```
 composer require nihongodera/limelight
 ```
 
-### Initialize Limelight
+### Parse Text
 Make a new instance of Limelight\Limelight.  Limelight takes no arguments.
 ```php
 $limelight = new Limelight();
 ```
 
-### Parse Text
 Use the parse() method on the Limelight object to parse Japanese text.
 ```php
 $results = $limelight->parse('庭でライムを育てています。');

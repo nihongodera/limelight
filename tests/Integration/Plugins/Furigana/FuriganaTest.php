@@ -287,18 +287,11 @@ class FuriganaTest extends TestCase
     {
         $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
 
-        $furigana = $results->plugin('Furigana')->all();
+        $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals([
-            'アッ',
-            '、',
-            '<ruby><rb>太郎</rb><rp>(</rp><rt>たろう</rt><rp>)</rp></ruby>',
-            '！',
-            '<ruby><rb>久</rb><rp>(</rp><rt>ひさ</rt><rp>)</rp></ruby>しぶり',
-            '！',
-            '<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>',
-            '？'
-        ], $furigana);
+        $this->assertEquals(
+            'アッ、<ruby><rb>太郎</rb><rp>(</rp><rt>たろう</rt><rp>)</rp></ruby>！<ruby><rb>久</rb><rp>(</rp><rt>ひさ</rt><rp>)</rp></ruby>しぶり！<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？',
+            $furigana);
     }
 
     /**
@@ -308,12 +301,9 @@ class FuriganaTest extends TestCase
     {
         $results = self::$limelight->parse('7時');
 
-        $furigana = $results->plugin('Furigana')->all();
+        $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals([
-            '7',
-            '<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>'
-        ], $furigana);
+        $this->assertEquals('7<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>', $furigana);
     }
 
     /**
@@ -323,11 +313,8 @@ class FuriganaTest extends TestCase
     {
         $results = self::$limelight->parse('７時');
 
-        $furigana = $results->plugin('Furigana')->all();
+        $furigana = $results->plugin('Furigana');
 
-        $this->assertEquals([
-            '７',
-            '<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>'
-        ], $furigana);
+        $this->assertEquals('７<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>', $furigana);
     }
 }

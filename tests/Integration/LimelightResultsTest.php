@@ -272,14 +272,11 @@ class LimelightResultsTest extends TestCase
      */
     public function it_can_get_plugin_data()
     {
-        $furigana = $this->getResults()->plugin('Furigana')->all();
+        $furigana = $this->getResults()->plugin('Furigana');
 
-        $this->assertEquals([
-            '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
-            'を',
-            '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
-            '。'
-        ], $furigana);
+        $this->assertEquals(
+            '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>を<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます。',
+            $furigana);
     }
 
     /**
@@ -290,6 +287,16 @@ class LimelightResultsTest extends TestCase
         $string = $this->getResults()->string('partOfSpeech', ' ');
 
         $this->assertEquals('noun postposition verb symbol', $string);
+    }
+
+    /**
+     * @test
+     */
+    public function it_accepts_plural_string_values()
+    {
+        $string = $this->getResults()->string('words');
+
+        $this->assertEquals('音楽を聴きます。', $string);
     }
 
     /**

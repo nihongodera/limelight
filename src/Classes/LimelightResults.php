@@ -66,12 +66,10 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      */
     public function string($value, $glue = null)
     {
-        $string = $this->map(function ($item, $key) use ($value, $glue) {
-            if ($value !== 'partOfSpeech' && $item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
-                return $item->$value;
-            }
+        $value = $this->makeSingular($value);
 
-            return $glue.$item->$value;
+        $string = $this->map(function ($item, $key) use ($value, $glue) {
+            return $this->buildString($item, $value, $glue);
         });
 
         return $this->cutFirst(implode('', $string->all()), $glue);
@@ -190,7 +188,25 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      */
     public function plugin($name)
     {
-        return $this->getPluginData($name);
+        return $this->getPluginData($name, 'self');
+    }
+
+    /**
+     * Build string for word.
+     *
+     * @param LimelightWord $item
+     * @param string        $value
+     * @param string|null   $glue
+     *
+     * @return string
+     */
+    private function buildString($item, $value, $glue)
+    {
+        if ($value !== 'partOfSpeech' && $item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
+            return $item->$value;
+        }
+
+        return $glue.$item->$value;
     }
 
     /**
@@ -208,5 +224,21 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
         }
 
         return $string;
+    }
+
+    /**
+     * Make value singular.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function makeSingular($value)
+    {
+        if (substr($value, -1) === 's') {
+            return substr($value, 0, -1);
+        }
+
+        return $value;
     }
 }

@@ -13,12 +13,13 @@ trait PluginHelper
     /**
      * Get data from pluginData.
      *
-     * @param string $type [romaji, furigana]
+     * @param string $type   [romaji, furigana]
+     * @param string $target [self, child]
      *
      * @return static
      * @throws PluginNotFoundException
      */
-    protected function getPluginData($type)
+    protected function getPluginData($type, $target = 'child')
     {
         $type = ucfirst($type);
 
@@ -28,7 +29,7 @@ trait PluginHelper
             throw new PluginNotFoundException("Plugin data for {$type} can not be found. Is the {$type} plugin registered in config?");
         }
 
-        if ($this instanceof Collection) {
+        if ($this instanceof Collection && $target === 'child') {
             return $this->pluck('pluginData')->pluck($type);
         } else {
             return $this->pluginData[$type];
