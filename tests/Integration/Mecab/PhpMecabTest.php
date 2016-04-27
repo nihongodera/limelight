@@ -55,18 +55,4 @@ class PhpMecabTest extends TestCase
 
         $this->assertContains('形容詞,自立,*,*,形容詞・イ段,基本形,美味しい,オイシイ,オイシイ', $results);
     }
-
-    /**
-     * @test
-     */
-    public function it_can_access_mecab_split_method()
-    {
-        $results = self::$phpmecab->split('めっちゃ眠い。');
-
-        $this->assertEquals('めっちゃ', $results[0]);
-
-        $this->assertEquals('眠い', $results[1]);
-
-        $this->assertEquals('。', $results[2]);
-    }
 }

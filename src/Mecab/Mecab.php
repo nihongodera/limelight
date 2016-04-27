@@ -30,13 +30,4 @@ interface Mecab
      * @return string
      */
     public function parseToString($string);
-
-    /**
-     * Split string into array.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    public function split($string);
 }

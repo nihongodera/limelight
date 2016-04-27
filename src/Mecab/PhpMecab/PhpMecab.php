@@ -71,22 +71,6 @@ class PhpMecab implements Mecab
     }
 
     /**
-     * Split string into array.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    public function split($string)
-    {
-        if (isset($this->options['dictionary'])) {
-            return mecab_split($string, $this->options['dictionary']);
-        }
-
-        return mecab_split($string);
-    }
-
-    /**
      * Make instance of MeCab_Tagger.
      *
      * @return MeCab_Tagger

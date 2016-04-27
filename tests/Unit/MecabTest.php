@@ -60,15 +60,4 @@ class MecabTest extends TestCase
             'Mecab does not have method parseToString.'
         );
     }
-
-    /**
-     * @test
-     */
-    public function it_has_split_method()
-    {
-        $this->assertTrue(
-            method_exists(self::$mecab, 'split'),
-            'Mecab does not have method split.'
-        );
-    }
 }

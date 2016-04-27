@@ -81,20 +81,6 @@ class LimelightTest extends TestCase
     /**
      * @test
      */
-    public function it_can_access_mecab_split_method()
-    {
-        $results = self::$limelight->mecabSplit('めっちゃ眠い。');
-
-        $this->assertEquals('めっちゃ', $results[0]);
-
-        $this->assertEquals('眠い', $results[1]);
-
-        $this->assertEquals('。', $results[2]);
-    }
-
-    /**
-     * @test
-     */
     public function it_can_set_config_values()
     {
         $limelight = self::$limelight;
