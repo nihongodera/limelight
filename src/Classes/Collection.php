@@ -16,7 +16,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     use Arr;
 
     /**
-     * Collection methods adopted from Laravel Collection.
+     * Collection methods adapted from Laravel Collection.
      * https://github.com/illuminate/support/blob/master/Collection.php.
      */
 

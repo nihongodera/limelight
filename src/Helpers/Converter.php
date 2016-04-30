@@ -35,7 +35,7 @@ class Converter
      *
      * @return string
      */
-    private function katakana($value)
+    private static function katakana($value)
     {
         return static::convertKana($value, 'C');
     }

@@ -7,7 +7,7 @@ use Limelight\Classes\Collection;
 trait Arr
 {
     /**
-     * Methods in this trait adopted from Laravel Arr class.
+     * Methods in this trait adapted from Laravel Arr class.
      * https://github.com/illuminate/support/blob/master/Arr.php
      */
     
