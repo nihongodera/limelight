@@ -41,4 +41,16 @@ class RomajiTest extends TestCase
 
         $this->assertEquals('Ure.shii', $conversion);
     }
+
+    /**
+     * @test
+     */
+    public function it_passes_english_words()
+    {
+        $results = self::$limelight->parse('大阪 pass 今週');
+
+        $conversion = $results->plugin('Romaji');
+
+        $this->assertEquals('Ōsaka pass konshū', $conversion);
+    }
 }

@@ -102,7 +102,11 @@ abstract class RomajiConverter
                 $results = substr($results, 0, -1);
             }
 
-            $results .= $convertedChar;
+            if ($convertedChar === '' && ctype_alpha($char)) {
+                $results .= $char;
+            } else {
+                $results .= $convertedChar;
+            }
         }
 
         return $this->upperCaseNames($results, $word);

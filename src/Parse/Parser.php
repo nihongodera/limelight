@@ -62,7 +62,11 @@ class Parser
 
         $words = $this->tokenParser->parseTokens($tokens);
 
-        $pluginResults = ($runPlugins ? $this->runPlugins($text, $node, $tokens, $words) : null);
+        if ($runPlugins) {
+            $pluginResults = $this->runPlugins($text, $node, $tokens, $words);
+        } else {
+            $pluginResults = null;
+        }
 
         $results = new LimelightResults($text, $words, $pluginResults);
 
