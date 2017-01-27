@@ -2,13 +2,13 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
-use Limelight\Helpers\PluginHelper;
-use Limelight\Classes\LimelightWord;
-use Limelight\Helpers\JapaneseHelpers;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
 use Limelight\Exceptions\InvalidInputException;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Limelight;
 
 class NoParser
 {
@@ -42,9 +42,9 @@ class NoParser
      * @param string $text
      * @param array  $pluginWhiteList
      *
-     * @return LimelightResults
-     *
      * @throws InvalidInputException
+     *
+     * @return LimelightResults
      */
     public function handle($text, array $pluginWhiteList)
     {
@@ -79,9 +79,9 @@ class NoParser
     private function buildToken($text)
     {
         return [
-            'literal' => $text,
-            'lemma' => $text,
-            'reading' => $text,
+            'literal'       => $text,
+            'lemma'         => $text,
+            'reading'       => $text,
             'pronunciation' => $text,
         ];
     }
@@ -95,7 +95,7 @@ class NoParser
     {
         return [
             'partOfSpeech' => null,
-            'grammar' => null,
+            'grammar'      => null,
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Limelight\Config;
 
-use Limelight\Exceptions\InvalidInputException;
 use Limelight\Exceptions\InternalErrorException;
+use Limelight\Exceptions\InvalidInputException;
 
 class Config
 {
@@ -34,9 +34,9 @@ class Config
      *
      * @param string $string [config.php key]
      *
-     * @return mixed
-     *
      * @throws InvalidInputException
+     *
+     * @return mixed
      */
     public function get($string)
     {
@@ -77,9 +77,9 @@ class Config
      *
      * @param string $interface [full interface namespace]
      *
-     * @return class_instance
-     *
      * @throws InternalErrorException
+     *
+     * @return class_instance
      */
     public function make($interface)
     {
@@ -125,9 +125,9 @@ class Config
      * @param string $key1
      * @param string $key1
      *
-     * @return bool
-     *
      * @throws InvalidInputException
+     *
+     * @return bool
      */
     public function set($value, $key1, $key2 = null)
     {
@@ -163,9 +163,9 @@ class Config
      * @param array  $bindings
      * @param string $interface
      *
-     * @return string
-     *
      * @throws InternalErrorException
+     *
+     * @return string
      */
     private function getFullClassName(array $bindings, $interface)
     {

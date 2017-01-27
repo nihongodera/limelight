@@ -8,9 +8,9 @@ trait Arr
 {
     /**
      * Methods in this trait adapted from Laravel Arr class.
-     * https://github.com/illuminate/support/blob/master/Arr.php
+     * https://github.com/illuminate/support/blob/master/Arr.php.
      */
-    
+
     /**
      * Determine whether the given value is array accessible.
      *

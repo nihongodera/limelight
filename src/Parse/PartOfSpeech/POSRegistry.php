@@ -46,8 +46,9 @@ class POSRegistry
      *
      * @param string $className
      *
-     * @return PartOfSpeech
      * @throws InternalErrorException
+     *
+     * @return PartOfSpeech
      */
     public function getClass($className)
     {
@@ -85,8 +86,9 @@ class POSRegistry
      *
      * @param string $class
      *
-     * @return bool/InternalErrorException
      * @throws InternalErrorException
+     *
+     * @return bool/InternalErrorException
      */
     private function validateClass($class)
     {

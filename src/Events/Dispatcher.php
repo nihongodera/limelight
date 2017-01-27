@@ -16,7 +16,7 @@ class Dispatcher
     /**
      * When false, events are fired.
      *
-     * @var boolean
+     * @var bool
      */
     protected $supressEvents = false;
 
@@ -101,7 +101,7 @@ class Dispatcher
     /**
      * Turn eventing on/off.
      *
-     * @param  bool $supressEvents
+     * @param bool $supressEvents
      *
      * @return bool
      */

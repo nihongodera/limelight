@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Tests\TestCase;
 use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Tests\TestCase;
 
 class JapaneseHelpersTest extends TestCase
 {

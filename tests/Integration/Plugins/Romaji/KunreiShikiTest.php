@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Tests\TestCase;
 use Limelight\Plugins\Library\Romaji\Styles\KunreiShiki;
+use Limelight\Tests\TestCase;
 
 class KunreiShikiTest extends TestCase
 {

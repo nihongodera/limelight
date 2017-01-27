@@ -2,9 +2,9 @@
 
 namespace Limelight\tests\Integration;
 
+use Limelight\Classes\LimelightResults;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
-use Limelight\Classes\LimelightResults;
 
 class LimelightResultsTest extends TestCase
 {
@@ -197,7 +197,7 @@ class LimelightResultsTest extends TestCase
             '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
             'を',
             '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
-            '。'
+            '。',
         ], $furigana->all());
     }
 

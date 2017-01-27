@@ -198,7 +198,7 @@ class LimelightWordTest extends TestCase
         $config->erase('plugins', 'Romaji');
 
         $string = $this->getResults()->romaji()->words();
-        
+
         $config->resetConfig();
     }
 
@@ -361,7 +361,7 @@ class LimelightWordTest extends TestCase
 
         $this->assertFalse($result->parsed());
     }
-    
+
     /**
      * Parse test phrase and return LimelightResults.
      *

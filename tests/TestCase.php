@@ -29,8 +29,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Assert MecabNode object equals expected array.
      *
-     * @param Node $nodes
-     * @param array      $expected
+     * @param Node  $nodes
+     * @param array $expected
      */
     protected function assertNodeResult($nodes, $expected)
     {
@@ -48,7 +48,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Get romaji string for results.
      *
-     * @param RomajiConverter $converter
+     * @param RomajiConverter  $converter
      * @param LimelightResults $results
      *
      * @return string

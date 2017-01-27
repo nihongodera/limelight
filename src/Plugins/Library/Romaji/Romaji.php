@@ -3,8 +3,8 @@
 namespace Limelight\Plugins\Library\Romaji;
 
 use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Exceptions\PluginErrorException;
+use Limelight\Plugins\Plugin;
 
 class Romaji extends Plugin
 {
@@ -43,8 +43,9 @@ class Romaji extends Plugin
     /**
      * Make decorator class from config value.
      *
+     * @throws PluginErrorException
+     *
      * @return RomajiConverter
-     * @throws  PluginErrorException
      */
     private function makeStyleClass()
     {

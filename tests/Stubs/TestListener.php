@@ -2,9 +2,8 @@
 
 namespace Limelight\Tests\Stubs;
 
-use Limelight\Config\Config;
-use Limelight\Classes\LimelightWord;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
 use Limelight\Events\LimelightListener;
 
 class TestListener implements LimelightListener
@@ -23,6 +22,6 @@ class TestListener implements LimelightListener
             return file_put_contents($path, $message, FILE_APPEND);
         }
 
-        return (is_null($payload) ? 'It works!' : "Payload says {$payload}");
+        return is_null($payload) ? 'It works!' : "Payload says {$payload}";
     }
 }

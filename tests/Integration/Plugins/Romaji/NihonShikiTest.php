@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Tests\TestCase;
 use Limelight\Plugins\Library\Romaji\Styles\NihonShiki;
+use Limelight\Tests\TestCase;
 
 class NihonShikiTest extends TestCase
 {
@@ -18,7 +18,7 @@ class NihonShikiTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
+
         self::$nihon = new NihonShiki();
     }
 

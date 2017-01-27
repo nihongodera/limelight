@@ -2,8 +2,8 @@
 
 namespace Limelight\Providers\Laravel;
 
-use Limelight\Limelight;
 use Illuminate\Support\ServiceProvider;
+use Limelight\Limelight;
 
 class LimelightServiceProvider extends ServiceProvider
 {

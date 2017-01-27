@@ -2,11 +2,11 @@
 
 namespace Limelight\Helpers;
 
-use Limelight\Mecab\Node;
-use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Classes\Collection;
+use Limelight\Config\Config;
 use Limelight\Exceptions\PluginNotFoundException;
+use Limelight\Mecab\Node;
+use Limelight\Plugins\Plugin;
 
 trait PluginHelper
 {
@@ -16,8 +16,9 @@ trait PluginHelper
      * @param string $type   [romaji, furigana]
      * @param string $target [self, child]
      *
-     * @return static
      * @throws PluginNotFoundException
+     *
+     * @return static
      */
     protected function getPluginData($type, $target = 'child')
     {

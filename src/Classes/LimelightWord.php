@@ -2,13 +2,13 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Limelight;
-use Limelight\Helpers\Converter;
-use Limelight\Helpers\PluginHelper;
-use Limelight\Helpers\JapaneseHelpers;
-use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Converter;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Limelight;
 
 class LimelightWord implements Arrayable, Convertable, Jsonable
 {
@@ -402,9 +402,9 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
 
         $this->lemma = $token['lemma'];
 
-        $this->reading = (isset($token['reading']) ?  $token['reading'] : null);
+        $this->reading = (isset($token['reading']) ? $token['reading'] : null);
 
-        $this->pronunciation = (isset($token['pronunciation']) ?  $token['pronunciation'] : null);
+        $this->pronunciation = (isset($token['pronunciation']) ? $token['pronunciation'] : null);
 
         $this->partOfSpeech = $properties['partOfSpeech'];
 

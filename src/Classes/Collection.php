@@ -4,12 +4,12 @@ namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 use Limelight\Helpers\Arr;
-use Limelight\Helpers\Converter;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Converter;
 
 abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggregate
 {
@@ -627,7 +627,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
      *      => [[1, 4], [2, 5], [3, 6]]
      *
-     * @param  mixed ...$items
+     * @param mixed ...$items
      *
      * @return static
      */

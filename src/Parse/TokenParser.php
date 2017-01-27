@@ -2,9 +2,9 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
 use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
+use Limelight\Limelight;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class TokenParser
@@ -30,13 +30,13 @@ class TokenParser
      * @var array
      */
     private $defaults = [
-        'partOfSpeech' => null,
-        'grammar' => null,
-        'eatNext' => false,
-        'eatLemma' => true,
-        'attachToPrevious' => false,
+        'partOfSpeech'      => null,
+        'grammar'           => null,
+        'eatNext'           => false,
+        'eatLemma'          => true,
+        'attachToPrevious'  => false,
         'alsoAttachToLemma' => false,
-        'updatePOS' => false,
+        'updatePOS'         => false,
     ];
 
     /**

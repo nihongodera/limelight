@@ -11,7 +11,7 @@ return [
     */
     'plugins' => [
         'Furigana' => 'Limelight\Plugins\Library\Furigana\Furigana',
-        'Romaji' => 'Limelight\Plugins\Library\Romaji\Romaji'
+        'Romaji'   => 'Limelight\Plugins\Library\Romaji\Romaji',
     ],
 
     /*
@@ -20,16 +20,16 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define the way that furigana is created. Item is placed where double
-    | curly braces ( {{}} ) occur. 'furigana_wrapper' wraps the furigana. 
+    | curly braces ( {{}} ) occur. 'furigana_wrapper' wraps the furigana.
     | 'kanji_wrapper' wraps the kanji. 'kanji_furigana_wrapper' wraps both the
     | kanji and the furigana. 'word_wrapper' wraps the entire word.
     |
     */
     'Furigana' => [
-        'furigana_wrapper' => '<rp>(</rp><rt>{{}}</rt><rp>)</rp>',
+        'furigana_wrapper'       => '<rp>(</rp><rt>{{}}</rt><rp>)</rp>',
         'kanji_furigana_wrapper' => '<ruby>{{}}</ruby>',
-        'kanji_wrapper' => '<rb>{{}}</rb>',
-        'word_wrapper' => '',
+        'kanji_wrapper'          => '<rb>{{}}</rb>',
+        'word_wrapper'           => '',
     ],
 
     /*
@@ -42,7 +42,7 @@ return [
     |
     */
     'Romaji' => [
-        'style' => 'hepburn_modified'
+        'style' => 'hepburn_modified',
     ],
 
     /*
@@ -62,7 +62,7 @@ return [
         ],
         'ParseWasSuccessful' => [
             //
-        ]
+        ],
     ],
 
     /*
@@ -70,12 +70,12 @@ return [
     | Interface => Class Bindings
     |--------------------------------------------------------------------------
     |
-    | Bind an interface to class.  Resolve the class by passing the full 
+    | Bind an interface to class.  Resolve the class by passing the full
     | interface namespace to the make method on Config.
     |
     */
     'bindings' => [
-        'Limelight\Mecab\Mecab' => 'Limelight\Mecab\PhpMecab\PhpMecab'
+        'Limelight\Mecab\Mecab' => 'Limelight\Mecab\PhpMecab\PhpMecab',
     ],
 
     /*
@@ -91,7 +91,7 @@ return [
     'options' => [
         'PhpMecab' => [
             // '-d' => 'path/to/your/dic/directory'
-        ]
+        ],
     ],
 
     /*
@@ -102,5 +102,5 @@ return [
     | Set package debug mode. When true, stack traces will print in terminal.
     |
     */
-    'debug' => false
+    'debug' => false,
 ];
