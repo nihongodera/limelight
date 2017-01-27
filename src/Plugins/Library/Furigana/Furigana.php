@@ -143,10 +143,10 @@ class Furigana extends Plugin
 
     /**
      * Find valid furigana by walking hiragana array in reverse.
-     * 
+     *
      * @param array $wordChars
      * @param array $hiraganaChars
-     * 
+     *
      * @return array
      */
     private function reverseArrayCompile(array $wordChars, array $hiraganaChars)
@@ -301,7 +301,7 @@ class Furigana extends Plugin
             $openClose = explode('{{}}', $tag);
 
             $this->tags[$name] = [
-                'open' => (isset($openClose[0]) ? $openClose[0] : ''),
+                'open'  => (isset($openClose[0]) ? $openClose[0] : ''),
                 'close' => (isset($openClose[1]) ? $openClose[1] : ''),
             ];
         }

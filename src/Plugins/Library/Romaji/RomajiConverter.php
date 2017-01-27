@@ -68,9 +68,9 @@ abstract class RomajiConverter
 
             $char = $characters[$index];
 
-            $next = (isset($characters[$index + 1]) ?  $characters[$index + 1] : null);
+            $next = (isset($characters[$index + 1]) ? $characters[$index + 1] : null);
 
-            $nextNext = (isset($characters[$index + 2]) ?  $characters[$index + 2] : null);
+            $nextNext = (isset($characters[$index + 2]) ? $characters[$index + 2] : null);
 
             $charToConvert = $this->findCombos($char, $next, $nextNext);
 
@@ -82,7 +82,7 @@ abstract class RomajiConverter
 
             if (isset($this->conversions[$charToConvert])) {
                 $convertedChar = $this->conversions[$charToConvert];
-            } elseif (preg_match("/[0-9.!?,;:-]$/", $charToConvert)) {
+            } elseif (preg_match('/[0-9.!?,;:-]$/', $charToConvert)) {
                 $convertedChar = $charToConvert;
             } else {
                 $convertedChar = '';
@@ -218,7 +218,7 @@ abstract class RomajiConverter
      * @param string        $convertedChar
      * @param string        $results
      * @param LimelightWord $word
-     * @param Int           $index
+     * @param int           $index
      *
      * @return bool
      */

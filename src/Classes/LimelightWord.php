@@ -402,9 +402,9 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
 
         $this->lemma = $token['lemma'];
 
-        $this->reading = (isset($token['reading']) ?  $token['reading'] : null);
+        $this->reading = (isset($token['reading']) ? $token['reading'] : null);
 
-        $this->pronunciation = (isset($token['pronunciation']) ?  $token['pronunciation'] : null);
+        $this->pronunciation = (isset($token['pronunciation']) ? $token['pronunciation'] : null);
 
         $this->partOfSpeech = $properties['partOfSpeech'];
 

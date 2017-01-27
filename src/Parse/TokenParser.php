@@ -30,13 +30,13 @@ class TokenParser
      * @var array
      */
     private $defaults = [
-        'partOfSpeech' => null,
-        'grammar' => null,
-        'eatNext' => false,
-        'eatLemma' => true,
-        'attachToPrevious' => false,
+        'partOfSpeech'      => null,
+        'grammar'           => null,
+        'eatNext'           => false,
+        'eatLemma'          => true,
+        'attachToPrevious'  => false,
         'alsoAttachToLemma' => false,
-        'updatePOS' => false,
+        'updatePOS'         => false,
     ];
 
     /**

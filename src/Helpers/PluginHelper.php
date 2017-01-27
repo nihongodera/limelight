@@ -16,8 +16,9 @@ trait PluginHelper
      * @param string $type   [romaji, furigana]
      * @param string $target [self, child]
      *
-     * @return static
      * @throws PluginNotFoundException
+     *
+     * @return static
      */
     protected function getPluginData($type, $target = 'child')
     {

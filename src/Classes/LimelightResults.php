@@ -138,9 +138,9 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Get romaji if data exists.
      *
-     * @return static
-     *
      * @throws PluginNotFoundException
+     *
+     * @return static
      */
     public function romaji()
     {
@@ -150,9 +150,9 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Get furigana if data exists.
      *
-     * @return static
-     *
      * @throws PluginNotFoundException
+     *
+     * @return static
      */
     public function furigana()
     {

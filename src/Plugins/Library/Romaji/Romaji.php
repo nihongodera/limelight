@@ -43,8 +43,9 @@ class Romaji extends Plugin
     /**
      * Make decorator class from config value.
      *
+     * @throws PluginErrorException
+     *
      * @return RomajiConverter
-     * @throws  PluginErrorException
      */
     private function makeStyleClass()
     {

@@ -8,10 +8,10 @@ use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 class Meishi implements PartOfSpeech
 {
     private $overrides = [
-        'sahensetsuzoku' => 'fukushikanou',
+        'sahensetsuzoku'    => 'fukushikanou',
         'keiyoudoushigokan' => 'fukushikanou',
         'naikeiyoushigokan' => 'fukushikanou',
-        'tokushu' => 'hijiritsu',
+        'tokushu'           => 'hijiritsu',
     ];
 
     /**
@@ -32,9 +32,9 @@ class Meishi implements PartOfSpeech
         $registry = POSRegistry::getInstance();
 
         if (array_key_exists($current['partOfSpeech2'], $this->overrides)) {
-            $className = 'Meishi' . ucfirst($this->overrides[$current['partOfSpeech2']]);
+            $className = 'Meishi'.ucfirst($this->overrides[$current['partOfSpeech2']]);
         } else {
-            $className = 'Meishi' . ucfirst($current['partOfSpeech2']);
+            $className = 'Meishi'.ucfirst($current['partOfSpeech2']);
         }
 
         if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\'.$className)) {

@@ -12,10 +12,10 @@ class LimelightException extends \Exception
      * @var array
      */
     protected $colors = [
-        'red' => "\033[0;31m ",
-        'blue' => "\033[0;36m ",
+        'red'   => "\033[0;31m ",
+        'blue'  => "\033[0;36m ",
         'green' => "\033[0;32m ",
-        'none' => "\033[0m",
+        'none'  => "\033[0m",
     ];
 
     /**

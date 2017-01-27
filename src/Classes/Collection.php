@@ -627,7 +627,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
      *      => [[1, 4], [2, 5], [3, 6]]
      *
-     * @param  mixed ...$items
+     * @param mixed ...$items
      *
      * @return static
      */

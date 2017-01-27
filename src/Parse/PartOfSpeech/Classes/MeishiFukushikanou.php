@@ -21,7 +21,6 @@ class MeishiFukushikanou implements PartOfSpeech
     {
         if ($next) {
             if ($next['inflectionType'] === 'sahenSuru') {
-
                 $properties['partOfSpeech'] = 'verb';
 
                 $properties['eatNext'] = true;
