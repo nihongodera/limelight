@@ -300,6 +300,16 @@ class LimelightResultsTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function string_with_glue_does_not_start_with_glue()
+    {
+        $string = $this->getResults()->toHiragana()->string('reading', '--');
+
+        $this->assertEquals('おんがく--を--ききます--。', $string);
+    }
+
+    /**
      * Parse test phrase and return LimelightResults.
      *
      * @return LimelightResults

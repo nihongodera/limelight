@@ -68,11 +68,11 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     {
         $value = $this->makeSingular($value);
 
-        $string = $this->map(function ($item, $key) use ($value, $glue) {
+        $collection = $this->map(function ($item, $key) use ($value, $glue) {
             return $this->buildString($item, $value, $glue);
         });
 
-        return $this->cutFirst(implode('', $string->all()), $glue);
+        return $this->cutFirst($collection, $glue);
     }
 
     /**
@@ -210,17 +210,19 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     }
 
     /**
-     * Cut first char if its is divider.
+     * Cut first chars if its is glue.
      *
-     * @param string $string
-     * @param string $divider
+     * @param Collection $collection
+     * @param string     $glue
      *
      * @return string
      */
-    private function cutFirst($string, $divider)
+    private function cutFirst($collection, $glue)
     {
-        if (mb_substr($string, 0, 1) === $divider) {
-            return mb_substr($string, 1);
+        $string = implode('', $collection->all());
+
+        if ($glue) {
+            return implode($glue, array_filter(explode($glue, $string)));
         }
 
         return $string;
