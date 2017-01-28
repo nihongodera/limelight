@@ -24,7 +24,7 @@ class MeishiFukushikanou implements PartOfSpeech
                 $properties['partOfSpeech'] = 'verb';
 
                 $properties['eatNext'] = true;
-            } elseif ($next['inflectionType'] = 'tokushuDa' && $current['partOfSpeech2'] !== 'sahensetsuzoku') {
+            } elseif ($this->isTokushuDaNotSahensetsuzoku($current, $next)) {
                 $properties['partOfSpeech'] = 'adjective';
 
                 if ($next['inflectionForm'] === 'taigensetsuzoku') {
@@ -44,5 +44,20 @@ class MeishiFukushikanou implements PartOfSpeech
         }
 
         return $properties;
+    }
+
+    /**
+     * Return true if next inflection is tokushuDa and POS2 is not
+     * sahensetsuzoku.
+     *
+     * @param  array  $current
+     * @param  array  $next
+     *
+     * @return boolean
+     */
+    public function isTokushuDaNotSahensetsuzoku($current, $next)
+    {
+        return $next['inflectionType'] = 'tokushuDa' &&
+            $current['partOfSpeech2'] !== 'sahensetsuzoku';
     }
 }

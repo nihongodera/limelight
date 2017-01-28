@@ -385,7 +385,9 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      */
     private function getPublicProperties()
     {
-        return (new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC);
+        return (
+            new \ReflectionObject($this))->getProperties(\ReflectionProperty::IS_PUBLIC
+        );
     }
 
     /**

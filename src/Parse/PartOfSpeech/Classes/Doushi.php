@@ -23,10 +23,23 @@ class Doushi implements PartOfSpeech
 
         if ($current['partOfSpeech2'] === 'setsubi') {
             $properties['attachToPrevious'] = true;
-        } elseif ($current['partOfSpeech2'] === 'hijiritsu' && $current['inflectionForm'] !== 'meireiI') {
+        } elseif ($this->isHijiritsuNotMeireiI($current)) {
             $properties['attachToPrevious'] = true;
         }
 
         return $properties;
+    }
+
+    /**
+     * Return true if POS is hijiritsu and inflection is not meireiI.
+     *
+     * @param  array  $current
+     *
+     * @return boolean
+     */
+    protected function isHijiritsuNotMeireiI($current)
+    {
+        return $current['partOfSpeech2'] === 'hijiritsu' &&
+            $current['inflectionForm'] !== 'meireiI';
     }
 }

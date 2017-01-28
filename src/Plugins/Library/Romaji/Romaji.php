@@ -61,7 +61,9 @@ class Romaji extends Plugin
             return new $styleClass();
         }
 
-        throw new PluginErrorException("Style {$style} does not exist.  Check config.php file.");
+        throw new PluginErrorException(
+            "Style {$style} does not exist.  Check config.php file."
+        );
     }
 
     /**

@@ -202,11 +202,27 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      */
     private function buildString($item, $value, $glue)
     {
-        if ($value !== 'partOfSpeech' && $item->partOfSpeech === 'symbol' && preg_match('/\\s/', $glue)) {
+        if ($this->shouldNotGlue($item, $value, $glue)) {
             return $item->$value;
         }
 
         return $glue.$item->$value;
+    }
+
+    /**
+     * Return true if should not prefix with glue.
+     *
+     * @param LimelightWord $item
+     * @param string        $value
+     * @param string        $glue
+     *
+     * @return bool
+     */
+    private function shouldNotGlue($item, $value, $glue)
+    {
+        return $value !== 'partOfSpeech' &&
+            $item->partOfSpeech === 'symbol' &&
+            preg_match('/\\s/', $glue);
     }
 
     /**

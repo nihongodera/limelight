@@ -21,10 +21,23 @@ class Joshi implements PartOfSpeech
     {
         $properties['partOfSpeech'] = 'postposition';
 
-        if ($current['partOfSpeech2'] === 'setsuzokujoshi' && in_array($current['literal'], ['て', 'で', 'ば'])) {
+        if ($this->isSetsuzokujishi($current)) {
             $properties['attachToPrevious'] = true;
         }
 
         return $properties;
+    }
+
+    /**
+     * Return true if POS is setsuzokujishi and literal is て, で, or ば.
+     *
+     * @param array $current
+     *
+     * @return bool
+     */
+    public function isSetsuzokujishi($current)
+    {
+        return $current['partOfSpeech2'] === 'setsuzokujoshi' &&
+            in_array($current['literal'], ['て', 'で', 'ば']);
     }
 }

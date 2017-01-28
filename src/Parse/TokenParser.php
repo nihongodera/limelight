@@ -106,13 +106,24 @@ class TokenParser
      *
      * @return array
      */
-    private function getProperties(POSRegistry $registry, $previousWord, $previous, $current, $next)
-    {
+    private function getProperties(
+        POSRegistry $registry,
+        $previousWord,
+        $previous,
+        $current,
+        $next
+    ) {
         $className = ucfirst($current['partOfSpeech1']);
 
         $POSClass = $registry->getClass($className);
 
-        $properties = $POSClass->handle($this->defaults, $previousWord, $previous, $current, $next);
+        $properties = $POSClass->handle(
+            $this->defaults,
+            $previousWord,
+            $previous,
+            $current,
+            $next
+        );
 
         return $properties;
     }

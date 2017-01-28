@@ -91,7 +91,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function diff($items)
     {
-        return new static($this->text, array_diff($this->words, $this->getArrayableItems($items)), $this->pluginData);
+        return new static(
+            $this->text,
+            array_diff($this->words, $this->getArrayableItems($items)), $this->pluginData
+        );
     }
 
     /**
@@ -130,7 +133,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
-        return new static($this->text, $this->arrExcept($this->words, $keys), $this->pluginData);
+        return new static(
+            $this->text,
+            $this->arrExcept($this->words, $keys), $this->pluginData
+        );
     }
 
     /**
@@ -179,7 +185,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function flatten($depth = INF)
     {
-        return new static($this->text, $this->arrFlatten($this->words, $depth), $this->pluginData);
+        return new static(
+            $this->text,
+            $this->arrFlatten($this->words, $depth), $this->pluginData
+        );
     }
 
     /**
@@ -259,7 +268,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function intersect($items)
     {
-        return new static($this->text, array_intersect($this->words, $this->getArrayableItems($items)), $this->pluginData);
+        return new static(
+            $this->text,
+            array_intersect($this->words, $this->getArrayableItems($items)), $this->pluginData
+        );
     }
 
     /**
@@ -320,7 +332,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function merge($items)
     {
-        return new static($this->text, array_merge($this->words, $this->getArrayableItems($items)), $this->pluginData);
+        return new static(
+            $this->text,
+            array_merge($this->words, $this->getArrayableItems($items)), $this->pluginData
+        );
     }
 
     /**
@@ -383,7 +398,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     {
         $keys = is_array($keys) ? $keys : func_get_args();
 
-        return new static($this->text, $this->arrOnly($this->words, $keys), $this->pluginData);
+        return new static(
+            $this->text,
+            $this->arrOnly($this->words, $keys), $this->pluginData
+        );
     }
 
     /**
@@ -396,7 +414,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function pluck($value, $key = null)
     {
-        return new static($this->text, $this->arrPluck($this->words, $value, $key), $this->pluginData);
+        return new static(
+            $this->text,
+            $this->arrPluck($this->words, $value, $key), $this->pluginData
+        );
     }
 
     /**
@@ -491,7 +512,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      */
     public function slice($offset, $length = null)
     {
-        return new static($this->text, array_slice($this->words, $offset, $length, true), $this->pluginData);
+        return new static(
+            $this->text,
+            array_slice($this->words, $offset, $length, true), $this->pluginData
+        );
     }
 
     /**
@@ -506,10 +530,16 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     public function splice($offset, $length = null, $replacement = [])
     {
         if (func_num_args() == 1) {
-            return new static($this->text, array_splice($this->words, $offset), $this->pluginData);
+            return new static(
+                $this->text,
+                array_splice($this->words, $offset), $this->pluginData
+            );
         }
 
-        return new static($this->text, array_splice($this->words, $offset, $length, $replacement), $this->pluginData);
+        return new static(
+            $this->text,
+            array_splice($this->words, $offset, $length, $replacement), $this->pluginData
+        );
     }
 
     /**
@@ -576,7 +606,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     public function unique($key = null)
     {
         if (is_null($key)) {
-            return new static($this->text, array_unique($this->words, SORT_REGULAR), $this->pluginData);
+            return new static(
+                $this->text,
+                array_unique($this->words, SORT_REGULAR), $this->pluginData
+            );
         }
 
         $key = $this->valueRetriever($key);
@@ -641,7 +674,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
             return new static($this->text, func_get_args(), $this->pluginData);
         }, $this->words], $arrayableItems);
 
-        return new static($this->text, call_user_func_array('array_map', $params), $this->pluginData);
+        return new static(
+            $this->text,
+            call_user_func_array('array_map', $params), $this->pluginData
+        );
     }
 
     /**

@@ -7,6 +7,11 @@ use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Meishi implements PartOfSpeech
 {
+    /**
+     * POS's that can use other POS class.
+     *
+     * @var array
+     */
     private $overrides = [
         'sahensetsuzoku'    => 'fukushikanou',
         'keiyoudoushigokan' => 'fukushikanou',

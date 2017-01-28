@@ -71,13 +71,26 @@ class MeishiHijiritsu implements PartOfSpeech
             if ($next['inflectionForm'] === 'taigensetsuzoku') {
                 $properties['eatNext'] = true;
             }
-        } elseif ($next['partOfSpeech1'] === 'joshi' && $next['partOfSpeech2'] === 'fukushika') {
+        } elseif ($this->nextIsJoshiAndFukushika($next)) {
             $properties['partOfSpeech'] = 'adverb';
 
             $properties['eatNext'] = true;
         }
 
         return $properties;
+    }
+
+    /**
+     * Return true if next POS1 is joshi and next POS2 is fukushika.
+     *
+     * @param  array $next
+     *
+     * @return bool
+     */
+    protected function nextIsJoshiAndFukushika($next)
+    {
+        return $next['partOfSpeech1'] === 'joshi' &&
+            $next['partOfSpeech2'] === 'fukushika';
     }
 
     /**
@@ -94,10 +107,26 @@ class MeishiHijiritsu implements PartOfSpeech
     {
         $properties['partOfSpeech'] = 'adjective';
 
-        if (($next['inflectionType'] === 'tokushuDa' && $next['inflectionForm'] === 'taigensetsuzoku') || $next['partOfSpeech2'] === 'rentaika') {
+        if ($this->nextIsTokushuDaOrRentaika($next)) {
             $properties['eatNext'] = true;
         }
 
         return $properties;
+    }
+
+    /**
+     * Return true if next inflection is tokushuDa and inflection form is
+     * taigensetsuzoku or if POS2 is rentaika.
+     *
+     * @param  array $next
+     *
+     * @return bool
+     */
+    protected function nextIsTokushuDaOrRentaika($next)
+    {
+        return (
+            $next['inflectionType'] === 'tokushuDa' &&
+            $next['inflectionForm'] === 'taigensetsuzoku'
+        ) || $next['partOfSpeech2'] === 'rentaika';
     }
 }

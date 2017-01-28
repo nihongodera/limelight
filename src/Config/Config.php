@@ -102,7 +102,9 @@ class Config
 
             return $instance;
         } catch (\Exception $e) {
-            throw new InternalErrorException("Class {$fullClassName} could not be instantiated.");
+            throw new InternalErrorException(
+                "Class {$fullClassName} could not be instantiated."
+            );
         }
     }
 
@@ -172,7 +174,9 @@ class Config
         if (isset($bindings[$interface])) {
             return $bindings[$interface];
         } else {
-            throw new InternalErrorException("Cannot resolve interface {$interface}. Check config.php file bindings.");
+            throw new InternalErrorException(
+                "Cannot resolve interface {$interface}. Check config.php file bindings."
+            );
         }
     }
 
@@ -187,11 +191,15 @@ class Config
     private function validateClass($fullClassName, $interface)
     {
         if (!class_exists($fullClassName)) {
-            throw new InternalErrorException("Class {$fullClassName} defined in config.php does not exist.");
+            throw new InternalErrorException(
+                "Class {$fullClassName} defined in config.php does not exist."
+            );
         }
 
         if (!in_array($interface, class_implements($fullClassName))) {
-            throw new InternalErrorException("Class {$fullClassName} does not implement interface {$interface}.");
+            throw new InternalErrorException(
+                "Class {$fullClassName} does not implement interface {$interface}."
+            );
         }
     }
 

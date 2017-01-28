@@ -60,7 +60,9 @@ class POSRegistry
             return $this->setClass($fullName);
         }
 
-        throw new InternalErrorException("Class {$fullName} could not be instantiated.");
+        throw new InternalErrorException(
+            "Class {$fullName} could not be instantiated."
+        );
     }
 
     /**

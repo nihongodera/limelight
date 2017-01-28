@@ -21,6 +21,30 @@ class Jodoushi implements PartOfSpeech
     {
         $properties['partOfSpeech'] = 'postposition';
 
+        if ($this->isInInflections($previous, $current)) {
+            $properties['attachToPrevious'] = true;
+        } elseif ($this->isFuhenkagataAndNorU($current)) {
+            $properties['attachToPrevious'] = true;
+        } elseif ($this->isNaraAndPreviousIsMeishi($previous, $current)) {
+            $properties['partOfSpeech'] = 'conjunction';
+        } elseif ($this->isTokushuAndNa($current)) {
+            $properties['partOfSpeech'] = 'verb';
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Return true if previous exists, POS is kakarijoshi and is in inflections
+     * array.
+     *
+     * @param array $previous
+     * @param array $current
+     *
+     * @return bool
+     */
+    protected function isInInflections($previous, $current)
+    {
         $inflections = [
             'tokushuTa',
             'tokushuNai',
@@ -29,16 +53,51 @@ class Jodoushi implements PartOfSpeech
             'tokushuNu',
         ];
 
-        if (is_null($previous) || (!is_null($previous) && $previous['partOfSpeech2'] !== 'kakarijoshi') && in_array($current['inflectionType'], $inflections)) {
-            $properties['attachToPrevious'] = true;
-        } elseif ($current['inflectionType'] === 'fuhenkagata' && ($current['lemma'] === 'ん' || $current['lemma'] === 'う')) {
-            $properties['attachToPrevious'] = true;
-        } elseif ($current['literal'] === 'なら' && $previous['partOfSpeech1'] === 'meishi') {
-            $properties['partOfSpeech'] = 'conjunction';
-        } elseif ($current['inflectionType'] === 'tokushuDa' || $current['inflectionType'] === 'tokushuDesu' && $current['literal'] !== 'な') {
-            $properties['partOfSpeech'] = 'verb';
-        }
+        return is_null($previous) ||
+            (!is_null($previous) &&
+                $previous['partOfSpeech2'] !== 'kakarijoshi') &&
+                in_array($current['inflectionType'], $inflections
+            );
+    }
 
-        return $properties;
+    /**
+     * Return true if inflection is fuhenkagata and lemma is ん or う.
+     *
+     * @param array $current
+     *
+     * @return bool
+     */
+    protected function isFuhenkagataAndNorU($current)
+    {
+        return $current['inflectionType'] === 'fuhenkagata' &&
+            ($current['lemma'] === 'ん' || $current['lemma'] === 'う');
+    }
+
+    /**
+     * Return true if literal is なら and previous POS is meishi.
+     *
+     * @param  array  $previous
+     * @param  array  $current
+     *
+     * @return boolean
+     */
+    protected function isNaraAndPreviousIsMeishi($previous, $current)
+    {
+        return $current['literal'] === 'なら' &&
+            $previous['partOfSpeech1'] === 'meishi';
+    }
+
+    /**
+     * Return true inflection is tokushu and literal is な.
+     *
+     * @param  array  $current
+     *
+     * @return boolean
+     */
+    protected function isTokushuAndNa($current)
+    {
+        return $current['inflectionType'] === 'tokushuDa' ||
+            $current['inflectionType'] === 'tokushuDesu' &&
+            $current['literal'] !== 'な';
     }
 }

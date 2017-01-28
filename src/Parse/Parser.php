@@ -37,9 +37,14 @@ class Parser
      * @param Mecab       $mecab
      * @param Tokenizer   $tokenizer
      * @param TokenParser $tokenParser
+     * @param Dispatcher  $dispatcher
      */
-    public function __construct(Mecab $mecab, Tokenizer $tokenizer, TokenParser $tokenParser, Dispatcher $dispatcher)
-    {
+    public function __construct(
+        Mecab $mecab,
+        Tokenizer $tokenizer,
+        TokenParser $tokenParser,
+        Dispatcher $dispatcher
+    ) {
         $this->mecab = $mecab;
         $this->tokenizer = $tokenizer;
         $this->tokenParser = $tokenParser;

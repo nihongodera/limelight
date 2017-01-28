@@ -27,7 +27,9 @@ trait PluginHelper
         if (is_null($this->pluginData)) {
             return;
         } elseif (!isset($this->pluginData[$type])) {
-            throw new PluginNotFoundException("Plugin data for {$type} can not be found. Is the {$type} plugin registered in config?");
+            throw new PluginNotFoundException(
+                "Plugin data for {$type} can not be found. Is the {$type} plugin registered in config?"
+            );
         }
 
         if ($this instanceof Collection && $target === 'child') {

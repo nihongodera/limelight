@@ -213,7 +213,8 @@ abstract class RomajiConverter
      */
     private function particleCanBeConverted($word, $convertedChar)
     {
-        return $word->partOfSpeech === 'postposition' && in_array($convertedChar, array_keys($this->particleConversions));
+        return $word->partOfSpeech === 'postposition' &&
+            in_array($convertedChar, array_keys($this->particleConversions));
     }
 
     /**
@@ -228,7 +229,9 @@ abstract class RomajiConverter
      */
     private function verbCanBeCombined($convertedChar, $results, $word, $index)
     {
-        return $this->equalsPrevious($convertedChar, $results) && $this->inComboArray($convertedChar) && $this->hasLongSound($word, $index);
+        return $this->equalsPrevious($convertedChar, $results) &&
+            $this->inComboArray($convertedChar) &&
+            $this->hasLongSound($word, $index);
     }
 
     /**
@@ -241,7 +244,8 @@ abstract class RomajiConverter
      */
     private function equalsPrevious($convertedChar, $results)
     {
-        return $convertedChar === substr($results, -1) || ($convertedChar === 'u' && substr($results, -1) === 'o');
+        return $convertedChar === substr($results, -1) ||
+            ($convertedChar === 'u' && substr($results, -1) === 'o');
     }
 
     /**
