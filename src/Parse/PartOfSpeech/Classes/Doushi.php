@@ -33,9 +33,9 @@ class Doushi implements PartOfSpeech
     /**
      * Return true if POS is hijiritsu and inflection is not meireiI.
      *
-     * @param  array  $current
+     * @param array $current
      *
-     * @return boolean
+     * @return bool
      */
     protected function isHijiritsuNotMeireiI($current)
     {

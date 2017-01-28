@@ -76,10 +76,10 @@ class Jodoushi implements PartOfSpeech
     /**
      * Return true if literal is なら and previous POS is meishi.
      *
-     * @param  array  $previous
-     * @param  array  $current
+     * @param array $previous
+     * @param array $current
      *
-     * @return boolean
+     * @return bool
      */
     protected function isNaraAndPreviousIsMeishi($previous, $current)
     {
@@ -90,9 +90,9 @@ class Jodoushi implements PartOfSpeech
     /**
      * Return true inflection is tokushu and literal is な.
      *
-     * @param  array  $current
+     * @param array $current
      *
-     * @return boolean
+     * @return bool
      */
     protected function isTokushuAndNa($current)
     {
