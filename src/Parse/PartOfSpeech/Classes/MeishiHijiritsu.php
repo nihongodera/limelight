@@ -83,7 +83,7 @@ class MeishiHijiritsu implements PartOfSpeech
     /**
      * Return true if next POS1 is joshi and next POS2 is fukushika.
      *
-     * @param  array $next
+     * @param array $next
      *
      * @return bool
      */
@@ -118,7 +118,7 @@ class MeishiHijiritsu implements PartOfSpeech
      * Return true if next inflection is tokushuDa and inflection form is
      * taigensetsuzoku or if POS2 is rentaika.
      *
-     * @param  array $next
+     * @param array $next
      *
      * @return bool
      */

@@ -335,7 +335,7 @@ class Furigana extends Plugin
             $openClose = explode('{{}}', $tag);
 
             $this->tags[$name] = [
-                'open' => (isset($openClose[0]) ? $openClose[0] : ''),
+                'open'  => (isset($openClose[0]) ? $openClose[0] : ''),
                 'close' => (isset($openClose[1]) ? $openClose[1] : ''),
             ];
         }

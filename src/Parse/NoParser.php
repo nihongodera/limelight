@@ -80,9 +80,9 @@ class NoParser
     private function buildToken($text)
     {
         return [
-            'literal' => $text,
-            'lemma' => $text,
-            'reading' => $text,
+            'literal'       => $text,
+            'lemma'         => $text,
+            'reading'       => $text,
             'pronunciation' => $text,
         ];
     }
@@ -96,7 +96,7 @@ class NoParser
     {
         return [
             'partOfSpeech' => null,
-            'grammar' => null,
+            'grammar'      => null,
         ];
     }
 }

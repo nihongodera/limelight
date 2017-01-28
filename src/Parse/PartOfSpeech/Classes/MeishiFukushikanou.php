@@ -50,10 +50,10 @@ class MeishiFukushikanou implements PartOfSpeech
      * Return true if next inflection is tokushuDa and POS2 is not
      * sahensetsuzoku.
      *
-     * @param  array  $current
-     * @param  array  $next
+     * @param array $current
+     * @param array $next
      *
-     * @return boolean
+     * @return bool
      */
     public function isTokushuDaNotSahensetsuzoku($current, $next)
     {
