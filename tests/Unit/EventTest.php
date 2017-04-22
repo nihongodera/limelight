@@ -3,9 +3,9 @@
 namespace Limelight\tests\Unit;
 
 use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
 use Limelight\Events\Dispatcher;
 use Limelight\Tests\Stubs\TestListener;
+use Limelight\Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -70,11 +70,11 @@ class EventTest extends TestCase
 
         $listeners = [
             'WordWasCreated' => [
-                'Limelight\Tests\Stubs\TestListener'
+                'Limelight\Tests\Stubs\TestListener',
             ],
             'ParseWasSuccessful' => [
-                'Limelight\Tests\Stubs\TestListener'
-            ]
+                'Limelight\Tests\Stubs\TestListener',
+            ],
         ];
 
         $dispatcher->addAllListeners($listeners);

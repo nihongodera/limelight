@@ -2,16 +2,15 @@
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
 use Limelight\Classes\LimelightResults;
+use Limelight\Tests\TestCase;
 
 class CollectionMethodsTest extends TestCase
 {
     /**
-     * chunk()
+     * chunk().
      */
-    
+
     /**
      * @test
      */
@@ -37,9 +36,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * convert()
+     * convert().
      */
-    
+
     /**
      * @test
      */
@@ -83,7 +82,7 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * count()
+     * count().
      */
 
     /**
@@ -95,9 +94,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * diff()
+     * diff().
      */
-    
+
     /**
      * @test
      */
@@ -111,9 +110,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * every()
+     * every().
      */
-    
+
     /**
      * @test
      */
@@ -135,9 +134,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * except()
+     * except().
      */
-    
+
     /**
      * @test
      */
@@ -151,7 +150,7 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * filter()
+     * filter().
      */
 
     /**
@@ -185,9 +184,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * first()
+     * first().
      */
-    
+
     /**
      * @test
      */
@@ -215,9 +214,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * flatten()
+     * flatten().
      */
-    
+
     /**
      * @test
      */
@@ -235,14 +234,14 @@ class CollectionMethodsTest extends TestCase
             '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
             'kikimasu',
             '。',
-            '.'
+            '.',
         ], $answer->all());
     }
 
     /**
-     * forget()
+     * forget().
      */
-    
+
     /**
      * @test
      */
@@ -256,9 +255,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * groupBy()
+     * groupBy().
      */
-    
+
     /**
      * @test
      */
@@ -310,9 +309,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * implode()
+     * implode().
      */
-    
+
     /**
      * @test
      */
@@ -324,9 +323,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * intersect()
+     * intersect().
      */
-    
+
     /**
      * @test
      */
@@ -340,9 +339,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * isEmpty()
+     * isEmpty().
      */
-    
+
     /**
      * @test
      */
@@ -364,9 +363,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * keys()
+     * keys().
      */
-    
+
     /**
      * @test
      */
@@ -378,9 +377,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * last()
+     * last().
      */
-    
+
     /**
      * @test
      */
@@ -408,7 +407,7 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * map()
+     * map().
      */
 
     /**
@@ -416,7 +415,6 @@ class CollectionMethodsTest extends TestCase
      */
     public function map_returns_mapped_limelightresults_object()
     {
-
         $answer = $this->getResults()->map(function ($item, $key) {
             return $item->get();
         });
@@ -427,9 +425,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * merge()
+     * merge().
      */
-    
+
     /**
      * @test
      */
@@ -447,9 +445,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * only()
+     * only().
      */
-    
+
     /**
      * @test
      */
@@ -463,9 +461,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * pluck()
+     * pluck().
      */
-    
+
     /**
      * @test
      */
@@ -479,9 +477,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * pop()
+     * pop().
      */
-    
+
     /**
      * @test
      */
@@ -495,9 +493,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * prepend()
+     * prepend().
      */
-    
+
     /**
      * @test
      */
@@ -513,9 +511,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * pull()
+     * pull().
      */
-    
+
     /**
      * @test
      */
@@ -533,9 +531,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * push()
+     * push().
      */
-    
+
     /**
      * @test
      */
@@ -551,9 +549,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * reject()
+     * reject().
      */
-    
+
     /**
      * @test
      */
@@ -567,9 +565,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * shift()
+     * shift().
      */
-    
+
     /**
      * @test
      */
@@ -585,9 +583,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * slice()
+     * slice().
      */
-    
+
     /**
      * @test
      */
@@ -619,9 +617,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * splice()
+     * splice().
      */
-    
+
     /**
      * @test
      */
@@ -661,15 +659,15 @@ class CollectionMethodsTest extends TestCase
     {
         $results = $this->getResults();
 
-         $answer = $results->splice(2, 1, $this->getResults()->all());
+        $answer = $results->splice(2, 1, $this->getResults()->all());
 
-         $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
 
-         $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。', '。'], $results->pluck('word')->all());
+        $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。', '。'], $results->pluck('word')->all());
     }
 
     /**
-     * take()
+     * take().
      */
 
     /**
@@ -697,9 +695,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * toArray()
+     * toArray().
      */
-    
+
     /**
      * @test
      */
@@ -729,9 +727,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * toJson()
+     * toJson().
      */
-    
+
     /**
      * @test
      */
@@ -765,9 +763,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * transform()
+     * transform().
      */
-    
+
     /**
      * @test
      */
@@ -785,9 +783,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * unique()
+     * unique().
      */
-    
+
     /**
      * @test
      */
@@ -833,7 +831,7 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * values()
+     * values().
      */
 
     /**
@@ -851,7 +849,7 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * where()
+     * where().
      */
 
     /**
@@ -867,9 +865,9 @@ class CollectionMethodsTest extends TestCase
     }
 
     /**
-     * zip()
+     * zip().
      */
-    
+
     /**
      * @test
      */

@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Tests\TestCase;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
+use Limelight\Tests\TestCase;
 
 class POSRegistryTest extends TestCase
 {

@@ -18,7 +18,7 @@ class ParseTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
+
         self::$lib = include 'tests/lib.php';
     }
 
@@ -129,13 +129,13 @@ class ParseTest extends TestCase
      */
     public function it_parses_text()
     {
-         $results = self::$limelight->parse(self::$lib['textOne']);
+        $results = self::$limelight->parse(self::$lib['textOne']);
 
-         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->string('word'));
+        $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->string('word'));
 
-         $words = $results->all();
+        $words = $results->all();
 
-         $this->assertCount(450, $words);
+        $this->assertCount(450, $words);
     }
 
     /**

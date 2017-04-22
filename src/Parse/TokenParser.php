@@ -2,9 +2,9 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
 use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
+use Limelight\Limelight;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class TokenParser

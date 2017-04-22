@@ -3,8 +3,8 @@
 namespace Limelight\tests\Unit;
 
 use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
 use Limelight\Parse\Tokenizer;
+use Limelight\Tests\TestCase;
 
 class TokenizerTest extends TestCase
 {
@@ -19,7 +19,7 @@ class TokenizerTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
+
         $config = Config::getInstance();
 
         self::$mecab = $config->make('Limelight\Mecab\Mecab');

@@ -2,13 +2,13 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
-use Limelight\Helpers\PluginHelper;
-use Limelight\Classes\LimelightWord;
-use Limelight\Helpers\JapaneseHelpers;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
 use Limelight\Exceptions\InvalidInputException;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Limelight;
 
 class NoParser
 {

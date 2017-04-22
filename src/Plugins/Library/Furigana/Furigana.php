@@ -3,8 +3,8 @@
 namespace Limelight\Plugins\Library\Furigana;
 
 use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Plugins\Plugin;
 
 class Furigana extends Plugin
 {

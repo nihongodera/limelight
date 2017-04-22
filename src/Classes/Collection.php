@@ -4,12 +4,12 @@ namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 use Limelight\Helpers\Arr;
-use Limelight\Helpers\Converter;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Converter;
 
 abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggregate
 {

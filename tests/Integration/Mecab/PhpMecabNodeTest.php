@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Integration\Mecab;
 
-use Limelight\Tests\TestCase;
 use Limelight\Mecab\PhpMecab\PhpMecab;
+use Limelight\Tests\TestCase;
 
 class PhpMecabNodeTest extends TestCase
 {

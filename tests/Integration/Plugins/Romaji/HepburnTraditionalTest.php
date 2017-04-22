@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Tests\TestCase;
 use Limelight\Plugins\Library\Romaji\Styles\HepburnTraditional;
+use Limelight\Tests\TestCase;
 
 class HepburnTraditionalTest extends TestCase
 {
@@ -18,7 +18,7 @@ class HepburnTraditionalTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        
+
         self::$hepburn = new HepburnTraditional();
     }
 

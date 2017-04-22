@@ -2,10 +2,10 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Helpers\PluginHelper;
-use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\PluginHelper;
 
 class LimelightResults extends Collection implements Arrayable, Convertable, Jsonable
 {

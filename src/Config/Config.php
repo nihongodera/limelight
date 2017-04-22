@@ -2,8 +2,8 @@
 
 namespace Limelight\Config;
 
-use Limelight\Exceptions\InvalidInputException;
 use Limelight\Exceptions\InternalErrorException;
+use Limelight\Exceptions\InvalidInputException;
 
 class Config
 {

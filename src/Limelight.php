@@ -2,11 +2,11 @@
 
 namespace Limelight;
 
-use Limelight\Parse\Parser;
 use Limelight\Config\Config;
-use Limelight\Parse\NoParser;
-use Limelight\Parse\Tokenizer;
 use Limelight\Events\Dispatcher;
+use Limelight\Parse\NoParser;
+use Limelight\Parse\Parser;
+use Limelight\Parse\Tokenizer;
 use Limelight\Parse\TokenParser;
 
 class Limelight

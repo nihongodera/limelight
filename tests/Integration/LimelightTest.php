@@ -2,8 +2,8 @@
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
+use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class LimelightTest extends TestCase
@@ -43,7 +43,7 @@ class LimelightTest extends TestCase
 
         $this->assertNodeResult($nodes, $expected);
     }
-    
+
     /**
      * @test
      */
