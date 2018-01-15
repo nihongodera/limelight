@@ -3,8 +3,9 @@
 namespace Limelight\Tests;
 
 use Limelight\Limelight;
+use PHPUnit\Framework\TestCase as PhpunitTestCase;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PhpunitTestCase
 {
     /**
      * Path to test logs.
