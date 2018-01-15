@@ -14,7 +14,7 @@ OUTPUT=$(php --version)
 
 LONGVERSION=$(echo $OUTPUT | cut -d ' ' -f2 | cut -d '-' -f1)
 
-SHORTVERSION=${LONGVERSION%??}
+SHORTVERSION=${LONGVERSION%.*}
 
 echo $SHORTVERSION
 
