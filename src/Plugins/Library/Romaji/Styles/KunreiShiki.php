@@ -44,7 +44,7 @@ class KunreiShiki extends RomajiConverter
      * @var array
      */
     protected $tsuConversions = [
-
+        //
     ];
 
     /**

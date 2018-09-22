@@ -13,7 +13,7 @@ class HepburnModifiedTest extends TestCase
     protected static $hepburn;
 
     /**
-     * Set static Limelight and Hepburn on object.
+     * Set static hepburn on object.
      */
     public static function setUpBeforeClass()
     {

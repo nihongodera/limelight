@@ -13,7 +13,7 @@ class NihonShikiTest extends TestCase
     protected static $nihon;
 
     /**
-     * Set static hepburn on object.
+     * Set static nihon on object.
      */
     public static function setUpBeforeClass()
     {

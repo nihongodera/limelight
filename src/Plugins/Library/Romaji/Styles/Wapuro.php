@@ -4,7 +4,7 @@ namespace Limelight\Plugins\Library\Romaji\Styles;
 
 use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
-class NihonShiki extends RomajiConverter
+class Wapuro extends RomajiConverter
 {
     /**
      * Romaji library.
@@ -19,12 +19,12 @@ class NihonShiki extends RomajiConverter
      * @var array
      */
     protected $nConversions = [
-        'a' => 'n\'',
-        'i' => 'n\'',
-        'u' => 'n\'',
-        'e' => 'n\'',
-        'o' => 'n\'',
-        'y' => 'n\'',
+        'a' => 'nn',
+        'i' => 'nn',
+        'u' => 'nn',
+        'e' => 'nn',
+        'o' => 'nn',
+        'y' => 'nn',
     ];
 
     /**
@@ -51,10 +51,7 @@ class NihonShiki extends RomajiConverter
      * @var array
      */
     protected $verbCombos = [
-        'a' => 'â',
-        'u' => 'û',
-        'e' => 'ê',
-        'o' => 'ô',
+        //
     ];
 
     /**
@@ -62,7 +59,7 @@ class NihonShiki extends RomajiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/NihonShiki.php';
+        $this->conversions = include dirname(__DIR__) . '/Lib/Wapuro.php';
     }
 
     /**

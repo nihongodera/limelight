@@ -3,23 +3,23 @@
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
 use Limelight\Tests\TestCase;
-use Limelight\Plugins\Library\Romaji\Styles\KunreiShiki;
+use Limelight\Plugins\Library\Romaji\Styles\Wapuro;
 
-class KunreiShikiTest extends TestCase
+class WapuroTest extends TestCase
 {
     /**
-     * @var Limelight\Plugins\Library\Romaji\Styles\KunreiShiki
+     * @var Limelight\Plugins\Library\Romaji\Styles\Wapuro
      */
-    protected static $kunrei;
+    protected static $wapuro;
 
     /**
-     * Set static Kunrei on object.
+     * Set static wapuro on object.
      */
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
-        self::$kunrei = new KunreiShiki();
+        self::$wapuro = new Wapuro();
     }
 
     /**
@@ -29,7 +29,7 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('行きます');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
         $this->assertEquals('ikimasu', $conversion);
     }
@@ -41,7 +41,7 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('参加');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
         $this->assertEquals('sanka', $conversion);
     }
@@ -53,7 +53,7 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('お兄さん');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
         $this->assertEquals('oniisan', $conversion);
     }
@@ -65,9 +65,9 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('初夏');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('syoka', $conversion);
+        $this->assertEquals('shoka', $conversion);
     }
 
     /**
@@ -77,9 +77,9 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('証券');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('syôken', $conversion);
+        $this->assertEquals('shouken', $conversion);
     }
 
     /**
@@ -89,9 +89,9 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('今日');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('kyô', $conversion);
+        $this->assertEquals('kyou', $conversion);
     }
 
     /**
@@ -101,9 +101,9 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('福岡に住んでいます。');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('Hukuokanisundeimasu.', $conversion);
+        $this->assertEquals('Fukuokanisundeimasu.', $conversion);
     }
 
     /**
@@ -113,7 +113,7 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('結果');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
         $this->assertEquals('kekka', $conversion);
     }
@@ -125,19 +125,19 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('抹茶');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('mattya', $conversion);
+        $this->assertEquals('maccha', $conversion);
     }
 
     /**
      * @test
      */
-    public function it_converts_nm_to_mm()
+    public function it_doesnt_convert_nm()
     {
         $results = self::$limelight->parse('群馬');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
         $this->assertEquals('Gunma', $conversion);
     }
@@ -145,13 +145,13 @@ class KunreiShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_n_vowel_to_n_dash()
+    public function it_converts_n_vowel_to_nn()
     {
         $results = self::$limelight->parse('簡易');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('kan\'i', $conversion);
+        $this->assertEquals('kanni', $conversion);
     }
 
     /**
@@ -161,32 +161,32 @@ class KunreiShikiTest extends TestCase
     {
         $results = self::$limelight->parse('お婆さん');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('obâsan', $conversion);
+        $this->assertEquals('obaasan', $conversion);
     }
 
     /**
      * @test
      */
-    public function it_converts_ha_to_wa()
+    public function it_doesnt_convert_ha_to_wa()
     {
         $results = self::$limelight->parse('は');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('wa', $conversion);
+        $this->assertEquals('ha', $conversion);
     }
 
     /**
      * @test
      */
-    public function it_converts_he_to_e()
+    public function it_doesnt_convert_he_to_e()
     {
         $results = self::$limelight->parse('へ');
 
-        $conversion = $this->getRomajiConversion(self::$kunrei, $results);
+        $conversion = $this->getRomajiConversion(self::$wapuro, $results);
 
-        $this->assertEquals('e', $conversion);
+        $this->assertEquals('he', $conversion);
     }
 }
