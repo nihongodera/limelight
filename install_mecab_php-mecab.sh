@@ -19,7 +19,7 @@ SHORTVERSION=${LONGVERSION%.*}
 echo $SHORTVERSION
 
 echo "${GREEN}Installing dependencies...${NC}"
-sudo apt-get install mecab mecab-ipadic-utf8 mecab-utils libmecab-dev unzip build-essential php7.0-dev
+sudo apt-get install mecab mecab-ipadic-utf8 mecab-utils libmecab-dev unzip build-essential php${SHORTVERSION}-dev
 
 if [ $HASMECAB ] ; then
     echo "${BLUE}php-mecab is already installed.${NC}"
