@@ -3,3 +3,4 @@
 .env
 .env.example
 /vendor
+composer.lock
