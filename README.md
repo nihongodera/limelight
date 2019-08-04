@@ -6,7 +6,7 @@
   - Find parts of speech for words
   - Find dictionary entries (lemmas) for conjugated words
   - Get readings and pronunciations for words
-  - Build fuirgana for words
+  - Build furigana for words
   - Convert Japanese to romaji (English lettering)
 
 ### Quick Guide
