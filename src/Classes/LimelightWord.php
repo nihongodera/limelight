@@ -2,13 +2,13 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Limelight;
-use Limelight\Helpers\Converter;
-use Limelight\Helpers\PluginHelper;
-use Limelight\Helpers\JapaneseHelpers;
-use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Converter;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Limelight;
 
 class LimelightWord implements Arrayable, Convertable, Jsonable
 {
@@ -87,8 +87,9 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      *
      * @param array $token
      * @param array $properties
+     * @param Limelight $limelight
      */
-    public function __construct($token, $properties, Limelight $limelight)
+    public function __construct(array $token, array $properties, Limelight $limelight)
     {
         $this->setProperties($token, $properties);
 
@@ -101,8 +102,7 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      * Call methods for plugin items.
      *
      * @param string $name
-     * @param array  $arguments
-     *
+     * @param array $arguments
      * @return array
      */
     public function __call($name, $arguments)
@@ -116,7 +116,6 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      * Get private properties.
      *
      * @param string $name
-     *
      * @return string|array
      */
     public function __get($name)
@@ -162,7 +161,6 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      * Convert the object to its JSON representation.
      *
      * @param int $options
-     *
      * @return string
      */
     public function toJson($options = 0)
@@ -174,7 +172,6 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      * Convert word properties to given format.
      *
      * @param string $format
-     *
      * @return static
      */
     public function convert($format)
@@ -345,7 +342,7 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
     /**
      * Append value to end of property.
      *
-     * @param string       $property
+     * @param string $property
      * @param string|array $value
      */
     public function appendTo($property, $value)
@@ -370,8 +367,8 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
     /**
      * Set plugin data on object.
      *
-     * @param string $pluginName [name of the plugin]
-     * @param mixed  $value      [the value to store]
+     * @param string $pluginName
+     * @param mixed $value
      */
     public function setPluginData($pluginName, $value)
     {
@@ -396,7 +393,7 @@ class LimelightWord implements Arrayable, Convertable, Jsonable
      * @param array $token
      * @param array $properties
      */
-    private function setProperties($token, $properties)
+    private function setProperties(array $token, array $properties)
     {
         $this->rawMecab = [$token];
 

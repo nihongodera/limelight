@@ -14,7 +14,7 @@ class InternalErrorException extends LimelightException
      *
      * @param string $message
      */
-    public function __construct($message = 'An internal error has occured.')
+    public function __construct($message = 'An internal error has occurred.')
     {
         $this->message = $message;
 

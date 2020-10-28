@@ -2,13 +2,14 @@
 
 namespace Limelight\Mecab;
 
+use Mecab\Node;
+
 interface Mecab
 {
     /**
      * Split string into nodes.
      *
      * @param string $string
-     *
      * @return Node
      */
     public function parseToNode($string);
@@ -17,8 +18,7 @@ interface Mecab
      * Split string into nodes, return raw Mecab node.
      *
      * @param string $string
-     *
-     * @return Mecab_Node
+     * @return Node
      */
     public function parseToMecabNode($string);
 
@@ -26,7 +26,6 @@ interface Mecab
      * Parse string, return mecab results as string.
      *
      * @param string $string
-     *
      * @return string
      */
     public function parseToString($string);

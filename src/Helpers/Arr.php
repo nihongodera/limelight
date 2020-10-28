@@ -15,7 +15,6 @@ trait Arr
      * Determine whether the given value is array accessible.
      *
      * @param mixed $value
-     *
      * @return bool
      */
     public function arrAccessible($value)
@@ -27,7 +26,6 @@ trait Arr
      * Collapse an array of arrays into a single array.
      *
      * @param array $array
-     *
      * @return array
      */
     public function arrCollapse($array)
@@ -50,9 +48,8 @@ trait Arr
     /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
-     *
      * @return array
      */
     public function arrExcept($array, $keys)
@@ -66,8 +63,7 @@ trait Arr
      * Determine if the given key exists in the provided array.
      *
      * @param \ArrayAccess|array $array
-     * @param string|int         $key
-     *
+     * @param string|int $key
      * @return bool
      */
     public function arrExists($array, $key)
@@ -82,10 +78,9 @@ trait Arr
     /**
      * Return the first element in an array passing a given truth test.
      *
-     * @param array         $array
+     * @param array $array
      * @param callable|null $callback
-     * @param mixed         $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     protected function arrFirst($array, callable $callback = null, $default = null)
@@ -106,8 +101,7 @@ trait Arr
      * Flatten a multi-dimensional array into a single level.
      *
      * @param array $array
-     * @param int   $depth
-     *
+     * @param int $depth
      * @return array
      */
     public function arrFlatten($array, $depth = INF)
@@ -138,7 +132,7 @@ trait Arr
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
      */
     public function arrForget(&$array, $keys)
@@ -180,9 +174,8 @@ trait Arr
      * Get an item from an array using "dot" notation.
      *
      * @param \ArrayAccess|array $array
-     * @param string             $key
-     * @param mixed              $default
-     *
+     * @param string $key
+     * @param mixed $default
      * @return mixed
      */
     public function arrGet($array, $key, $default = null)
@@ -213,10 +206,9 @@ trait Arr
     /**
      * Return the last element in an array passing a given truth test.
      *
-     * @param array         $array
+     * @param array $array
      * @param callable|null $callback
-     * @param mixed         $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     public function arrLast($array, callable $callback = null, $default = null)
@@ -231,9 +223,8 @@ trait Arr
     /**
      * Get a subset of the items from the given array.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
-     *
      * @return array
      */
     public function arrOnly($array, $keys)
@@ -244,10 +235,9 @@ trait Arr
     /**
      * Pluck an array of values from an array.
      *
-     * @param array             $array
-     * @param string|array      $value
+     * @param array $array
+     * @param string|array $value
      * @param string|array|null $key
-     *
      * @return array
      */
     public function arrPluck($array, $value, $key = null)
@@ -277,7 +267,6 @@ trait Arr
      * @param array $array
      * @param mixed $value
      * @param mixed $key
-     *
      * @return array
      */
     public function arrPrepend($array, $value, $key = null)
@@ -294,10 +283,9 @@ trait Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
-     * @param mixed  $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     public function arrPull(&$array, $key, $default = null)
@@ -312,10 +300,9 @@ trait Arr
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param mixed        $target
+     * @param mixed $target
      * @param string|array $key
-     * @param mixed        $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     protected function dataGet($target, $key, $default = null)
@@ -354,7 +341,6 @@ trait Arr
      * Results array of items from Collection or Arrayable.
      *
      * @param mixed $items
-     *
      * @return array
      */
     protected function getArrayableItems($items)
@@ -377,9 +363,8 @@ trait Arr
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
      *
-     * @param string|array      $value
+     * @param string|array $value
      * @param string|array|null $key
-     *
      * @return array
      */
     protected function explodePluckParameters($value, $key)
@@ -395,7 +380,6 @@ trait Arr
      * Determine if the given value is callable, but not a string.
      *
      * @param mixed $value
-     *
      * @return bool
      */
     protected function useAsCallable($value)
@@ -407,7 +391,6 @@ trait Arr
      * Return the default value of the given value.
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     protected function value($value)
@@ -419,7 +402,6 @@ trait Arr
      * Get a value retrieving callback.
      *
      * @param string $value
-     *
      * @return callable
      */
     protected function valueRetriever($value)

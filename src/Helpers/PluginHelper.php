@@ -2,22 +2,20 @@
 
 namespace Limelight\Helpers;
 
-use Limelight\Mecab\Node;
-use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Classes\Collection;
+use Limelight\Config\Config;
 use Limelight\Exceptions\PluginNotFoundException;
+use Limelight\Mecab\Node;
+use Limelight\Plugins\Plugin;
 
 trait PluginHelper
 {
     /**
      * Get data from pluginData.
      *
-     * @param string $type   [romaji, furigana]
-     * @param string $target [self, child]
-     *
+     * @param string $type romaji, furigana
+     * @param string $target self, child
      * @throws PluginNotFoundException
-     *
      * @return static
      */
     protected function getPluginData($type, $target = 'child')
@@ -42,12 +40,11 @@ trait PluginHelper
     /**
      * Run all registered plugins.
      *
-     * @param string     $text
-     * @param Node|null  $node
+     * @param string $text
+     * @param Node|null $node
      * @param array|null $tokens
      * @param array|null $words
-     * @param array      $pluginWhiteList
-     *
+     * @param array $pluginWhiteList
      * @return array
      */
     protected function runPlugins($text, $node, $tokens, $words, $pluginWhiteList = [])
@@ -64,7 +61,7 @@ trait PluginHelper
 
                 $pluginClass = new $namespace($text, $node, $tokens, $words);
 
-                $pluginResults[$plugin] = $this->firePlugin($pluginClass);
+                $pluginResults[$plugin] = $pluginClass->handle($pluginClass);
             }
         }
 
@@ -75,8 +72,7 @@ trait PluginHelper
      * Whitelist is empty or plugin is in white list.
      *
      * @param string $plugin
-     * @param array  $pluginWhiteList
-     *
+     * @param array $pluginWhiteList
      * @return bool
      */
     private function isWhiteListed($plugin, array $pluginWhiteList)
@@ -96,7 +92,6 @@ trait PluginHelper
      * Validate plugin class exists.
      *
      * @param string $namespace
-     *
      * @throws PluginNotFoundException
      */
     private function validatePlugin($namespace)
@@ -104,17 +99,5 @@ trait PluginHelper
         if (!class_exists($namespace)) {
             throw new PluginNotFoundException("Plugin {$namespace} not found.");
         }
-    }
-
-    /**
-     * Fire the plugin.
-     *
-     * @param Plugin $plugin
-     *
-     * @return mixed
-     */
-    private function firePlugin(Plugin $plugin)
-    {
-        return $plugin->handle();
     }
 }

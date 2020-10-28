@@ -2,8 +2,8 @@
 
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
-use Limelight\Parse\PartOfSpeech\POSRegistry;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
+use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class Meishi implements PartOfSpeech
 {
@@ -42,7 +42,7 @@ class Meishi implements PartOfSpeech
             $className = 'Meishi'.ucfirst($current['partOfSpeech2']);
         }
 
-        if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\'.$className)) {
+        if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\' . $className)) {
             $POSClass = $registry->getClass($className);
 
             $properties = $POSClass->handle($properties, $previousWord, $previous, $current, $next);

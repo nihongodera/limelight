@@ -8,8 +8,7 @@ class Converter
      * Convert item to given format.
      *
      * @param string|array $items
-     * @param string       $format
-     *
+     * @param string $format
      * @return string|array
      */
     public static function convert($items, $format)
@@ -31,8 +30,7 @@ class Converter
      * Convert to katakana.
      *
      * @param string $property
-     * @param array  $wordData
-     *
+     * @param array $wordData
      * @return string
      */
     private static function katakana($value)
@@ -44,8 +42,7 @@ class Converter
      * Convert to hiragana.
      *
      * @param string $property
-     * @param array  $wordData
-     *
+     * @param array $wordData
      * @return string
      */
     private static function hiragana($value)
@@ -57,9 +54,8 @@ class Converter
      * Handle kana conversions.
      *
      * @param string $property
-     * @param array  $wordData
+     * @param array $wordData
      * @param string $flag
-     *
      * @return string
      */
     private static function convertKana($value, $flag)

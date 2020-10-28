@@ -88,7 +88,6 @@ class LimelightException extends \Exception
      * Color text red.
      *
      * @param string $text
-     *
      * @return string
      */
     protected function red($text)
@@ -100,7 +99,6 @@ class LimelightException extends \Exception
      * Color text blue.
      *
      * @param string $text
-     *
      * @return string
      */
     protected function blue($text)
@@ -112,7 +110,6 @@ class LimelightException extends \Exception
      * Color text green.
      *
      * @param string $text
-     *
      * @return string
      */
     protected function green($text)
@@ -125,7 +122,6 @@ class LimelightException extends \Exception
      *
      * @param string $text
      * @param string $color
-     *
      * @return string
      */
     private function colorText($text, $color)

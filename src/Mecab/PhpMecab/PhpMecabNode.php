@@ -3,20 +3,21 @@
 namespace Limelight\Mecab\PhpMecab;
 
 use Limelight\Mecab\Node;
+use Mecab\Node as MecabNode;
 
 class PhpMecabNode implements Node
 {
     /**
-     * @var MeCab_Node
+     * @var MecabNode
      */
     private $node;
 
     /**
      * Construct.
      *
-     * @param MeCab_Node $node
+     * @param MecabNode $node
      */
-    public function __construct(\MeCab\Node $node)
+    public function __construct(MecabNode $node)
     {
         $this->node = $node;
     }
@@ -62,7 +63,7 @@ class PhpMecabNode implements Node
     /**
      * Set the node on the object.
      *
-     * @param MeCab_Node $node
+     * @param MecabNode $node
      */
     public function setNode($node)
     {
@@ -74,7 +75,7 @@ class PhpMecabNode implements Node
     /**
      * Get node off object.
      *
-     * @return MeCab_Node
+     * @return MecabNode
      */
     public function getNode()
     {

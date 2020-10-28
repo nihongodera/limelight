@@ -2,10 +2,10 @@
 
 namespace Limelight\Classes;
 
-use Limelight\Helpers\PluginHelper;
-use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\PluginHelper;
 
 class LimelightResults extends Collection implements Arrayable, Convertable, Jsonable
 {
@@ -35,8 +35,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Construct.
      *
-     * @param string     $text
-     * @param array      $words
+     * @param string $text
+     * @param array $words
      * @param array/null $pluginData
      */
     public function __construct($text, array $words, $pluginData)
@@ -59,9 +59,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Get values as string.
      *
-     * @param string $value [value]
-     * @param string $glue  [word divider]
-     *
+     * @param string $value
+     * @param string $glue
      * @return string
      */
     public function string($value, $glue = null)
@@ -76,7 +75,7 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     }
 
     /**
-     * Get the original, user inputed text.
+     * Get the original, user input text.
      *
      * @return string
      */
@@ -162,7 +161,7 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Convert items to hiragana.
      *
-     * @return $this
+     * @return static
      */
     public function toHiragana()
     {
@@ -172,7 +171,7 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Convert items to katakana.
      *
-     * @return $this
+     * @return static
      */
     public function toKatakana()
     {
@@ -182,8 +181,7 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
     /**
      * Get plugin data from object.
      *
-     * @param string $name [The name of the plugin]
-     *
+     * @param string $name
      * @return mixed|bool
      */
     public function plugin($name)
@@ -195,9 +193,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * Build string for word.
      *
      * @param LimelightWord $item
-     * @param string        $value
-     * @param string|null   $glue
-     *
+     * @param string $value
+     * @param string|null $glue
      * @return string
      */
     private function buildString($item, $value, $glue)
@@ -206,7 +203,7 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
             return $item->$value;
         }
 
-        return $glue.$item->$value;
+        return $glue . $item->$value;
     }
 
     /**
@@ -215,7 +212,6 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * @param LimelightWord $item
      * @param string        $value
      * @param string        $glue
-     *
      * @return bool
      */
     private function shouldNotGlue($item, $value, $glue)
@@ -229,11 +225,10 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * Cut first chars if its is glue.
      *
      * @param Collection $collection
-     * @param string     $glue
-     *
+     * @param string $glue
      * @return string
      */
-    private function cutFirst($collection, $glue)
+    private function cutFirst(Collection $collection, $glue)
     {
         $string = implode('', $collection->all());
 
@@ -248,7 +243,6 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * Make value singular.
      *
      * @param string $value
-     *
      * @return string
      */
     private function makeSingular($value)

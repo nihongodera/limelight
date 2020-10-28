@@ -3,6 +3,8 @@
 namespace Limelight\Mecab\PhpMecab;
 
 use Limelight\Mecab\Mecab;
+use MeCab\Node;
+use MeCab\Tagger;
 
 class PhpMecab implements Mecab
 {
@@ -25,7 +27,7 @@ class PhpMecab implements Mecab
      *
      * @param array $options
      */
-    public function __construct($options)
+    public function __construct(array $options)
     {
         $this->options = $options;
 
@@ -36,7 +38,6 @@ class PhpMecab implements Mecab
      * Split string into nodes.
      *
      * @param string $string
-     *
      * @return Node
      */
     public function parseToNode($string)
@@ -50,8 +51,7 @@ class PhpMecab implements Mecab
      * Split string into nodes, return raw Mecab node.
      *
      * @param string $string
-     *
-     * @return Mecab_Node
+     * @return Node
      */
     public function parseToMecabNode($string)
     {
@@ -62,7 +62,6 @@ class PhpMecab implements Mecab
      * Parse string, return mecab results as string.
      *
      * @param string $string
-     *
      * @return string
      */
     public function parseToString($string)
@@ -73,15 +72,13 @@ class PhpMecab implements Mecab
     /**
      * Make instance of MeCab_Tagger.
      *
-     * @return MeCab_Tagger
+     * @return Tagger
      */
     private function makeMecab()
     {
         $options = $this->buildOptions();
 
-        $mecab = new \MeCab\Tagger($options);
-
-        return $mecab;
+        return new Tagger($options);
     }
 
     /**

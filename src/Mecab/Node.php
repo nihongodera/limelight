@@ -2,6 +2,8 @@
 
 namespace Limelight\Mecab;
 
+use Mecab\Node as MecabNode;
+
 interface Node
 {
     /**
@@ -28,14 +30,14 @@ interface Node
     /**
      * Set the node on the object.
      *
-     * @param MeCab_Node $node
+     * @param MecabNode $node
      */
     public function setNode($node);
 
     /**
      * Get node off object.
      *
-     * @return MeCab_Node
+     * @return MecabNode
      */
     public function getNode();
 }

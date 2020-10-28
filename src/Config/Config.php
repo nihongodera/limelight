@@ -2,8 +2,8 @@
 
 namespace Limelight\Config;
 
-use Limelight\Exceptions\InvalidInputException;
 use Limelight\Exceptions\InternalErrorException;
+use Limelight\Exceptions\InvalidInputException;
 
 class Config
 {
@@ -17,7 +17,7 @@ class Config
     /**
      * Instance of self.
      *
-     * @var self
+     * @var static
      */
     private static $instance;
 
@@ -50,7 +50,7 @@ class Config
     /**
      * Get instance of self.
      *
-     * @return self
+     * @return static
      */
     public static function getInstance()
     {
@@ -75,11 +75,9 @@ class Config
      * Make class instance from given interface name.  Class must be bound to
      * interface in config.php.
      *
-     * @param string $interface [full interface namespace]
-     *
+     * @param string $interface
      * @throws InternalErrorException
-     *
-     * @return class_instance
+     * @return object
      */
     public function make($interface)
     {
@@ -126,9 +124,7 @@ class Config
      * @param string $value
      * @param string $key1
      * @param string $key1
-     *
      * @throws InvalidInputException
-     *
      * @return bool
      */
     public function set($value, $key1, $key2 = null)
@@ -164,20 +160,18 @@ class Config
      *
      * @param array  $bindings
      * @param string $interface
-     *
      * @throws InternalErrorException
-     *
      * @return string
      */
     private function getFullClassName(array $bindings, $interface)
     {
         if (isset($bindings[$interface])) {
             return $bindings[$interface];
-        } else {
-            throw new InternalErrorException(
-                "Cannot resolve interface {$interface}. Check config.php file bindings."
-            );
         }
+
+        throw new InternalErrorException(
+            "Cannot resolve interface {$interface}. Check config.php file bindings."
+        );
     }
 
     /**
@@ -185,7 +179,6 @@ class Config
      *
      * @param string $fullClassName
      * @param string $interface
-     *
      * @throws InternalErrorException
      */
     private function validateClass($fullClassName, $interface)
@@ -207,7 +200,6 @@ class Config
      * Get options for class.
      *
      * @param string $fullClassName
-     *
      * @return array
      */
     private function getClassOptions($fullClassName)
@@ -216,22 +208,17 @@ class Config
 
         $options = $this->get('options');
 
-        $classOptions = (isset($options[$shortClassName]) ? $options[$shortClassName] : []);
-
-        return $classOptions;
+        return isset($options[$shortClassName]) ? $options[$shortClassName] : [];
     }
 
     /**
      * Get short class name from full namespace.
      *
      * @param string $fullClassName
-     *
      * @return string
      */
     private function getShortClassName($fullClassName)
     {
-        $class = new \ReflectionClass($fullClassName);
-
-        return $class->getShortName();
+        return (new \ReflectionClass($fullClassName))->getShortName();
     }
 }

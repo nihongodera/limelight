@@ -8,7 +8,6 @@ trait JapaneseHelpers
      * Return true if word contains kanji.
      *
      * @param string $word
-     *
      * @return bool
      */
     protected function hasKanji($word)
@@ -26,7 +25,6 @@ trait JapaneseHelpers
      * Return true if character is katakana.
      *
      * @param string $character
-     *
      * @return bool
      */
     protected function isKatakana($character)
@@ -40,7 +38,6 @@ trait JapaneseHelpers
      * Get character array from string.
      *
      * @param string $string
-     *
      * @return array
      */
     protected function getChars($string)

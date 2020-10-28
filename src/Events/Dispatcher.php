@@ -18,7 +18,7 @@ class Dispatcher
      *
      * @var bool
      */
-    protected $supressEvents = false;
+    protected $suppressEvents = false;
 
     /**
      * Construct.
@@ -44,7 +44,7 @@ class Dispatcher
      * Add a single listener.
      *
      * @param LimelightListener|array $listeners
-     * @param string                  $eventName
+     * @param string $eventName
      */
     public function addListeners($listeners, $eventName)
     {
@@ -81,13 +81,12 @@ class Dispatcher
      * Call handle method on all listeners for event.
      *
      * @param string $eventName
-     * @param mixed  $payload
-     *
+     * @param mixed $payload
      * @return mixed
      */
     public function fire($eventName, $payload = null)
     {
-        if (isset($this->registeredListeners[$eventName]) && $this->supressEvents === false) {
+        if (isset($this->registeredListeners[$eventName]) && $this->suppressEvents === false) {
             $listeners = $this->registeredListeners[$eventName];
 
             return array_map(function (LimelightListener $listener) use ($payload) {
@@ -101,18 +100,17 @@ class Dispatcher
     /**
      * Turn eventing on/off.
      *
-     * @param bool $supressEvents
-     *
+     * @param bool $suppressEvents
      * @return bool
      */
-    public function toggleEvents($supressEvents)
+    public function toggleEvents($suppressEvents)
     {
-        if ($supressEvents === true && $this->supressEvents === false) {
-            $this->supressEvents = true;
-        } elseif ($supressEvents === true && $this->supressEvents === true) {
-            $this->supressEvents = false;
+        if ($suppressEvents === true && $this->suppressEvents === false) {
+            $this->suppressEvents = true;
+        } elseif ($suppressEvents === true && $this->suppressEvents === true) {
+            $this->suppressEvents = false;
         }
 
-        return $this->supressEvents;
+        return $this->suppressEvents;
     }
 }

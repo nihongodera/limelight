@@ -4,12 +4,12 @@ namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 use Limelight\Helpers\Arr;
-use Limelight\Helpers\Converter;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Converter;
 
 abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggregate
 {
@@ -34,7 +34,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Chunk the underlying collection array.
      *
      * @param int $size
-     *
      * @return static
      */
     public function chunk($size)
@@ -52,7 +51,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Convert collection to given format.
      *
      * @param string $format
-     *
      * @return static
      */
     public function convert($format)
@@ -74,7 +72,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Count the number of items on the object.
-     *
      * @return int
      */
     public function count()
@@ -86,7 +83,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get the items in the collection that are not present in the given items.
      *
      * @param mixed $items
-     *
      * @return static
      */
     public function diff($items)
@@ -102,7 +98,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param int $step
      * @param int $offset
-     *
      * @return static
      */
     public function every($step, $offset = 0)
@@ -126,7 +121,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get all items except for those with the specified keys.
      *
      * @param mixed $keys
-     *
      * @return static
      */
     public function except($keys)
@@ -143,7 +137,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Run a filter over each of the items.
      *
      * @param callable|null $callback
-     *
      * @return static
      */
     public function filter(callable $callback = null)
@@ -167,8 +160,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get the first item from the collection.
      *
      * @param callable|null $callback
-     * @param mixed         $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     public function first(callable $callback = null, $default = null)
@@ -180,7 +172,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get a flattened array of the items in the collection.
      *
      * @param int $depth
-     *
      * @return static
      */
     public function flatten($depth = INF)
@@ -195,7 +186,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Remove an item from the collection by key.
      *
      * @param string|array $keys
-     *
      * @return $this
      */
     public function forget($keys)
@@ -211,8 +201,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Group an associative array by a field or using a callback.
      *
      * @param callable|string $groupBy
-     * @param bool            $preserveKeys
-     *
+     * @param bool $preserveKeys
      * @return static
      */
     public function groupBy($groupBy, $preserveKeys = false)
@@ -245,7 +234,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param string $value
      * @param string $glue
-     *
      * @return string
      */
     public function implode($value, $glue = null)
@@ -263,7 +251,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Intersect the collection with the given items.
      *
      * @param mixed $items
-     *
      * @return static
      */
     public function intersect($items)
@@ -298,8 +285,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get the last item from the collection.
      *
      * @param callable|null $callback
-     * @param mixed         $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     public function last(callable $callback = null, $default = null)
@@ -311,7 +297,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Run a map over each of the items.
      *
      * @param callable $callback
-     *
      * @return static
      */
     public function map(callable $callback)
@@ -327,7 +312,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Merge the collection with the given items.
      *
      * @param mixed $items
-     *
      * @return static
      */
     public function merge($items)
@@ -342,7 +326,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get an item at a given offset.
      *
      * @param mixed $key
-     *
      * @return mixed
      */
     public function offsetGet($key)
@@ -354,7 +337,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Determine if an item exists at an offset.
      *
      * @param mixed $key
-     *
      * @return bool
      */
     public function offsetExists($key)
@@ -391,7 +373,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get the items with the specified keys.
      *
      * @param mixed $keys
-     *
      * @return static
      */
     public function only($keys)
@@ -407,9 +388,8 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     /**
      * Get the values of a given key.
      *
-     * @param string      $value
+     * @param string $value
      * @param string|null $key
-     *
      * @return static
      */
     public function pluck($value, $key = null)
@@ -435,7 +415,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param mixed $value
      * @param mixed $key
-     *
      * @return $this
      */
     public function prepend($value, $key = null)
@@ -450,7 +429,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param mixed $key
      * @param mixed $default
-     *
      * @return mixed
      */
     public function pull($key, $default = null)
@@ -462,8 +440,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Push an item onto the end of the collection.
      *
      * @param mixed $value
-     *
-     * @return $this
+     * @return static
      */
     public function push($value)
     {
@@ -476,7 +453,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Create a collection of all elements that do not pass a given truth test.
      *
      * @param callable|mixed $callback
-     *
      * @return static
      */
     public function reject($callback)
@@ -507,7 +483,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param int $offset
      * @param int $length
-     *
      * @return static
      */
     public function slice($offset, $length = null)
@@ -521,10 +496,9 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     /**
      * Splice a portion of the underlying collection array.
      *
-     * @param int      $offset
+     * @param int $offset
      * @param int|null $length
-     * @param mixed    $replacement
-     *
+     * @param mixed $replacement
      * @return static
      */
     public function splice($offset, $length = null, $replacement = [])
@@ -546,7 +520,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Take the first or last {$limit} items.
      *
      * @param int $limit
-     *
      * @return static
      */
     public function take($limit)
@@ -574,7 +547,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Get the collection of items as JSON.
      *
      * @param int $options
-     *
      * @return string
      */
     public function toJson($options = 0)
@@ -586,7 +558,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Transform each item in the collection using a callback.
      *
      * @param callable $callback
-     *
      * @return $this
      */
     public function transform(callable $callback)
@@ -600,7 +571,6 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Return only unique items from the collection array.
      *
      * @param string|callable|null $key
-     *
      * @return static
      */
     public function unique($key = null)
@@ -639,9 +609,8 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Filter items by the given key value pair.
      *
      * @param string $key
-     * @param mixed  $operator
-     * @param mixed  $value
-     *
+     * @param mixed $operator
+     * @param mixed $value
      * @return static
      */
     public function where($key, $operator, $value = null)
@@ -660,8 +629,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
      *      => [[1, 4], [2, 5], [3, 6]]
      *
-     * @param mixed ...$items
-     *
+     * @param mixed $items
      * @return static
      */
     public function zip($items)
@@ -715,8 +683,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * @param string $key
      * @param string $operator
-     * @param mixed  $value
-     *
+     * @param mixed $value
      * @return \Closure
      */
     protected function operatorForWhere($key, $operator, $value)
