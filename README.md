@@ -30,7 +30,7 @@ docker build -f docker/Dockerfile -t limelight .
 
 Once it is built, run the container:
 ```
-docker run --name limelight -v /host/path/to/limelight:/usr/limelight limelight
+docker run --name limelight -v /host/path/to/limelight:/usr/limelight -d --rm limelight
 ```
 
 Access the project in the container:
