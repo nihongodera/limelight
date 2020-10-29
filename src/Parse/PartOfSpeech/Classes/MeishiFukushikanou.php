@@ -10,33 +10,37 @@ class MeishiFukushikanou implements PartOfSpeech
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
-        if ($next) {
-            if ($next['inflectionType'] === 'sahenSuru') {
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
+        if ($nextToken) {
+            if ($nextToken['inflectionType'] === 'sahenSuru') {
                 $properties['partOfSpeech'] = 'verb';
 
                 $properties['eatNext'] = true;
-            } elseif ($this->isTokushuDaNotSahensetsuzoku($current, $next)) {
+            } elseif ($this->isTokushuDaNotSahensetsuzoku($currentToken, $nextToken)) {
                 $properties['partOfSpeech'] = 'adjective';
 
-                if ($next['inflectionForm'] === 'taigensetsuzoku') {
+                if ($nextToken['inflectionForm'] === 'taigensetsuzoku') {
                     $properties['eatNext'] = true;
 
                     $properties['eatLemma'] = false;
                 }
-            } elseif ($next['inflectionType'] === 'tokushuNai') {
+            } elseif ($nextToken['inflectionType'] === 'tokushuNai') {
                 $properties['partOfSpeech'] = 'adjective';
 
                 $properties['eatNext'] = true;
-            } elseif ($next['partOfSpeech1'] === 'joshi' && $next['literal'] === 'に') {
+            } elseif ($nextToken['partOfSpeech1'] === 'joshi' && $nextToken['literal'] === 'に') {
                 $properties['partOfSpeech'] = 'adverb';
 
                 $properties['eatNext'] = false;
@@ -50,14 +54,13 @@ class MeishiFukushikanou implements PartOfSpeech
      * Return true if next inflection is tokushuDa and POS2 is not
      * sahensetsuzoku.
      *
-     * @param array $current
-     * @param array $next
-     *
+     * @param array $currentToken
+     * @param array $nextToken
      * @return bool
      */
-    public function isTokushuDaNotSahensetsuzoku($current, $next)
+    public function isTokushuDaNotSahensetsuzoku($currentToken, $nextToken)
     {
-        return $next['inflectionType'] = 'tokushuDa' &&
-            $current['partOfSpeech2'] !== 'sahensetsuzoku';
+        return $nextToken['inflectionType'] = 'tokushuDa' &&
+            $currentToken['partOfSpeech2'] !== 'sahensetsuzoku';
     }
 }

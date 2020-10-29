@@ -3,8 +3,8 @@
 namespace Limelight\Plugins\Library\Furigana;
 
 use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Plugins\Plugin;
 
 class Furigana extends Plugin
 {
@@ -21,9 +21,9 @@ class Furigana extends Plugin
      * Construct.
      *
      * @param string $text
-     * @param Node   $node
-     * @param array  $tokens
-     * @param array  $words
+     * @param Node $node
+     * @param array $tokens
+     * @param array $words
      */
     public function __construct($text, $node, $tokens, $words)
     {
@@ -77,7 +77,6 @@ class Furigana extends Plugin
      *
      * @param array $wordChars
      * @param array $katakanaChars
-     *
      * @return array
      */
     private function buildHiraganaChars(array $wordChars, array $katakanaChars)
@@ -92,10 +91,9 @@ class Furigana extends Plugin
     }
 
     /**
-     * Remove katakan from array.
+     * Remove katakana from array.
      *
      * @param array $array
-     *
      * @return array
      */
     private function purgeKatakana(array $array)
@@ -110,7 +108,6 @@ class Furigana extends Plugin
      *
      * @param array $hiraganaChars
      * @param array $wordChars
-     *
      * @return array
      */
     private function buildKanaArray(array $hiraganaChars, array $wordChars)
@@ -129,10 +126,9 @@ class Furigana extends Plugin
     /**
      * Return true if the chars should be reverse compiled.
      *
-     * @param array  $hiraganaChars
+     * @param array $hiraganaChars
      * @param string $hiraganaChar
-     * @param array  $intersect
-     *
+     * @param array $intersect
      * @return bool
      */
     protected function shouldReverseCompile($hiraganaChars, $hiraganaChar, $intersect)
@@ -145,9 +141,8 @@ class Furigana extends Plugin
     /**
      * Return number of instances of value in array.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $value
-     *
      * @return int
      */
     private function countArrayValues(array $array, $value)
@@ -162,7 +157,6 @@ class Furigana extends Plugin
      *
      * @param array $wordChars
      * @param array $hiraganaChars
-     *
      * @return array
      */
     private function reverseArrayCompile(array $wordChars, array $hiraganaChars)
@@ -186,7 +180,6 @@ class Furigana extends Plugin
      * Divide array into arrays of continuous keys.
      *
      * @param array $subject
-     *
      * @return array
      */
     private function divide(array $subject)
@@ -223,7 +216,6 @@ class Furigana extends Plugin
      *
      * @param array $kanjiArray
      * @param array $furiganaArray
-     *
      * @return array
      */
     private function combineKanjiKana(array $kanjiArray, array $furiganaArray)
@@ -244,19 +236,18 @@ class Furigana extends Plugin
      *
      * @param string $kanji
      * @param string $furigana
-     *
      * @return string
      */
     private function buildFurigana($kanji, $furigana)
     {
-        return $this->tags['kanji_furigana_wrapper']['open'].
-               $this->tags['kanji_wrapper']['open'].
-               $kanji.
-               $this->tags['kanji_wrapper']['close'].
-               $this->tags['furigana_wrapper']['open'].
-               $furigana.
-               $this->tags['furigana_wrapper']['close'].
-               $this->tags['kanji_furigana_wrapper']['close'];
+        return $this->tags['kanji_furigana_wrapper']['open'] .
+            $this->tags['kanji_wrapper']['open'] .
+            $kanji .
+            $this->tags['kanji_wrapper']['close'] .
+            $this->tags['furigana_wrapper']['open'] .
+            $furigana .
+            $this->tags['furigana_wrapper']['close'] .
+            $this->tags['kanji_furigana_wrapper']['close'];
     }
 
     /**
@@ -265,7 +256,6 @@ class Furigana extends Plugin
      * @param array $wordChars
      * @param array $kanjiWithKana
      * @param array $katakanaChars
-     *
      * @return string
      */
     private function rebuildWord(array $wordChars, array $kanjiWithKana, array $katakanaChars)
@@ -294,11 +284,10 @@ class Furigana extends Plugin
     /**
      * Return true if kanji with kana should be added to word.
      *
-     * @param array  $kanjiWithKana
-     * @param array  $katakanaChars
+     * @param array $kanjiWithKana
+     * @param array $katakanaChars
      * @param string $char
-     * @param int    $key
-     *
+     * @param int $key
      * @return bool
      */
     protected function shouldAddKanji($kanjiWithKana, $katakanaChars, $char, $key)
@@ -312,12 +301,13 @@ class Furigana extends Plugin
      * Add furigana word to word object.
      *
      * @param LimelightWord $wordObject
-     * @param string        $word
+     * @param string $word
      */
     private function addToWord($wordObject, $word)
     {
-        $word = $this->tags['word_wrapper']['open'].
-            $word.$this->tags['word_wrapper']['close'];
+        $word = $this->tags['word_wrapper']['open'] .
+            $word .
+            $this->tags['word_wrapper']['close'];
 
         $wordObject->setPluginData('Furigana', $word);
     }
@@ -335,7 +325,7 @@ class Furigana extends Plugin
             $openClose = explode('{{}}', $tag);
 
             $this->tags[$name] = [
-                'open'  => (isset($openClose[0]) ? $openClose[0] : ''),
+                'open' => (isset($openClose[0]) ? $openClose[0] : ''),
                 'close' => (isset($openClose[1]) ? $openClose[1] : ''),
             ];
         }

@@ -64,15 +64,14 @@ class HepburnModified extends RomajiConverter
      */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
+        $this->conversions = include dirname(__DIR__) . '/Lib/Hepburn.php';
     }
 
     /**
      * handle conversion request.
      *
-     * @param string        $string
+     * @param string $string
      * @param LimelightWord $word
-     *
      * @return string
      */
     public function handle($string, $word)

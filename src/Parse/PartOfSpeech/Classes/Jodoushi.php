@@ -10,24 +10,28 @@ class Jodoushi implements PartOfSpeech
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
         $properties['partOfSpeech'] = 'postposition';
 
-        if ($this->isInInflections($previous, $current)) {
+        if ($this->isInInflections($previousToken, $currentToken)) {
             $properties['attachToPrevious'] = true;
-        } elseif ($this->isFuhenkagataAndNorU($current)) {
+        } elseif ($this->isFuhenkagataAndNorU($currentToken)) {
             $properties['attachToPrevious'] = true;
-        } elseif ($this->isNaraAndPreviousIsMeishi($previous, $current)) {
+        } elseif ($this->isNaraAndPreviousIsMeishi($previousToken, $currentToken)) {
             $properties['partOfSpeech'] = 'conjunction';
-        } elseif ($this->isTokushuAndNa($current)) {
+        } elseif ($this->isTokushuAndNa($currentToken)) {
             $properties['partOfSpeech'] = 'verb';
         }
 
@@ -38,12 +42,11 @@ class Jodoushi implements PartOfSpeech
      * Return true if previous exists, POS is kakarijoshi and is in inflections
      * array.
      *
-     * @param array $previous
-     * @param array $current
-     *
+     * @param array $previousToken
+     * @param array $currentToken
      * @return bool
      */
-    protected function isInInflections($previous, $current)
+    protected function isInInflections($previousToken, $currentToken)
     {
         $inflections = [
             'tokushuTa',
@@ -53,51 +56,49 @@ class Jodoushi implements PartOfSpeech
             'tokushuNu',
         ];
 
-        return is_null($previous) ||
-            (!is_null($previous) &&
-                $previous['partOfSpeech2'] !== 'kakarijoshi') &&
-                in_array($current['inflectionType'], $inflections
+        return is_null($previousToken) ||
+            (!is_null($previousToken) &&
+                $previousToken['partOfSpeech2'] !== 'kakarijoshi') &&
+                in_array($currentToken['inflectionType'], $inflections
             );
     }
 
     /**
      * Return true if inflection is fuhenkagata and lemma is ん or う.
      *
-     * @param array $current
-     *
+     * @param array $currentToken
      * @return bool
      */
-    protected function isFuhenkagataAndNorU($current)
+    protected function isFuhenkagataAndNorU($currentToken)
     {
-        return $current['inflectionType'] === 'fuhenkagata' &&
-            ($current['lemma'] === 'ん' || $current['lemma'] === 'う');
+        return $currentToken['inflectionType'] === 'fuhenkagata' &&
+            ($currentToken['lemma'] === 'ん' || $currentToken['lemma'] === 'う');
     }
 
     /**
      * Return true if literal is なら and previous POS is meishi.
      *
-     * @param array $previous
-     * @param array $current
-     *
+     * @param array $previousToken
+     * @param array $currentToken
      * @return bool
      */
-    protected function isNaraAndPreviousIsMeishi($previous, $current)
+    protected function isNaraAndPreviousIsMeishi($previousToken, $currentToken)
     {
-        return $current['literal'] === 'なら' &&
-            $previous['partOfSpeech1'] === 'meishi';
+        return $currentToken['literal'] === 'なら' &&
+            $previousToken &&
+            $previousToken['partOfSpeech1'] === 'meishi';
     }
 
     /**
      * Return true inflection is tokushu and literal is な.
      *
-     * @param array $current
-     *
+     * @param array $currentToken
      * @return bool
      */
-    protected function isTokushuAndNa($current)
+    protected function isTokushuAndNa($currentToken)
     {
-        return $current['inflectionType'] === 'tokushuDa' ||
-            $current['inflectionType'] === 'tokushuDesu' &&
-            $current['literal'] !== 'な';
+        return $currentToken['inflectionType'] === 'tokushuDa' ||
+            $currentToken['inflectionType'] === 'tokushuDesu' &&
+            $currentToken['literal'] !== 'な';
     }
 }

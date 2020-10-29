@@ -2,20 +2,20 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
 use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
+use Limelight\Limelight;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
 
 class TokenParser
 {
     /**
-     * @var Limelight\Limelight
+     * @var Limelight
      */
     private $limelight;
 
     /**
-     * @var Limelight\Events\Dispatcher
+     * @var Dispatcher
      */
     private $dispatcher;
 
@@ -30,19 +30,19 @@ class TokenParser
      * @var array
      */
     private $defaults = [
-        'partOfSpeech'      => null,
-        'grammar'           => null,
-        'eatNext'           => false,
-        'eatLemma'          => true,
-        'attachToPrevious'  => false,
+        'partOfSpeech' => null,
+        'grammar' => null,
+        'eatNext' => false,
+        'eatLemma' => true,
+        'attachToPrevious' => false,
         'alsoAttachToLemma' => false,
-        'updatePOS'         => false,
+        'updatePOS' => false,
     ];
 
     /**
      * Construct.
      *
-     * @param Limelight  $limelight
+     * @param Limelight $limelight
      * @param Dispatcher $dispatcher
      */
     public function __construct(Limelight $limelight, Dispatcher $dispatcher)
@@ -55,7 +55,6 @@ class TokenParser
      * Parse the text by filtering through the tokens.
      *
      * @param array $tokens
-     *
      * @return array
      */
     public function parseTokens($tokens)
@@ -71,22 +70,22 @@ class TokenParser
 
             $previousWord = end($this->words);
 
-            $previous = ($i > 0 ? $tokens[$i - 1] : null);
+            $previousToken = ($i > 0 ? $tokens[$i - 1] : null);
 
-            $current = $tokens[$i];
+            $currentToken = $tokens[$i];
 
-            $next = ($i + 1 < $length ? $tokens[$i + 1] : null);
+            $nextToken = ($i + 1 < $length ? $tokens[$i + 1] : null);
 
-            $properties = $this->getProperties($registry, $previousWord, $previous, $current, $next);
+            $properties = $this->getProperties($registry, $previousWord, $previousToken, $currentToken, $nextToken);
 
             if ($properties['attachToPrevious'] && count($this->words) > 0) {
-                $this->appendWordToLast($current, $properties, $previousWord);
+                $this->appendWordToLast($currentToken, $properties, $previousWord);
             } else {
-                $this->makeNewWord($current, $properties);
+                $this->makeNewWord($currentToken, $properties);
             }
 
             if ($properties['eatNext']) {
-                $this->eatNextToken($current, $next, $properties);
+                $this->eatNextToken($nextToken, $properties);
 
                 $i += 1;
             }
@@ -98,75 +97,72 @@ class TokenParser
     /**
      * Get properties for current token.
      *
-     * @param POSRegistry        $registry
+     * @param POSRegistry $registry
      * @param LimelightWord|bool $previousWord
-     * @param array              $previous
-     * @param array              $current
-     * @param array              $next
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      *
      * @return array
      */
     private function getProperties(
         POSRegistry $registry,
         $previousWord,
-        $previous,
-        $current,
-        $next
+        $previousToken,
+        $currentToken,
+        $nextToken
     ) {
-        $className = ucfirst($current['partOfSpeech1']);
+        $className = ucfirst($currentToken['partOfSpeech1']);
 
         $POSClass = $registry->getClass($className);
 
-        $properties = $POSClass->handle(
+        return $POSClass->handle(
             $this->defaults,
             $previousWord,
-            $previous,
-            $current,
-            $next
+            $previousToken,
+            $currentToken,
+            $nextToken
         );
-
-        return $properties;
     }
 
     /**
      * Update current if reading does not exist.
      *
-     * @param array $current
-     *
+     * @param array $currentToken
      * @return array
      */
-    private function updateCurrent($current)
+    private function updateCurrent($currentToken)
     {
-        $current['lemma'] = $current['literal'];
+        $currentToken['lemma'] = $currentToken['literal'];
 
-        $katakana = mb_convert_kana($current['literal'], 'C');
+        $katakana = mb_convert_kana($currentToken['literal'], 'C');
 
-        $current['reading'] = $katakana;
+        $currentToken['reading'] = $katakana;
 
-        $current['pronunciation'] = $katakana;
+        $currentToken['pronunciation'] = $katakana;
 
-        return $current;
+        return $currentToken;
     }
 
     /**
      * Append current word to last word in words array.
      *
-     * @param array              $current
-     * @param array              $properties
+     * @param array   $currentToken
+     * @param array $properties
      * @param LimelightWord|bool $previousWord
      */
-    private function appendWordToLast($current, $properties, $previousWord)
+    private function appendWordToLast($currentToken, $properties, $previousWord)
     {
-        $previousWord->appendTo('rawMecab', $current);
+        $previousWord->appendTo('rawMecab', $currentToken);
 
-        $previousWord->appendTo('word', $current['literal']);
+        $previousWord->appendTo('word', $currentToken['literal']);
 
-        $previousWord->appendTo('reading', $current['reading']);
+        $previousWord->appendTo('reading', $currentToken['reading']);
 
-        $previousWord->appendTo('pronunciation', $current['pronunciation']);
+        $previousWord->appendTo('pronunciation', $currentToken['pronunciation']);
 
         if ($properties['alsoAttachToLemma']) {
-            $previousWord->appendTo('lemma', $current['lemma']);
+            $previousWord->appendTo('lemma', $currentToken['lemma']);
         }
 
         if ($properties['updatePOS']) {
@@ -177,12 +173,12 @@ class TokenParser
     /**
      * Make new word and append it to words array.
      *
-     * @param array $current
+     * @param array $currentToken
      * @param array $properties
      */
-    private function makeNewWord($current, $properties)
+    private function makeNewWord($currentToken, $properties)
     {
-        $word = new LimelightWord($current, $properties, $this->limelight);
+        $word = new LimelightWord($currentToken, $properties, $this->limelight);
 
         $this->dispatcher->fire('WordWasCreated', $word);
 
@@ -192,24 +188,23 @@ class TokenParser
     /**
      * Eat the next token.
      *
-     * @param array $current
-     * @param array $next
+     * @param array $nextToken
      * @param array $properties
      */
-    private function eatNextToken($current, $next, $properties)
+    private function eatNextToken($nextToken, $properties)
     {
         $word = end($this->words);
 
-        $word->appendTo('rawMecab', $next);
+        $word->appendTo('rawMecab', $nextToken);
 
-        $word->appendTo('word', $next['literal']);
+        $word->appendTo('word', $nextToken['literal']);
 
-        $word->appendTo('reading', $next['reading']);
+        $word->appendTo('reading', $nextToken['reading']);
 
-        $word->appendTo('pronunciation', $next['pronunciation']);
+        $word->appendTo('pronunciation', $nextToken['pronunciation']);
 
         if ($properties['eatLemma']) {
-            $word->appendTo('lemma', $next['lemma']);
+            $word->appendTo('lemma', $nextToken['lemma']);
         }
     }
 }

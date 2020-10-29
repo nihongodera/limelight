@@ -2,8 +2,8 @@
 
 namespace Limelight\Providers\Laravel;
 
-use Limelight\Limelight;
 use Illuminate\Support\ServiceProvider;
+use Limelight\Limelight;
 
 class LimelightServiceProvider extends ServiceProvider
 {
@@ -15,7 +15,7 @@ class LimelightServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-           __DIR__.'/../../config.php' => config_path('limelight.php'),
+           __DIR__ . '/../../config.php' => config_path('limelight.php'),
         ]);
     }
 

@@ -25,17 +25,18 @@ class POSRegistry
      */
     private function __construct()
     {
+        //
     }
 
     /**
      * Get instance of self.
      *
-     * @return self
+     * @return static
      */
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            self::$instance = new self();
+            static::$instance = new self();
         }
 
         return self::$instance;
@@ -45,9 +46,7 @@ class POSRegistry
      * Get class form registry.
      *
      * @param string $className
-     *
      * @throws InternalErrorException
-     *
      * @return PartOfSpeech
      */
     public function getClass($className)
@@ -69,7 +68,6 @@ class POSRegistry
      * Set class in registry.
      *
      * @param string $fullName
-     *
      * @return PartOfSpeech
      */
     public function setClass($fullName)
@@ -87,10 +85,8 @@ class POSRegistry
      * Validate class.
      *
      * @param string $class
-     *
      * @throws InternalErrorException
-     *
-     * @return bool/InternalErrorException
+     * @return bool
      */
     private function validateClass($class)
     {

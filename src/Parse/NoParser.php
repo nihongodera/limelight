@@ -2,13 +2,13 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Limelight;
-use Limelight\Events\Dispatcher;
-use Limelight\Helpers\PluginHelper;
-use Limelight\Classes\LimelightWord;
-use Limelight\Helpers\JapaneseHelpers;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
+use Limelight\Events\Dispatcher;
 use Limelight\Exceptions\InvalidInputException;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Limelight;
 
 class NoParser
 {
@@ -16,12 +16,12 @@ class NoParser
     use JapaneseHelpers;
 
     /**
-     * @var Limelight\Limelight
+     * @var Limelight
      */
     private $limelight;
 
     /**
-     * @var Limelight\Events\Dispatcher
+     * @var Dispatcher
      */
     private $dispatcher;
 
@@ -41,10 +41,8 @@ class NoParser
      * Handle the no-parse for given text.
      *
      * @param string $text
-     * @param array  $pluginWhiteList
-     *
+     * @param array $pluginWhiteList
      * @throws InvalidInputException
-     *
      * @return LimelightResults
      */
     public function handle($text, array $pluginWhiteList)
@@ -74,15 +72,14 @@ class NoParser
      * Build token using raw text for all properties.
      *
      * @param string $text
-     *
      * @return array
      */
     private function buildToken($text)
     {
         return [
-            'literal'       => $text,
-            'lemma'         => $text,
-            'reading'       => $text,
+            'literal' => $text,
+            'lemma' => $text,
+            'reading' => $text,
             'pronunciation' => $text,
         ];
     }
@@ -96,7 +93,7 @@ class NoParser
     {
         return [
             'partOfSpeech' => null,
-            'grammar'      => null,
+            'grammar' => null,
         ];
     }
 }

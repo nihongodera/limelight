@@ -19,7 +19,7 @@ trait MecabMethods
      * MeCab parseToNode method. Returns raw Mecab node object.
      *
      * @param string $string
-     * @return Mecab\node
+     * @return Mecab\Node
      */
     public function mecabToMecabNode($string)
     {

@@ -13,39 +13,43 @@ class Meishi implements PartOfSpeech
      * @var array
      */
     private $overrides = [
-        'sahensetsuzoku'    => 'fukushikanou',
+        'sahensetsuzoku' => 'fukushikanou',
         'keiyoudoushigokan' => 'fukushikanou',
         'naikeiyoushigokan' => 'fukushikanou',
-        'tokushu'           => 'hijiritsu',
+        'tokushu' => 'hijiritsu',
     ];
 
     /**
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
         $properties['partOfSpeech'] = 'noun';
 
         $registry = POSRegistry::getInstance();
 
-        if (array_key_exists($current['partOfSpeech2'], $this->overrides)) {
-            $className = 'Meishi'.ucfirst($this->overrides[$current['partOfSpeech2']]);
+        if (array_key_exists($currentToken['partOfSpeech2'], $this->overrides)) {
+            $className = 'Meishi'.ucfirst($this->overrides[$currentToken['partOfSpeech2']]);
         } else {
-            $className = 'Meishi'.ucfirst($current['partOfSpeech2']);
+            $className = 'Meishi'.ucfirst($currentToken['partOfSpeech2']);
         }
 
         if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\' . $className)) {
             $POSClass = $registry->getClass($className);
 
-            $properties = $POSClass->handle($properties, $previousWord, $previous, $current, $next);
+            $properties = $POSClass->handle($properties, $previousWord, $previousToken, $currentToken, $nextToken);
         }
 
         return $properties;

@@ -10,20 +10,24 @@ class MeishiHijiritsu implements PartOfSpeech
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
-        if ($next) {
-            $method = strtolower($current['partOfSpeech3']);
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
+        if ($nextToken) {
+            $method = strtolower($currentToken['partOfSpeech3']);
 
             if (method_exists($this, $method)) {
-                $properties = $this->$method($properties, $previous, $current, $next);
+                $properties = $this->$method($properties, $previousToken, $currentToken, $nextToken);
             }
         }
 
@@ -34,15 +38,14 @@ class MeishiHijiritsu implements PartOfSpeech
      * Handle fukushikanou.
      *
      * @param array $properties
-     * @param array $previous
-     * @param array $current
-     * @param array $next
-     *
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    private function fukushikanou($properties, $previous, $current, $next)
+    private function fukushikanou($properties, $previousToken, $currentToken, $nextToken)
     {
-        if ($next['partOfSpeech1'] === 'joshi' && $next['literal'] === 'に') {
+        if ($nextToken['partOfSpeech1'] === 'joshi' && $nextToken['literal'] === 'に') {
             $properties['partOfSpeech'] = 'adverb';
 
             $properties['eatNext'] = true;
@@ -55,23 +58,22 @@ class MeishiHijiritsu implements PartOfSpeech
      * Handle jodoushigokan.
      *
      * @param array $properties
-     * @param array $previous
-     * @param array $current
-     * @param array $next
-     *
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    private function jodoushigokan($properties, $previous, $current, $next)
+    private function jodoushigokan($properties, $previousToken, $currentToken, $nextToken)
     {
-        if ($next['inflectionType'] === 'tokushuDa') {
+        if ($nextToken['inflectionType'] === 'tokushuDa') {
             $properties['partOfSpeech'] = 'verb';
 
             $properties['grammar'] = 'auxillary';
 
-            if ($next['inflectionForm'] === 'taigensetsuzoku') {
+            if ($nextToken['inflectionForm'] === 'taigensetsuzoku') {
                 $properties['eatNext'] = true;
             }
-        } elseif ($this->nextIsJoshiAndFukushika($next)) {
+        } elseif ($this->nextIsJoshiAndFukushika($nextToken)) {
             $properties['partOfSpeech'] = 'adverb';
 
             $properties['eatNext'] = true;
@@ -83,31 +85,29 @@ class MeishiHijiritsu implements PartOfSpeech
     /**
      * Return true if next POS1 is joshi and next POS2 is fukushika.
      *
-     * @param array $next
-     *
+     * @param array $nextToken
      * @return bool
      */
-    protected function nextIsJoshiAndFukushika($next)
+    protected function nextIsJoshiAndFukushika($nextToken)
     {
-        return $next['partOfSpeech1'] === 'joshi' &&
-            $next['partOfSpeech2'] === 'fukushika';
+        return $nextToken['partOfSpeech1'] === 'joshi' &&
+            $nextToken['partOfSpeech2'] === 'fukushika';
     }
 
     /**
      * Handle keiyoudoushigokan for partOfSpeech3.
      *
      * @param array $properties
-     * @param array $previous
-     * @param array $current
-     * @param array $next
-     *
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    private function keiyoudoushigokan($properties, $previous, $current, $next)
+    private function keiyoudoushigokan($properties, $previousToken, $currentToken, $nextToken)
     {
         $properties['partOfSpeech'] = 'adjective';
 
-        if ($this->nextIsTokushuDaOrRentaika($next)) {
+        if ($this->nextIsTokushuDaOrRentaika($nextToken)) {
             $properties['eatNext'] = true;
         }
 
@@ -118,15 +118,14 @@ class MeishiHijiritsu implements PartOfSpeech
      * Return true if next inflection is tokushuDa and inflection form is
      * taigensetsuzoku or if POS2 is rentaika.
      *
-     * @param array $next
-     *
+     * @param array $nextToken
      * @return bool
      */
-    protected function nextIsTokushuDaOrRentaika($next)
+    protected function nextIsTokushuDaOrRentaika($nextToken)
     {
         return (
-            $next['inflectionType'] === 'tokushuDa' &&
-            $next['inflectionForm'] === 'taigensetsuzoku'
-        ) || $next['partOfSpeech2'] === 'rentaika';
+            $nextToken['inflectionType'] === 'tokushuDa' &&
+            $nextToken['inflectionForm'] === 'taigensetsuzoku'
+        ) || $nextToken['partOfSpeech2'] === 'rentaika';
     }
 }

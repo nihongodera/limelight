@@ -10,21 +10,25 @@ class MeishiSetsubi implements PartOfSpeech
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
-        if ($current['partOfSpeech3'] === 'jinmei') {
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
+        if ($currentToken['partOfSpeech3'] === 'jinmei') {
             $properties['partOfSpeech'] = 'suffix';
-        } elseif ($previous && $previous['partOfSpeech2'] === 'kazu') {
+        } elseif ($previousToken && $previousToken['partOfSpeech2'] === 'kazu') {
             $properties['partOfSpeech'] = 'suffix';
         } else {
-            if ($current['partOfSpeech3'] === 'tokushu' && $current['lemma'] === 'さ') {
+            if ($currentToken['partOfSpeech3'] === 'tokushu' && $currentToken['lemma'] === 'さ') {
                 $properties['updatePOS'] = true;
                 $properties['partOfSpeech'] = 'noun';
             } else {

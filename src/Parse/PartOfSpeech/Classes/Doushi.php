@@ -10,20 +10,24 @@ class Doushi implements PartOfSpeech
      * Handle the parsing request.
      *
      * @param array $properties
-     * @param array $previousWord [previous word]
-     * @param array $previous     [previous token]
-     * @param array $current      [current token]
-     * @param array $next         [next token]
-     *
+     * @param array $previousWord
+     * @param array $previousToken
+     * @param array $currentToken
+     * @param array $nextToken
      * @return array
      */
-    public function handle(array $properties, $previousWord, $previous, array $current, $next)
-    {
+    public function handle(
+        array $properties,
+        $previousWord,
+        $previousToken,
+        array $currentToken,
+        $nextToken
+    ) {
         $properties['partOfSpeech'] = 'verb';
 
-        if ($current['partOfSpeech2'] === 'setsubi') {
+        if ($currentToken['partOfSpeech2'] === 'setsubi') {
             $properties['attachToPrevious'] = true;
-        } elseif ($this->isHijiritsuNotMeireiI($current)) {
+        } elseif ($this->isHijiritsuNotMeireiI($currentToken)) {
             $properties['attachToPrevious'] = true;
         }
 
@@ -33,13 +37,12 @@ class Doushi implements PartOfSpeech
     /**
      * Return true if POS is hijiritsu and inflection is not meireiI.
      *
-     * @param array $current
-     *
+     * @param array $currentToken
      * @return bool
      */
-    protected function isHijiritsuNotMeireiI($current)
+    protected function isHijiritsuNotMeireiI($currentToken)
     {
-        return $current['partOfSpeech2'] === 'hijiritsu' &&
-            $current['inflectionForm'] !== 'meireiI';
+        return $currentToken['partOfSpeech2'] === 'hijiritsu' &&
+            $currentToken['inflectionForm'] !== 'meireiI';
     }
 }

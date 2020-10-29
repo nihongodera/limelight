@@ -65,7 +65,7 @@ class Wapuro extends RomajiConverter
     /**
      * handle conversion request.
      *
-     * @param string        $string
+     * @param string $string
      * @param LimelightWord $word
      *
      * @return string

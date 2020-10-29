@@ -5,7 +5,7 @@ namespace Limelight\Plugins;
 abstract class Plugin
 {
     /**
-     * The original, user inputed text.
+     * The original, user input text.
      *
      * @var string
      */
@@ -36,9 +36,9 @@ abstract class Plugin
      * Construct.
      *
      * @param string $text
-     * @param Node   $node
-     * @param array  $tokens
-     * @param array  $words
+     * @param Node $node
+     * @param array $tokens
+     * @param array $words
      */
     public function __construct($text, $node, $tokens, $words)
     {

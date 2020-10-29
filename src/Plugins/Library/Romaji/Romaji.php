@@ -3,8 +3,8 @@
 namespace Limelight\Plugins\Library\Romaji;
 
 use Limelight\Config\Config;
-use Limelight\Plugins\Plugin;
 use Limelight\Exceptions\PluginErrorException;
+use Limelight\Plugins\Plugin;
 
 class Romaji extends Plugin
 {
@@ -20,8 +20,6 @@ class Romaji extends Plugin
         $romajiString = '';
 
         foreach ($this->words as $word) {
-            $spaces = true;
-
             $hiraganaWord = mb_convert_kana($word->reading, 'c');
 
             $romajiWord = $style->handle($hiraganaWord, $word);
@@ -44,7 +42,6 @@ class Romaji extends Plugin
      * Make decorator class from config value.
      *
      * @throws PluginErrorException
-     *
      * @return RomajiConverter
      */
     private function makeStyleClass()
@@ -55,7 +52,7 @@ class Romaji extends Plugin
 
         $style = $this->underscoreToCamelCase($options['style']);
 
-        $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\'.ucfirst($style);
+        $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\' . ucfirst($style);
 
         if (class_exists($styleClass)) {
             return new $styleClass();
@@ -70,7 +67,6 @@ class Romaji extends Plugin
      * Make an underscored word camel-case.
      *
      * @param string $string
-     *
      * @return string
      */
     public function underscoreToCamelCase($string)
@@ -89,16 +85,13 @@ class Romaji extends Plugin
             $string = substr_replace($string, '', $index, 1);
         }
 
-        $string = str_replace('_', '', $string);
-
-        return $string;
+        return str_replace('_', '', $string);
     }
 
     /**
      * Multibyte safe ucfirst.
      *
      * @param string $string
-     *
      * @return string
      */
     public function uppercaseFirst($string)

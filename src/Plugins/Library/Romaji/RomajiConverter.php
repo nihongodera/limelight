@@ -32,9 +32,8 @@ abstract class RomajiConverter
     /**
      * handle conversion request.
      *
-     * @param string        $string
+     * @param string $string
      * @param LimelightWord $word
-     *
      * @return string
      */
     abstract protected function handle($string, $word);
@@ -42,9 +41,8 @@ abstract class RomajiConverter
     /**
      * Convert string to romaji.
      *
-     * @param string        $string
+     * @param string $string
      * @param LimelightWord $word
-     *
      * @return string
      */
     protected function convert($string, $word)
@@ -118,7 +116,6 @@ abstract class RomajiConverter
      * @param string $current
      * @param string $next
      * @param string $nextNext
-     *
      * @return string
      */
     private function findCombos($current, $next = null, $nextNext = null)
@@ -142,7 +139,6 @@ abstract class RomajiConverter
      * Value is in edible array.
      *
      * @param string $value
-     *
      * @return bool
      */
     private function isEdible($value)
@@ -154,7 +150,6 @@ abstract class RomajiConverter
      * Value is in conversions array.
      *
      * @param string $value
-     *
      * @return bool
      */
     private function canBeRomaji($value)
@@ -166,7 +161,6 @@ abstract class RomajiConverter
      * Get the next char from the next hiragana.
      *
      * @param string $next
-     *
      * @return string
      */
     private function convertSmallTsu($next)
@@ -187,7 +181,6 @@ abstract class RomajiConverter
      *
      * @param string $next
      * @param string $convertedChar
-     *
      * @return string
      */
     private function convertN($next, $convertedChar)
@@ -208,7 +201,6 @@ abstract class RomajiConverter
      *
      * @param string $word
      * @param string $convertedChar
-     *
      * @return bool
      */
     private function particleCanBeConverted($word, $convertedChar)
@@ -220,11 +212,10 @@ abstract class RomajiConverter
     /**
      * Verb can be combined with the previous verb.
      *
-     * @param string        $convertedChar
-     * @param string        $results
+     * @param string $convertedChar
+     * @param string $results
      * @param LimelightWord $word
-     * @param int           $index
-     *
+     * @param int $index
      * @return bool
      */
     private function verbCanBeCombined($convertedChar, $results, $word, $index)
@@ -239,7 +230,6 @@ abstract class RomajiConverter
      *
      * @param string $convertedChar
      * @param string $results
-     *
      * @return bool
      */
     private function equalsPrevious($convertedChar, $results)
@@ -252,7 +242,6 @@ abstract class RomajiConverter
      * The converted char is in the verbCombos array.
      *
      * @param string $convertedChar
-     *
      * @return bool
      */
     private function inComboArray($convertedChar)
@@ -264,8 +253,7 @@ abstract class RomajiConverter
      * The word pronunciation string indicates a long vowel sound.
      *
      * @param LimelightWord $word
-     * @param int           $index
-     *
+     * @param int $index
      * @return bool
      */
     private function hasLongSound($word, $index)
@@ -278,7 +266,6 @@ abstract class RomajiConverter
      *
      * @param string $convertedChar
      * @param string $results
-     *
      * @return string
      */
     private function getConvertedChar($convertedChar, $results)
@@ -293,9 +280,8 @@ abstract class RomajiConverter
     /**
      * Capitalize proper nouns.
      *
-     * @param string        $romaji
+     * @param string $romaji
      * @param LimelightWord $word
-     *
      * @return string
      */
     private function upperCaseNames($romaji, $word)

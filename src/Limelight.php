@@ -16,14 +16,14 @@ class Limelight
     /**
      * Mecab instance.
      *
-     * @var Limelight\Mecab\Mecab
+     * @var Mecab
      */
     private $mecab;
 
     /**
      * Dispatcher for eventing.
      *
-     * @var Limelight\Events\Dispatcher
+     * @var Dispatcher
      */
     private $dispatcher;
 
@@ -63,8 +63,7 @@ class Limelight
      * @param string $text
      * @param array $pluginWhiteList
      * @param bool $suppressEvents
-     *
-     * @return Limelight\Classes\LimelightResults/ InvalidInputException
+     * @return Limelight\Classes\LimelightResults
      */
     public function noParse($text, $pluginWhiteList = ['Romaji'], $suppressEvents = false)
     {
@@ -89,9 +88,7 @@ class Limelight
      */
     public function setConfig($value, $key1, $key2)
     {
-        $config = Config::getInstance();
-
-        return $config->set($value, $key1, $key2);
+        return Config::getInstance()->set($value, $key1, $key2);
     }
 
     /**

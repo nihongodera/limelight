@@ -2,42 +2,42 @@
 
 namespace Limelight\Parse;
 
-use Limelight\Mecab\Mecab;
+use Limelight\Classes\LimelightResults;
 use Limelight\Events\Dispatcher;
 use Limelight\Helpers\PluginHelper;
-use Limelight\Classes\LimelightResults;
+use Limelight\Mecab\Mecab;
 
 class Parser
 {
     use PluginHelper;
 
     /**
-     * @var Limelight\Mecab\Mecab
+     * @var Mecab
      */
     private $mecab;
 
     /**
-     * @var Limelight\Parse\Tokenizer
+     * @var Tokenizer
      */
     private $tokenizer;
 
     /**
-     * @var Limelight\Parse\TokenParser
+     * @var TokenParser
      */
     private $tokenParser;
 
     /**
-     * @var Limelight\Events\Dispatcher
+     * @var Dispatcher
      */
     private $dispatcher;
 
     /**
      * Construct.
      *
-     * @param Mecab       $mecab
-     * @param Tokenizer   $tokenizer
+     * @param Mecab $mecab
+     * @param Tokenizer $tokenizer
      * @param TokenParser $tokenParser
-     * @param Dispatcher  $dispatcher
+     * @param Dispatcher $dispatcher
      */
     public function __construct(
         Mecab $mecab,
@@ -55,7 +55,7 @@ class Parser
      * Handle the parse for given text.
      *
      * @param string $text
-     * @param bool   $runPlugins
+     * @param bool $runPlugins
      *
      * @return LimelightResults
      */
