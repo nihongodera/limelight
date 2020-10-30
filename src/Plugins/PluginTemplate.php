@@ -1,6 +1,6 @@
 <?php
 
-namespace Limelight\Plugins\Plugins;
+namespace Limelight\Plugins;
 
 use Limelight\Plugins\Plugin;
 
