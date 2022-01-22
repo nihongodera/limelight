@@ -44,7 +44,7 @@ class Limelight
      *
      * @param string $text
      * @param bool $runPlugins
-     * @return Limelight\Classes\LimelightResults
+     * @return Classes\LimelightResults
      */
     public function parse($text, $runPlugins = true)
     {
@@ -63,7 +63,7 @@ class Limelight
      * @param string $text
      * @param array $pluginWhiteList
      * @param bool $suppressEvents
-     * @return Limelight\Classes\LimelightResults
+     * @return Classes\LimelightResults
      */
     public function noParse($text, $pluginWhiteList = ['Romaji'], $suppressEvents = false)
     {
