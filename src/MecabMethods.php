@@ -8,7 +8,7 @@ trait MecabMethods
      * MeCab parseToNode method. Returns native Limelight node object.
      *
      * @param string $string
-     * @return Limelight\Mecab\Node
+     * @return Mecab\Node
      */
     public function mecabToNode($string)
     {
