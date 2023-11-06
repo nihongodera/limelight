@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Exceptions;
 
 class InvalidInputException extends LimelightException
@@ -9,12 +11,7 @@ class InvalidInputException extends LimelightException
      */
     protected $message;
 
-    /**
-     * Construct.
-     *
-     * @param string $message
-     */
-    public function __construct($message = 'Invalid input.')
+    public function __construct(string $message = 'Invalid input.')
     {
         $this->message = $message;
 
@@ -23,10 +20,8 @@ class InvalidInputException extends LimelightException
 
     /**
      * How to display error.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->handle();
     }

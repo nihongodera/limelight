@@ -1,46 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Helpers;
 
 trait JapaneseHelpers
 {
     /**
      * Return true if word contains kanji.
-     *
-     * @param string $word
-     * @return bool
      */
-    protected function hasKanji($word)
+    protected function hasKanji(string $word): bool
     {
         $kanjiPattern = '\p{Han}';
 
-        if (mb_ereg($kanjiPattern, $word) === false) {
-            return false;
-        }
-
-        return true;
+        return (bool) mb_ereg($kanjiPattern, $word);
     }
 
     /**
      * Return true if character is katakana.
-     *
-     * @param string $character
-     * @return bool
      */
-    protected function isKatakana($character)
+    protected function isKatakana(string $character): bool
     {
         $kanaPattern = '[ァ-・ヽヾ゛゜ー]';
 
-        return mb_ereg($kanaPattern, $character);
+        return (bool) mb_ereg($kanaPattern, $character);
     }
 
     /**
      * Get character array from string.
-     *
-     * @param string $string
-     * @return array
      */
-    protected function getChars($string)
+    protected function getChars(string $string): array
     {
         return preg_split('//u', $string, -1, PREG_SPLIT_NO_EMPTY);
     }

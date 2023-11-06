@@ -1,21 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Plugins\Furigana;
 
-use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class FuriganaTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    private static $lib;
+    private static array $lib;
 
-    /**
-     * Set Limelight on object.
-     */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -25,7 +20,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_adds_kanji_to_string_for_single_kanji_word()
+    public function it_adds_kanji_to_string_for_single_kanji_word(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -41,7 +36,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_passes_katakana_words_untouched()
+    public function it_passes_katakana_words_untouched(): void
     {
         $results = self::$limelight->parse('テレビ');
 
@@ -57,7 +52,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_passes_hiragana_words_untouched()
+    public function it_passes_hiragana_words_untouched(): void
     {
         $results = self::$limelight->parse('おいしい');
 
@@ -73,7 +68,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_adds_kanji_to_string_for_double_kanji_word()
+    public function it_adds_kanji_to_string_for_double_kanji_word(): void
     {
         $results = self::$limelight->parse('勉強する');
 
@@ -89,7 +84,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_adds_kana_to_string_for_kana_only_word()
+    public function it_adds_kana_to_string_for_kana_only_word(): void
     {
         $results = self::$limelight->parse('おいしい');
 
@@ -105,7 +100,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_kanji_kana_word()
+    public function it_makes_furigana_for_kanji_kana_word(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -121,7 +116,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_kanji_kana_kanji_word()
+    public function it_makes_furigana_for_kanji_kana_kanji_word(): void
     {
         $results = self::$limelight->parse('使い方');
 
@@ -137,7 +132,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_kanji_kanji_word()
+    public function it_makes_furigana_for_kanji_kanji_word(): void
     {
         $results = self::$limelight->parse('健康');
 
@@ -153,7 +148,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_kana_kanji_word()
+    public function it_makes_furigana_for_kana_kanji_word(): void
     {
         $results = self::$limelight->parse('ソ連');
 
@@ -169,7 +164,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_kanji_punc_word()
+    public function it_makes_furigana_for_kanji_punc_word(): void
     {
         $results = self::$limelight->parse('元気？');
 
@@ -185,7 +180,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_1()
+    public function it_makes_furigana_for_word_when_same_hiragana_appears_1(): void
     {
         $results = self::$limelight->parse('中傷し');
 
@@ -201,7 +196,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_2()
+    public function it_makes_furigana_for_word_when_same_hiragana_appears_2(): void
     {
         $results = self::$limelight->parse('少々');
 
@@ -217,7 +212,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_3()
+    public function it_makes_furigana_for_word_when_same_hiragana_appears_3(): void
     {
         $results = self::$limelight->parse('行きたい');
 
@@ -233,7 +228,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_complex_phrase()
+    public function it_makes_furigana_for_complex_phrase(): void
     {
         $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
 
@@ -249,7 +244,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_number_kanji_combos()
+    public function it_makes_furigana_for_number_kanji_combos(): void
     {
         $results = self::$limelight->parse('20日');
 
@@ -265,7 +260,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_furigana_for_complete_article()
+    public function it_makes_furigana_for_complete_article(): void
     {
         $results = self::$limelight->parse(self::$lib['furigana1']);
 
@@ -283,7 +278,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_furigana_off_results_object()
+    public function it_can_get_furigana_off_results_object(): void
     {
         $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
 
@@ -297,7 +292,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_make_furigana_for_half_width_numbers()
+    public function it_doesnt_make_furigana_for_half_width_numbers(): void
     {
         $results = self::$limelight->parse('7時');
 
@@ -309,7 +304,7 @@ class FuriganaTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_make_furigana_for_full_width_numbers()
+    public function it_doesnt_make_furigana_for_full_width_numbers(): void
     {
         $results = self::$limelight->parse('７時');
 

@@ -1,40 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Unit;
 
+use Limelight\Mecab\Mecab;
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 
 class MecabTest extends TestCase
 {
-    /**
-     * @var implements Limelight\Mecab\Mecab
-     */
-    protected static $mecab;
+    protected static Mecab $mecab;
 
     /**
      * Set static mecab on object.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        
+
         $config = Config::getInstance();
 
-        self::$mecab = $config->make('Limelight\Mecab\Mecab');
+        self::$mecab = $config->make(Mecab::class);
     }
 
     /**
      * @test
      */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $config = Config::getInstance();
 
-        $mecab = $config->make('Limelight\Mecab\Mecab');
+        $mecab = $config->make(Mecab::class);
 
-        $this->assertTrue(
-            is_object($mecab),
+        $this->assertIsObject(
+            $mecab,
             'Mecab could not be instantiated.'
         );
     }
@@ -42,7 +42,7 @@ class MecabTest extends TestCase
     /**
      * @test
      */
-    public function it_has_parseToNode_method()
+    public function it_has_parseToNode_method(): void
     {
         $this->assertTrue(
             method_exists(self::$mecab, 'parseToNode'),
@@ -53,7 +53,7 @@ class MecabTest extends TestCase
     /**
      * @test
      */
-    public function it_has_parseToString_method()
+    public function it_has_parseToString_method(): void
     {
         $this->assertTrue(
             method_exists(self::$mecab, 'parseToString'),

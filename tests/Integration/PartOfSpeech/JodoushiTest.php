@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\PartOfSpeech;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_partOfSpeech_to_postposition()
+    public function it_changes_partOfSpeech_to_postposition(): void
     {
         $results = self::$limelight->parse('です');
 
@@ -19,7 +21,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_attach_desu_to_previous_word()
+    public function it_doesnt_attach_desu_to_previous_word(): void
     {
         $results = self::$limelight->parse('大好きです');
 
@@ -35,7 +37,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_desired_inflections_to_previous_word()
+    public function it_attaches_desired_inflections_to_previous_word(): void
     {
         $results = self::$limelight->parse('したくない');
 
@@ -49,7 +51,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_nn_to_previous_word()
+    public function it_attaches_nn_to_previous_word(): void
     {
         $results = self::$limelight->parse('見えません');
 
@@ -63,7 +65,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_u_to_previous_word()
+    public function it_attaches_u_to_previous_word(): void
     {
         $results = self::$limelight->parse('作ろう');
 
@@ -77,7 +79,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_partOfSpeech_to_verb_when_da()
+    public function it_changes_partOfSpeech_to_verb_when_da(): void
     {
         $results = self::$limelight->parse('楽しいだ');
 
@@ -87,7 +89,7 @@ class JodoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_partOfSpeech_to_verb_when_desu()
+    public function it_changes_partOfSpeech_to_verb_when_desu(): void
     {
         $results = self::$limelight->parse('美味しいです');
 

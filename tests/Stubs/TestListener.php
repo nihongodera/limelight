@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Tests\Stubs;
 
-use Limelight\Config\Config;
 use Limelight\Classes\LimelightWord;
 use Limelight\Classes\LimelightResults;
 use Limelight\Events\LimelightListener;
@@ -17,12 +18,13 @@ class TestListener implements LimelightListener
             $message = 'WordWasCreated fired. '.$payload->word();
 
             return file_put_contents($path, $message, FILE_APPEND);
-        } elseif ($payload instanceof LimelightResults) {
+        }
+        if ($payload instanceof LimelightResults) {
             $message = 'ParseWasSuccessful fired.'.$payload->string('word');
 
             return file_put_contents($path, $message, FILE_APPEND);
         }
 
-        return (is_null($payload) ? 'It works!' : "Payload says {$payload}");
+        return is_null($payload) ? 'It works!' : "Payload says {$payload}";
     }
 }

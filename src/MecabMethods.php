@@ -1,50 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight;
+
+use Limelight\Mecab\Node;
+use Mecab\Node as MecabNode;
 
 trait MecabMethods
 {
     /**
      * MeCab parseToNode method. Returns native Limelight node object.
-     *
-     * @param string $string
-     * @return Limelight\Mecab\Node
      */
-    public function mecabToNode($string)
+    public function mecabToNode(string $string): Node
     {
         return $this->mecab->parseToNode($string);
     }
 
     /**
-     * MeCab parseToNode method. Returns raw Mecab node object.
-     *
-     * @param string $string
-     * @return Mecab\Node
+     * MeCab parseToMecabNode method. Returns raw Mecab node object.
      */
-    public function mecabToMecabNode($string)
+    public function mecabToMecabNode(string $string): MecabNode
     {
         return $this->mecab->parseToMecabNode($string);
     }
 
     /**
      * MeCab parseToString method.
-     *
-     * @param string $string
-     * @return string
      */
-    public function mecabToString($string)
+    public function mecabToString(string $string): string
     {
         return $this->mecab->parseToString($string);
-    }
-
-    /**
-     * MeCab split method.
-     *
-     * @param string $string
-     * @return array
-     */
-    public function mecabSplit($string)
-    {
-        return $this->mecab->split($string);
     }
 }

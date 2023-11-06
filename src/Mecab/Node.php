@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Mecab;
 
 use Mecab\Node as MecabNode;
@@ -8,36 +10,26 @@ interface Node
 {
     /**
      * Get the next node.
-     *
-     * @return this
      */
-    public function getNext();
+    public function getNext(): ?Node;
 
     /**
      * Get the node feature.
-     *
-     * @return string
      */
-    public function getFeature();
+    public function getFeature(): string;
 
     /**
      * Get the node surface.
-     *
-     * @return string
      */
-    public function getSurface();
+    public function getSurface(): string;
 
     /**
      * Set the node on the object.
-     *
-     * @param MecabNode $node
      */
-    public function setNode($node);
+    public function setNode(?MecabNode $node): Node;
 
     /**
      * Get node off object.
-     *
-     * @return MecabNode
      */
-    public function getNode();
+    public function getNode(): ?MecabNode;
 }

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration;
 
-use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
+use Limelight\Classes\LimelightWord;
 use Limelight\Classes\LimelightResults;
 
 class CollectionMethodsTest extends TestCase
@@ -11,17 +13,17 @@ class CollectionMethodsTest extends TestCase
     /**
      * chunk()
      */
-    
+
     /**
      * @test
      */
-    public function chunk_chunks_items()
+    public function chunk_chunks_items(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
         $chunks = $results->chunk(3);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $chunks);
+        $this->assertInstanceOf(LimelightResults::class, $chunks);
 
         $chunk1 = $chunks->pull(0);
 
@@ -39,15 +41,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * convert()
      */
-    
+
     /**
      * @test
      */
-    public function convert_converts_array_to_format()
+    public function convert_converts_array_to_format(): void
     {
         $readings = $this->getResults()->pluck('reading')->convert('hiragana')->flatten();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $readings);
+        $this->assertInstanceOf(LimelightResults::class, $readings);
 
         $this->assertEquals(['おんがく', 'を', 'ききます', '。'], $readings->all());
     }
@@ -55,11 +57,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function convert_converts_limelightword_to_format()
+    public function convert_converts_limelightword_to_format(): void
     {
         $converted = $this->getResults()->only(0)->convert('hiragana');
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $converted);
+        $this->assertInstanceOf(LimelightResults::class, $converted);
 
         $word = $converted->first();
 
@@ -71,11 +73,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function convert_converts_nested_arrays_to_format()
+    public function convert_converts_nested_arrays_to_format(): void
     {
         $converted = $this->getResults()->only(0)->convert('katakana');
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $converted);
+        $this->assertInstanceOf(LimelightResults::class, $converted);
 
         $word = $converted->first();
 
@@ -89,7 +91,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function count_returns_count()
+    public function count_returns_count(): void
     {
         $this->assertEquals(4, $this->getResults()->count());
     }
@@ -97,29 +99,29 @@ class CollectionMethodsTest extends TestCase
     /**
      * diff()
      */
-    
+
     /**
      * @test
      */
-    public function diff_finds_items_that_are_different()
+    public function diff_finds_items_that_are_different(): void
     {
         $answer = $this->getResults()->diff($this->getResults()->forget(0));
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽'], $answer->pluck('word')->all());
     }
 
     /**
-     * every()
+     * nth()
      */
-    
+
     /**
      * @test
      */
-    public function every_returns_every_nth_item()
+    public function every_returns_every_nth_item(): void
     {
-        $answer = $this->getResults()->every(2);
+        $answer = $this->getResults()->nth(2);
 
         $this->assertEquals(['音楽', '聴きます'], $answer->pluck('word')->all());
     }
@@ -127,9 +129,9 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function every_returns_every_nth_item_with_offset()
+    public function every_returns_every_nth_item_with_offset(): void
     {
-        $answer = $this->getResults()->every(2, 1);
+        $answer = $this->getResults()->nth(2, 1);
 
         $this->assertEquals(['を', '。'], $answer->pluck('word')->all());
     }
@@ -137,15 +139,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * except()
      */
-    
+
     /**
      * @test
      */
-    public function except_returns_limelightresults_without_items()
+    public function except_returns_limelightresults_without_items(): void
     {
         $answer = $this->getResults()->except(0);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['を', '聴きます', '。'], $answer->pluck('word')->all());
     }
@@ -157,13 +159,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function filter_with_callback_returns_filtered_limelightresults_object()
+    public function filter_with_callback_returns_filtered_limelightresults_object(): void
     {
         $answer = $this->getResults()->filter(function ($item, $key) {
             return $item->get() !== '音楽';
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertCount(3, $answer->all());
     }
@@ -171,7 +173,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function filter_with_null_returns_filtered_limelightresults_object()
+    public function filter_with_null_returns_filtered_limelightresults_object(): void
     {
         $results = $this->getResults()->push([]);
 
@@ -179,7 +181,7 @@ class CollectionMethodsTest extends TestCase
 
         $answer = $results->filter();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertCount(4, $answer->all());
     }
@@ -187,15 +189,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * first()
      */
-    
+
     /**
      * @test
      */
-    public function first_gets_first_word()
+    public function first_gets_first_word(): void
     {
         $first = $this->getResults()->first();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $first);
+        $this->assertInstanceOf(LimelightWord::class, $first);
 
         $this->assertEquals('音楽', $first->word());
     }
@@ -203,13 +205,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function first_gets_first_word_to_pass_truth_test()
+    public function first_gets_first_word_to_pass_truth_test(): void
     {
         $first = $this->getResults()->first(function ($item, $key) {
             return $item->word() === 'を';
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $first);
+        $this->assertInstanceOf(LimelightWord::class, $first);
 
         $this->assertEquals('を', $first->word());
     }
@@ -217,15 +219,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * flatten()
      */
-    
+
     /**
      * @test
      */
-    public function flatten_flattens_item()
+    public function flatten_flattens_item(): void
     {
         $answer = $this->getResults()->pluck('pluginData')->flatten();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals([
             '<ruby><rb>音楽</rb><rp>(</rp><rt>おんがく</rt><rp>)</rp></ruby>',
@@ -235,22 +237,22 @@ class CollectionMethodsTest extends TestCase
             '<ruby><rb>聴</rb><rp>(</rp><rt>き</rt><rp>)</rp></ruby>きます',
             'kikimasu',
             '。',
-            '.'
+            '.',
         ], $answer->all());
     }
 
     /**
      * forget()
      */
-    
+
     /**
      * @test
      */
-    public function forget_forgets_item()
+    public function forget_forgets_item(): void
     {
         $answer = $this->getResults()->forget(1);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', '聴きます', '。'], $answer->pluck('word')->all());
     }
@@ -258,11 +260,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * groupBy()
      */
-    
+
     /**
      * @test
      */
-    public function groupby_groups_items_by_key()
+    public function groupby_groups_items_by_key(): void
     {
         $answer = $this->getResults()->merge($this->getResults())->groupBy('partOfSpeech');
 
@@ -286,9 +288,9 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function groupby_groups_items_using_callback()
+    public function groupby_groups_items_using_callback(): void
     {
-        $answer = $this->getResults()->merge($this->getResults())->groupBy(function ($item, $key) {
+        $answer = $this->getResults()->merge($this->getResults())->groupBy(function ($item) {
             return substr($item->partOfSpeech, 0, 1);
         });
 
@@ -312,11 +314,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * implode()
      */
-    
+
     /**
      * @test
      */
-    public function implode_implodes_and_returns_string()
+    public function implode_implodes_and_returns_string(): void
     {
         $answer = $this->getResults()->implode('word');
 
@@ -326,15 +328,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * intersect()
      */
-    
+
     /**
      * @test
      */
-    public function intersect_intersects_collections()
+    public function intersect_intersects_collections(): void
     {
         $answer = $this->getResults()->intersect($this->getResults()->forget(1)->forget(2));
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', '。'], $answer->pluck('word')->all());
     }
@@ -342,11 +344,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * isEmpty()
      */
-    
+
     /**
      * @test
      */
-    public function isempty_returns_false_if_not_empty()
+    public function isempty_returns_false_if_not_empty(): void
     {
         $empty = $this->getResults()->isEmpty();
 
@@ -356,7 +358,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function isempty_returns_true_if_empty()
+    public function isempty_returns_true_if_empty(): void
     {
         $empty = self::$limelight->parse('')->isEmpty();
 
@@ -366,11 +368,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * keys()
      */
-    
+
     /**
      * @test
      */
-    public function keys_returns_keys()
+    public function keys_returns_keys(): void
     {
         $keys = $this->getResults()->keys();
 
@@ -380,15 +382,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * last()
      */
-    
+
     /**
      * @test
      */
-    public function last_gets_last_word()
+    public function last_gets_last_word(): void
     {
         $last = $this->getResults()->last();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $last);
+        $this->assertInstanceOf(LimelightWord::class, $last);
 
         $this->assertEquals('。', $last->word());
     }
@@ -396,13 +398,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function last_gets_last_word_to_pass_truth_test()
+    public function last_gets_last_word_to_pass_truth_test(): void
     {
         $last = $this->getResults()->last(function ($item, $key) {
             return $item->word() === 'を';
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $last);
+        $this->assertInstanceOf(LimelightWord::class, $last);
 
         $this->assertEquals('を', $last->word());
     }
@@ -414,14 +416,14 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function map_returns_mapped_limelightresults_object()
+    public function map_returns_mapped_limelightresults_object(): void
     {
 
-        $answer = $this->getResults()->map(function ($item, $key) {
+        $answer = $this->getResults()->map(function ($item) {
             return $item->get();
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $answer->all());
     }
@@ -429,11 +431,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * merge()
      */
-    
+
     /**
      * @test
      */
-    public function merge_merges_two_collections()
+    public function merge_merges_two_collections(): void
     {
         $results1 = $this->getResults();
 
@@ -441,7 +443,7 @@ class CollectionMethodsTest extends TestCase
 
         $merged = $results1->merge($results2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $merged);
+        $this->assertInstanceOf(LimelightResults::class, $merged);
 
         $this->assertEquals(['音楽', 'を', '聴きます', '。', '学校', 'に', '行きます', '。'], $merged->pluck('word')->all());
     }
@@ -449,15 +451,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * only()
      */
-    
+
     /**
      * @test
      */
-    public function only_gets_values_only_for_specified_keys()
+    public function only_gets_values_only_for_specified_keys(): void
     {
         $answer = $this->getResults()->only(2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals('聴きます', $answer->first()->word);
     }
@@ -465,15 +467,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * pluck()
      */
-    
+
     /**
      * @test
      */
-    public function pluck_plucks_values_for_key()
+    public function pluck_plucks_values_for_key(): void
     {
         $words = $this->getResults()->pluck('word');
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $words);
+        $this->assertInstanceOf(LimelightResults::class, $words);
 
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $words->all());
     }
@@ -481,15 +483,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * pop()
      */
-    
+
     /**
      * @test
      */
-    public function pop_pops()
+    public function pop_pops(): void
     {
         $answer = $this->getResults()->pop();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $answer);
+        $this->assertInstanceOf(LimelightWord::class, $answer);
 
         $this->assertEquals('。', $answer->word);
     }
@@ -497,17 +499,17 @@ class CollectionMethodsTest extends TestCase
     /**
      * prepend()
      */
-    
+
     /**
      * @test
      */
-    public function prepend_puts_item_at_front_of_items()
+    public function prepend_puts_item_at_front_of_items(): void
     {
         $word = $this->getResults()->first();
 
         $answer = $this->getResults()->prepend($word);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', '音楽', 'を', '聴きます', '。'], $answer->pluck('word')->all());
     }
@@ -515,17 +517,17 @@ class CollectionMethodsTest extends TestCase
     /**
      * pull()
      */
-    
+
     /**
      * @test
      */
-    public function pull_removes_word_by_key()
+    public function pull_removes_word_by_key(): void
     {
         $results = $this->getResults();
 
         $answer = $results->pull(0);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $answer);
+        $this->assertInstanceOf(LimelightWord::class, $answer);
 
         $this->assertEquals('音楽', $answer->word);
 
@@ -535,11 +537,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * push()
      */
-    
+
     /**
      * @test
      */
-    public function push_pushes_new_item_onto_limelightresults()
+    public function push_pushes_new_item_onto_limelightresults(): void
     {
         $results = $this->getResults();
 
@@ -553,13 +555,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * reject()
      */
-    
+
     /**
      * @test
      */
-    public function reject_rejects_items_that_return_true_in_callback()
+    public function reject_rejects_items_that_return_true_in_callback(): void
     {
-        $answer = $this->getResults()->reject(function ($value, $key) {
+        $answer = $this->getResults()->reject(function ($value) {
             return $value->partOfSpeech !== 'verb';
         });
 
@@ -569,11 +571,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * shift()
      */
-    
+
     /**
      * @test
      */
-    public function shift_removes_and_returns_first_item()
+    public function shift_removes_and_returns_first_item(): void
     {
         $results = $this->getResults();
 
@@ -587,17 +589,17 @@ class CollectionMethodsTest extends TestCase
     /**
      * slice()
      */
-    
+
     /**
      * @test
      */
-    public function slice_slices_array_at_given_index()
+    public function slice_slices_array_at_given_index(): void
     {
         $results = $this->getResults();
 
         $answer = $results->slice(2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
 
@@ -607,13 +609,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function slice_limits_size_of_return()
+    public function slice_limits_size_of_return(): void
     {
         $results = $this->getResults();
 
         $answer = $results->slice(2, 1);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['聴きます'], $answer->pluck('word')->all());
     }
@@ -621,17 +623,17 @@ class CollectionMethodsTest extends TestCase
     /**
      * splice()
      */
-    
+
     /**
      * @test
      */
-    public function splice_splices_at_given_index()
+    public function splice_splices_at_given_index(): void
     {
         $results = $this->getResults();
 
         $answer = $results->splice(2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', 'を'], $results->pluck('word')->all());
 
@@ -641,13 +643,13 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function splice_limits_size_of_return()
+    public function splice_limits_size_of_return(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
         $answer = $results->splice(2, 2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。'], $results->pluck('word')->all());
 
@@ -657,15 +659,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function splice_replaces_items()
+    public function splice_replaces_items(): void
     {
         $results = $this->getResults();
 
-         $answer = $results->splice(2, 1, $this->getResults()->all());
+        $answer = $results->splice(2, 1, $this->getResults()->all());
 
-         $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
-         $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。', '。'], $results->pluck('word')->all());
+        $this->assertEquals(['音楽', 'を', '音楽', 'を', '聴きます', '。', '。'], $results->pluck('word')->all());
     }
 
     /**
@@ -675,11 +677,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function take_takes_items_from_the_front()
+    public function take_takes_items_from_the_front(): void
     {
         $answer = $this->getResults()->take(2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽', 'を'], $answer->pluck('word')->all());
     }
@@ -687,11 +689,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function take_takes_items_from_the_back()
+    public function take_takes_items_from_the_back(): void
     {
         $answer = $this->getResults()->take(-2);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
     }
@@ -699,11 +701,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * toArray()
      */
-    
+
     /**
      * @test
      */
-    public function toarray_returns_array_with_public_properties()
+    public function toarray_returns_array_with_public_properties(): void
     {
         $answer = $this->getResults()->toArray();
 
@@ -731,11 +733,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * toJson()
      */
-    
+
     /**
      * @test
      */
-    public function tojson_return_json_with_public_properties()
+    public function tojson_return_json_with_public_properties(): void
     {
         $json = $this->getResults()->toJson();
 
@@ -745,33 +747,35 @@ class CollectionMethodsTest extends TestCase
 
         $this->assertTrue(is_array($array));
 
-        $this->assertObjectHasAttribute('rawMecab', $array[0]);
+        $this->assertIsObject($array[0]);
 
-        $this->assertObjectHasAttribute('word', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'rawMecab'));
 
-        $this->assertObjectHasAttribute('lemma', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'word'));
 
-        $this->assertObjectHasAttribute('reading', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'lemma'));
 
-        $this->assertObjectHasAttribute('pronunciation', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'reading'));
 
-        $this->assertObjectHasAttribute('partOfSpeech', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'pronunciation'));
 
-        $this->assertObjectHasAttribute('grammar', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'partOfSpeech'));
 
-        $this->assertObjectHasAttribute('parsed', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'grammar'));
 
-        $this->assertObjectHasAttribute('pluginData', $array[0]);
+        $this->assertTrue(property_exists($array[0], 'parsed'));
+
+        $this->assertTrue(property_exists($array[0], 'pluginData'));
     }
 
     /**
      * transform()
      */
-    
+
     /**
      * @test
      */
-    public function transform_transforms_items()
+    public function transform_transforms_items(): void
     {
         $results = $this->getResults();
 
@@ -779,7 +783,7 @@ class CollectionMethodsTest extends TestCase
             return $item->word;
         });
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $results);
+        $this->assertInstanceOf(LimelightResults::class, $results);
 
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $results->all());
     }
@@ -787,11 +791,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * unique()
      */
-    
+
     /**
      * @test
      */
-    public function unique_returns_unique_items()
+    public function unique_returns_unique_items(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
@@ -805,7 +809,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function unique_return_unique_items_for_given_key()
+    public function unique_return_unique_items_for_given_key(): void
     {
         $results = $this->getResults()->merge(self::$limelight->parse('行く'));
 
@@ -819,7 +823,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function unique_returns_unique_for_callback()
+    public function unique_returns_unique_for_callback(): void
     {
         $results = self::$limelight->parse('行く 行きます 行った 帰る 買う');
 
@@ -839,7 +843,7 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function values_resets_values()
+    public function values_resets_values(): void
     {
         $modified = $this->getResults()->forget(1);
 
@@ -857,11 +861,11 @@ class CollectionMethodsTest extends TestCase
     /**
      * @test
      */
-    public function where_finds_items_meeting_conditions()
+    public function where_finds_items_meeting_conditions(): void
     {
         $answer = $this->getResults()->where('word', '音楽');
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $this->assertEquals(['音楽'], $answer->pluck('word')->all());
     }
@@ -869,15 +873,15 @@ class CollectionMethodsTest extends TestCase
     /**
      * zip()
      */
-    
+
     /**
      * @test
      */
-    public function zip_zips_collections_together()
+    public function zip_zips_collections_together(): void
     {
         $answer = $this->getResults()->zip([1, 2, 3, 4]);
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightResults', $answer);
+        $this->assertInstanceOf(LimelightResults::class, $answer);
 
         $all = $answer->all();
 
@@ -892,10 +896,8 @@ class CollectionMethodsTest extends TestCase
 
     /**
      * Parse test phrase and return LimelightResults.
-     *
-     * @return LimelightResults
      */
-    protected function getResults()
+    protected function getResults(): LimelightResults
     {
         return self::$limelight->parse('音楽を聴きます。');
     }

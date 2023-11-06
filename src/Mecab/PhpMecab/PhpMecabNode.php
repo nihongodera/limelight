@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Mecab\PhpMecab;
 
 use Limelight\Mecab\Node;
@@ -7,16 +9,8 @@ use Mecab\Node as MecabNode;
 
 class PhpMecabNode implements Node
 {
-    /**
-     * @var MecabNode
-     */
-    private $node;
+    private ?MecabNode $node;
 
-    /**
-     * Construct.
-     *
-     * @param MecabNode $node
-     */
     public function __construct(MecabNode $node)
     {
         $this->node = $node;
@@ -24,13 +18,11 @@ class PhpMecabNode implements Node
 
     /**
      * Get the next node.
-     *
-     * @return this
      */
-    public function getNext()
+    public function getNext(): ?Node
     {
         if (is_null($this->node)) {
-            return;
+            return null;
         }
 
         $node = $this->node->getNext();
@@ -42,30 +34,32 @@ class PhpMecabNode implements Node
 
     /**
      * Get the node feature.
-     *
-     * @return string
      */
-    public function getFeature()
+    public function getFeature(): string
     {
+        if (is_null($this->node)) {
+            throw new \RuntimeException('Mecab node is null');
+        }
+
         return $this->node->getFeature();
     }
 
     /**
      * Get the node surface.
-     *
-     * @return string
      */
-    public function getSurface()
+    public function getSurface(): string
     {
+        if (is_null($this->node)) {
+            throw new \RuntimeException('Mecab node is null');
+        }
+
         return $this->node->getSurface();
     }
 
     /**
      * Set the node on the object.
-     *
-     * @param MecabNode $node
      */
-    public function setNode($node)
+    public function setNode(?MecabNode $node): Node
     {
         $this->node = $node;
 
@@ -74,10 +68,8 @@ class PhpMecabNode implements Node
 
     /**
      * Get node off object.
-     *
-     * @return MecabNode
      */
-    public function getNode()
+    public function getNode(): ?MecabNode
     {
         return $this->node;
     }

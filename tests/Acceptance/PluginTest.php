@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Acceptance;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class PluginTest extends TestCase
     /**
      * @test
      */
-    public function it_runs_plugins_by_default()
+    public function it_runs_plugins_by_default(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -25,12 +27,12 @@ class PluginTest extends TestCase
     /**
      * @test
      */
-    public function it_turns_plugins_off_if_false_is_passed_as_second_parameter()
+    public function it_turns_plugins_off_if_false_is_passed_as_second_parameter(): void
     {
         $results = self::$limelight->parse('燃える', false);
 
         $furigana = $results->furigana();
 
-        $this->assertEquals('', $furigana);
+        $this->assertNull($furigana);
     }
 }

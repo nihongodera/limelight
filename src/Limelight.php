@@ -1,52 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight;
 
-use Limelight\Config\Config;
-use Limelight\Events\Dispatcher;
-use Limelight\Parse\NoParser;
+use Limelight\Mecab\Mecab;
 use Limelight\Parse\Parser;
+use Limelight\Config\Config;
+use Limelight\Parse\NoParser;
 use Limelight\Parse\Tokenizer;
+use Limelight\Events\Dispatcher;
 use Limelight\Parse\TokenParser;
+use Limelight\Classes\LimelightResults;
 
 class Limelight
 {
     use MecabMethods;
 
-    /**
-     * Mecab instance.
-     *
-     * @var Mecab
-     */
-    private $mecab;
+    private Mecab $mecab;
 
     /**
      * Dispatcher for eventing.
-     *
-     * @var Dispatcher
      */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * Boot.
-     */
     public function __construct()
     {
         $config = Config::getInstance();
 
         $this->dispatcher = new Dispatcher($config->get('listeners'));
 
-        $this->mecab = $config->make('Limelight\Mecab\Mecab');
+        $this->mecab = $config->make(Mecab::class);
     }
 
     /**
      * Parse the given text.
-     *
-     * @param string $text
-     * @param bool $runPlugins
-     * @return Limelight\Classes\LimelightResults
      */
-    public function parse($text, $runPlugins = true)
+    public function parse(string $text, bool $runPlugins = true): LimelightResults
     {
         $tokenizer = new Tokenizer();
 
@@ -59,13 +49,8 @@ class Limelight
 
     /**
      * Run given text through plugins without mecab parsing. Kanji input will fail.
-     *
-     * @param string $text
-     * @param array $pluginWhiteList
-     * @param bool $suppressEvents
-     * @return Limelight\Classes\LimelightResults
      */
-    public function noParse($text, $pluginWhiteList = ['Romaji'], $suppressEvents = false)
+    public function noParse(string $text, array $pluginWhiteList = ['Romaji'], bool $suppressEvents = false): LimelightResults
     {
         $this->dispatcher->toggleEvents($suppressEvents);
 
@@ -80,23 +65,16 @@ class Limelight
 
     /**
      * Dynamically set config values. Could be dangerous, be careful.
-     *
-     * @param string $value
-     * @param string $key1
-     * @param string $key1
-     * @return bool
      */
-    public function setConfig($value, $key1, $key2)
+    public function setConfig(string $value, string $key1, string $key2): bool
     {
         return Config::getInstance()->set($value, $key1, $key2);
     }
 
     /**
      * Get the attached dispatcher instance.
-     *
-     * @return Dispatcher
      */
-    public function dispatcher()
+    public function dispatcher(): Dispatcher
     {
         return $this->dispatcher;
     }

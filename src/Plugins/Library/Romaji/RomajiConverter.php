@@ -1,22 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins\Library\Romaji;
+
+use Limelight\Classes\LimelightWord;
 
 abstract class RomajiConverter
 {
     /**
      * Number of index values to eat.
-     *
-     * @var int
      */
-    protected $eat;
+    protected int $eat;
 
     /**
      * Can be combined with other characters.
-     *
-     * @var array
      */
-    protected $edible = [
+    protected array $edible = [
         'ゃ',
         'ゅ',
         'ょ',
@@ -30,22 +30,14 @@ abstract class RomajiConverter
     ];
 
     /**
-     * handle conversion request.
-     *
-     * @param string $string
-     * @param LimelightWord $word
-     * @return string
+     * Handle conversion request.
      */
-    abstract protected function handle($string, $word);
+    abstract protected function handle(string $string, LimelightWord $word): string;
 
     /**
      * Convert string to romaji.
-     *
-     * @param string $string
-     * @param LimelightWord $word
-     * @return string
      */
-    protected function convert($string, $word)
+    protected function convert(string $string, LimelightWord $word): string
     {
         $this->eat = 0;
 
@@ -55,8 +47,8 @@ abstract class RomajiConverter
 
         $results = '';
 
-        for ($index = 0; $index < $count; ++$index) {
-            $index = $index + $this->eat;
+        for ($index = 0; $index < $count; $index++) {
+            $index += $this->eat;
 
             if ($index >= $count) {
                 break;
@@ -66,13 +58,13 @@ abstract class RomajiConverter
 
             $char = $characters[$index];
 
-            $next = (isset($characters[$index + 1]) ? $characters[$index + 1] : null);
+            $next = $characters[$index + 1] ?? null;
 
-            $nextNext = (isset($characters[$index + 2]) ? $characters[$index + 2] : null);
+            $nextNext = $characters[$index + 2] ?? null;
 
             $charToConvert = $this->findCombos($char, $next, $nextNext);
 
-            if ($char === 'っ' && $this->canBeRomaji($next)) {
+            if ($char === 'っ' && $next && $this->canBeRomaji($next)) {
                 $results .= $this->convertSmallTsu($next);
 
                 continue;
@@ -112,23 +104,16 @@ abstract class RomajiConverter
 
     /**
      * Find combos through recursion.
-     *
-     * @param string $current
-     * @param string $next
-     * @param string $nextNext
-     * @return string
      */
-    private function findCombos($current, $next = null, $nextNext = null)
+    private function findCombos(string $current, ?string $next, ?string $nextNext = null): string
     {
-        if ($this->isEdible($next)) {
+        if ($next && $this->isEdible($next)) {
             $combo = $current.$next;
 
             if ($this->canBeRomaji($combo)) {
-                $current = $combo;
-
                 $current = $this->findCombos($combo, $nextNext);
 
-                $this->eat += 1;
+                $this->eat++;
             }
         }
 
@@ -137,88 +122,61 @@ abstract class RomajiConverter
 
     /**
      * Value is in edible array.
-     *
-     * @param string $value
-     * @return bool
      */
-    private function isEdible($value)
+    private function isEdible(string $value): bool
     {
-        return in_array($value, $this->edible);
+        return in_array($value, $this->edible, true);
     }
 
     /**
      * Value is in conversions array.
-     *
-     * @param string $value
-     * @return bool
      */
-    private function canBeRomaji($value)
+    private function canBeRomaji(string $value): bool
     {
-        return in_array($value, array_keys($this->conversions));
+        return array_key_exists($value, $this->conversions);
     }
 
     /**
      * Get the next char from the next hiragana.
-     *
-     * @param string $next
-     * @return string
      */
-    private function convertSmallTsu($next)
+    private function convertSmallTsu(string $next): string
     {
         $nextRomaji = $this->conversions[$next];
 
         $nextChar = preg_split('//u', $nextRomaji, -1, PREG_SPLIT_NO_EMPTY)[0];
 
-        if (in_array($nextChar, array_keys($this->tsuConversions))) {
-            return $this->tsuConversions[$nextChar];
-        }
-
-        return $nextChar;
+        return $this->tsuConversions[$nextChar] ?? $nextChar;
     }
 
     /**
      * Convert n if possible.
-     *
-     * @param string $next
-     * @param string $convertedChar
-     * @return string
      */
-    private function convertN($next, $convertedChar)
+    private function convertN(?string $next, string $convertedChar): string
     {
-        $nextRomaji = (isset($this->conversions[$next]) ? $this->conversions[$next] : null);
+        $nextRomaji = $this->conversions[$next] ?? null;
+
+        if (is_null($nextRomaji)) {
+            return $convertedChar;
+        }
 
         $nextChar = substr($nextRomaji, 0, 1);
 
-        if (in_array($nextChar, array_keys($this->nConversions))) {
-            return $this->nConversions[$nextChar];
-        }
-
-        return $convertedChar;
+        return $this->nConversions[$nextChar] ?? $convertedChar;
     }
 
     /**
      * Char is particle and in particle conversions array.
-     *
-     * @param string $word
-     * @param string $convertedChar
-     * @return bool
      */
-    private function particleCanBeConverted($word, $convertedChar)
+    private function particleCanBeConverted(LimelightWord $word, string $convertedChar): bool
     {
         return $word->partOfSpeech === 'postposition' &&
-            in_array($convertedChar, array_keys($this->particleConversions));
+            array_key_exists($convertedChar, $this->particleConversions);
     }
 
     /**
      * Verb can be combined with the previous verb.
-     *
-     * @param string $convertedChar
-     * @param string $results
-     * @param LimelightWord $word
-     * @param int $index
-     * @return bool
      */
-    private function verbCanBeCombined($convertedChar, $results, $word, $index)
+    private function verbCanBeCombined(string $convertedChar, string $results, LimelightWord $word, int $index): bool
     {
         return $this->equalsPrevious($convertedChar, $results) &&
             $this->inComboArray($convertedChar) &&
@@ -227,12 +185,8 @@ abstract class RomajiConverter
 
     /**
      * Char equals the last char on the results string.
-     *
-     * @param string $convertedChar
-     * @param string $results
-     * @return bool
      */
-    private function equalsPrevious($convertedChar, $results)
+    private function equalsPrevious(string $convertedChar, string $results): bool
     {
         return $convertedChar === substr($results, -1) ||
             ($convertedChar === 'u' && substr($results, -1) === 'o');
@@ -240,35 +194,24 @@ abstract class RomajiConverter
 
     /**
      * The converted char is in the verbCombos array.
-     *
-     * @param string $convertedChar
-     * @return bool
      */
-    private function inComboArray($convertedChar)
+    private function inComboArray(string $convertedChar): bool
     {
-        return in_array($convertedChar, array_keys($this->verbCombos));
+        return array_key_exists($convertedChar, $this->verbCombos);
     }
 
     /**
      * The word pronunciation string indicates a long vowel sound.
-     *
-     * @param LimelightWord $word
-     * @param int $index
-     * @return bool
      */
-    private function hasLongSound($word, $index)
+    private function hasLongSound(LimelightWord $word, int $index): bool
     {
         return mb_substr($word->pronunciation, $index, 1) === 'ー';
     }
 
     /**
      * Get new char from verbCombos array.
-     *
-     * @param string $convertedChar
-     * @param string $results
-     * @return string
      */
-    private function getConvertedChar($convertedChar, $results)
+    private function getConvertedChar(string $convertedChar, string $results): string
     {
         if ($convertedChar === 'u' && substr($results, -1) === 'o') {
             return $this->verbCombos['o'];
@@ -279,12 +222,8 @@ abstract class RomajiConverter
 
     /**
      * Capitalize proper nouns.
-     *
-     * @param string $romaji
-     * @param LimelightWord $word
-     * @return string
      */
-    private function upperCaseNames($romaji, $word)
+    private function upperCaseNames(string $romaji, LimelightWord $word): string
     {
         if ($word->partOfSpeech === 'proper noun') {
             return mb_convert_case($romaji, MB_CASE_TITLE, 'UTF-8');

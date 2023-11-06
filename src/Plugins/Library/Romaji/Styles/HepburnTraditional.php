@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins\Library\Romaji\Styles;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
 class HepburnTraditional extends RomajiConverter
 {
-    /**
-     * Romaji library.
-     *
-     * @var array
-     */
-    protected $conversions;
+    protected array $conversions;
 
     /**
      * Conversions for 'n'.
-     *
-     * @var array
      */
-    protected $nConversions = [
+    protected array $nConversions = [
         'b' => 'm',
         'm' => 'm',
         'p' => 'm',
@@ -32,50 +28,36 @@ class HepburnTraditional extends RomajiConverter
 
     /**
      * Conversions for particles.
-     *
-     * @var array
      */
-    protected $particleConversions = [
+    protected array $particleConversions = [
         'ha' => 'wa',
         'he' => 'e',
     ];
 
     /**
      * Conversions for small tsu.
-     *
-     * @var array
      */
-    protected $tsuConversions = [
+    protected array $tsuConversions = [
         'c' => 't',
     ];
 
     /**
      * Acceptable verb combinations.
-     *
-     * @var array
      */
-    protected $verbCombos = [
+    protected array $verbCombos = [
         'u' => 'ū',
         'o' => 'ō',
     ];
 
-    /**
-     * Construct.
-     */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__) . '/Lib/Hepburn.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/Hepburn.php';
     }
 
     /**
-     * handle conversion request.
-     *
-     * @param string $string
-     * @param LimelightWord $word
-     *
-     * @return string
+     * Handle conversion request.
      */
-    public function handle($string, $word)
+    public function handle(string $string, LimelightWord $word): string
     {
         return $this->convert($string, $word);
     }

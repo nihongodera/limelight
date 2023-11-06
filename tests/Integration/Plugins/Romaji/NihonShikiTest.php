@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
 use Limelight\Tests\TestCase;
@@ -7,25 +9,22 @@ use Limelight\Plugins\Library\Romaji\Styles\NihonShiki;
 
 class NihonShikiTest extends TestCase
 {
-    /**
-     * @var Limelight\Plugins\Library\Romaji\Styles\NihonShiki
-     */
-    protected static $nihon;
+    protected static NihonShiki $nihon;
 
     /**
      * Set static nihon on object.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        
+
         self::$nihon = new NihonShiki();
     }
 
     /**
      * @test
      */
-    public function it_converts_simple_word_to_romaji()
+    public function it_converts_simple_word_to_romaji(): void
     {
         $results = self::$limelight->parse('行きます');
 
@@ -37,7 +36,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_nn_word_to_romaji()
+    public function it_converts_nn_word_to_romaji(): void
     {
         $results = self::$limelight->parse('参加');
 
@@ -49,7 +48,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_simple_double_vowel_word_to_romaji()
+    public function it_converts_simple_double_vowel_word_to_romaji(): void
     {
         $results = self::$limelight->parse('お兄さん');
 
@@ -61,7 +60,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_sho_to_romaji()
+    public function it_converts_sho_to_romaji(): void
     {
         $results = self::$limelight->parse('初夏');
 
@@ -73,7 +72,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_long_o_to_romaji()
+    public function it_converts_long_o_to_romaji(): void
     {
         $results = self::$limelight->parse('証券');
 
@@ -85,7 +84,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_kyou_to_romaji()
+    public function it_converts_kyou_to_romaji(): void
     {
         $results = self::$limelight->parse('今日');
 
@@ -97,7 +96,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_multiple_words_to_romaji()
+    public function it_converts_multiple_words_to_romaji(): void
     {
         $results = self::$limelight->parse('福岡に住んでいます。');
 
@@ -109,7 +108,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_k_to_romaji()
+    public function it_converts_double_k_to_romaji(): void
     {
         $results = self::$limelight->parse('結果');
 
@@ -121,7 +120,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_c_to_romaji()
+    public function it_converts_double_c_to_romaji(): void
     {
         $results = self::$limelight->parse('抹茶');
 
@@ -133,7 +132,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_nm_to_mm()
+    public function it_converts_nm_to_mm(): void
     {
         $results = self::$limelight->parse('群馬');
 
@@ -145,7 +144,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_n_vowel_to_n_dash()
+    public function it_converts_n_vowel_to_n_dash(): void
     {
         $results = self::$limelight->parse('簡易');
 
@@ -157,7 +156,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_long_vowels_not_listed()
+    public function it_doesnt_convert_long_vowels_not_listed(): void
     {
         $results = self::$limelight->parse('お婆さん');
 
@@ -169,7 +168,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_ha_to_wa()
+    public function it_converts_ha_to_wa(): void
     {
         $results = self::$limelight->parse('は');
 
@@ -181,7 +180,7 @@ class NihonShikiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_he_to_e()
+    public function it_converts_he_to_e(): void
     {
         $results = self::$limelight->parse('へ');
 
