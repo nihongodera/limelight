@@ -1,58 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Helpers;
 
 use Limelight\Classes\Collection;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Contracts\Arrayable;
 
+/**
+ * Methods in this trait adapted from Laravel Arr class.
+ *
+ * @link https://github.com/illuminate/collections/blob/master/Arr.php
+ */
 trait Arr
 {
     /**
-     * Methods in this trait adapted from Laravel Arr class.
-     * https://github.com/illuminate/support/blob/master/Arr.php.
-     */
-
-    /**
      * Determine whether the given value is array accessible.
-     *
-     * @param mixed $value
-     * @return bool
      */
-    public function arrAccessible($value)
+    public function arrAccessible($value): bool
     {
-        return is_array($value) || $value instanceof ArrayAccess;
+        return is_array($value) || $value instanceof \ArrayAccess;
     }
 
     /**
      * Collapse an array of arrays into a single array.
-     *
-     * @param array $array
-     * @return array
      */
-    public function arrCollapse($array)
+    public function arrCollapse(array $array): array
     {
         $results = [];
 
         foreach ($array as $values) {
-            if ($values instanceof LimelightResults) {
+            if ($values instanceof Collection) {
                 $values = $values->all();
             } elseif (!is_array($values)) {
                 continue;
             }
 
-            $results = array_merge($results, $values);
+            $results[] = $values;
         }
 
-        return $results;
+        return array_merge([], ...$results);
     }
 
     /**
-     * Get all of the given array except for a specified array of items.
+     * Get all of the given array except for a specified array of keys.
      *
-     * @param array $array
-     * @param array|string $keys
-     * @return array
+     * @param array|string|int|float $keys
      */
-    public function arrExcept($array, $keys)
+    public function arrExcept(array $array, $keys): array
     {
         $this->arrForget($array, $keys);
 
@@ -63,13 +59,16 @@ trait Arr
      * Determine if the given key exists in the provided array.
      *
      * @param \ArrayAccess|array $array
-     * @param string|int $key
-     * @return bool
+     * @param string|int|float   $key
      */
-    public function arrExists($array, $key)
+    public function arrExists($array, $key): bool
     {
-        if ($array instanceof ArrayAccess) {
+        if ($array instanceof \ArrayAccess) {
             return $array->offsetExists($key);
+        }
+
+        if (is_float($key)) {
+            $key = (string) $key;
         }
 
         return array_key_exists($key, $array);
@@ -77,53 +76,50 @@ trait Arr
 
     /**
      * Return the first element in an array passing a given truth test.
-     *
-     * @param array $array
-     * @param callable|null $callback
-     * @param mixed $default
-     * @return mixed
      */
-    protected function arrFirst($array, callable $callback = null, $default = null)
+    protected function arrFirst(array $array, ?callable $callback = null, $default = null)
     {
         if (is_null($callback)) {
-            return empty($array) ? value($default) : reset($array);
+            if (empty($array)) {
+                return $this->value($default);
+            }
+
+            foreach ($array as $item) {
+                return $item;
+            }
+
+            return $this->value($default);
         }
         foreach ($array as $key => $value) {
-            if (call_user_func($callback, $value, $key)) {
+            if ($callback($value, $key)) {
                 return $value;
             }
         }
 
-        return value($default);
+        return $this->value($default);
     }
 
     /**
      * Flatten a multi-dimensional array into a single level.
-     *
-     * @param array $array
-     * @param int $depth
-     * @return array
      */
-    public function arrFlatten($array, $depth = INF)
+    public function arrFlatten(array $array, int $depth = PHP_INT_MAX): array
     {
         $result = [];
 
         foreach ($array as $item) {
             $item = $item instanceof Collection ? $item->all() : $item;
 
-            if (is_array($item)) {
-                if ($depth === 1) {
-                    $result = array_merge($result, $item);
+            if (!is_array($item)) {
+                $result[] = $item;
+            } else {
+                $values = $depth === 1
+                    ? array_values($item)
+                    : $this->arrFlatten($item, $depth - 1);
 
-                    continue;
+                foreach ($values as $value) {
+                    $result[] = $value;
                 }
-
-                $result = array_merge($result, $this->arrFlatten($item, $depth - 1));
-
-                continue;
             }
-
-            $result[] = $item;
         }
 
         return $result;
@@ -132,10 +128,9 @@ trait Arr
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param array $array
-     * @param array|string $keys
+     * @param array|string|int|float $keys
      */
-    public function arrForget(&$array, $keys)
+    public function arrForget(array &$array, $keys): void
     {
         $original = &$array;
 
@@ -159,7 +154,7 @@ trait Arr
             while (count($parts) > 1) {
                 $part = array_shift($parts);
 
-                if (isset($array[$part]) && is_array($array[$part])) {
+                if (isset($array[$part]) && $this->arrAccessible($array[$part])) {
                     $array = &$array[$part];
                 } else {
                     continue 2;
@@ -174,14 +169,12 @@ trait Arr
      * Get an item from an array using "dot" notation.
      *
      * @param \ArrayAccess|array $array
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
+     * @param string|int|null    $key
      */
     public function arrGet($array, $key, $default = null)
     {
         if (!$this->arrAccessible($array)) {
-            return value($default);
+            return $this->value($default);
         }
 
         if (is_null($key)) {
@@ -190,6 +183,10 @@ trait Arr
 
         if ($this->arrExists($array, $key)) {
             return $array[$key];
+        }
+
+        if (!str_contains($key, '.')) {
+            return $array[$key] ?? $this->value($default);
         }
 
         foreach (explode('.', $key) as $segment) {
@@ -205,16 +202,11 @@ trait Arr
 
     /**
      * Return the last element in an array passing a given truth test.
-     *
-     * @param array $array
-     * @param callable|null $callback
-     * @param mixed $default
-     * @return mixed
      */
-    public function arrLast($array, callable $callback = null, $default = null)
+    public function arrLast(array $array, ?callable $callback = null, $default = null)
     {
         if (is_null($callback)) {
-            return empty($array) ? value($default) : end($array);
+            return empty($array) ? $this->value($default) : end($array);
         }
 
         return $this->arrFirst(array_reverse($array, true), $callback, $default);
@@ -222,12 +214,8 @@ trait Arr
 
     /**
      * Get a subset of the items from the given array.
-     *
-     * @param array $array
-     * @param array|string $keys
-     * @return array
      */
-    public function arrOnly($array, $keys)
+    public function arrOnly(array $array, $keys): array
     {
         return array_intersect_key($array, array_flip((array) $keys));
     }
@@ -235,16 +223,14 @@ trait Arr
     /**
      * Pluck an array of values from an array.
      *
-     * @param array $array
-     * @param string|array $value
-     * @param string|array|null $key
-     * @return array
+     * @param string|array|int|null $value
+     * @param string|array|null     $key
      */
-    public function arrPluck($array, $value, $key = null)
+    public function arrPluck(array $array, $value, $key = null): array
     {
         $results = [];
 
-        list($value, $key) = $this->explodePluckParameters($value, $key);
+        [$value, $key] = $this->explodePluckParameters($value, $key);
 
         foreach ($array as $item) {
             $itemValue = $this->dataGet($item, $value);
@@ -253,6 +239,10 @@ trait Arr
                 $results[] = $itemValue;
             } else {
                 $itemKey = $this->dataGet($item, $key);
+
+                if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
+                    $itemKey = (string) $itemKey;
+                }
 
                 $results[$itemKey] = $itemValue;
             }
@@ -263,15 +253,10 @@ trait Arr
 
     /**
      * Push an item onto the beginning of an array.
-     *
-     * @param array $array
-     * @param mixed $value
-     * @param mixed $key
-     * @return array
      */
-    public function arrPrepend($array, $value, $key = null)
+    public function arrPrepend(array $array, $value, $key = null): array
     {
-        if (is_null($key)) {
+        if (func_num_args() === 2) {
             array_unshift($array, $value);
         } else {
             $array = [$key => $value] + $array;
@@ -283,12 +268,9 @@ trait Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param array $array
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
+     * @param string|int $key
      */
-    public function arrPull(&$array, $key, $default = null)
+    public function arrPull(array &$array, $key, $default = null)
     {
         $value = $this->arrGet($array, $key, $default);
 
@@ -300,10 +282,7 @@ trait Arr
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param mixed $target
      * @param string|array $key
-     * @param mixed $default
-     * @return mixed
      */
     protected function dataGet($target, $key, $default = null)
     {
@@ -313,18 +292,29 @@ trait Arr
 
         $key = is_array($key) ? $key : explode('.', $key);
 
-        while (($segment = array_shift($key)) !== null) {
+        foreach ($key as $i => $segment) {
+            unset($key[$i]);
+
+            if (is_null($segment)) {
+                return $target;
+            }
+
             if ($segment === '*') {
-                if ($target instanceof LimelightResults) {
+                if ($target instanceof Collection) {
                     $target = $target->all();
                 } elseif (!is_array($target)) {
-                    return value($default);
+                    return $this->value($default);
                 }
 
-                $result = $this->arrPluck($target, $key);
+                $result = [];
 
-                return in_array('*', $key) ? $this->arrCollapse($result) : $result;
+                foreach ($target as $item) {
+                    $result[] = $this->dataGet($item, $key);
+                }
+
+                return in_array('*', $key, true) ? $this->arrCollapse($result) : $result;
             }
+
             if ($this->arrAccessible($target) && $this->arrExists($target, $segment)) {
                 $target = $target[$segment];
             } elseif (is_object($target) && isset($target->{$segment})) {
@@ -339,22 +329,26 @@ trait Arr
 
     /**
      * Results array of items from Collection or Arrayable.
-     *
-     * @param mixed $items
-     * @return array
      */
-    protected function getArrayableItems($items)
+    protected function getArrayableItems($items): array
     {
         if (is_array($items)) {
             return $items;
-        } elseif ($items instanceof self) {
+        }
+        if ($items instanceof Collection) {
             return $items->all();
-        } elseif ($items instanceof Arrayable) {
+        }
+        if ($items instanceof Arrayable) {
             return $items->toArray();
-        } elseif ($items instanceof Jsonable) {
-            return json_decode($items->toJson(), true);
-        } elseif ($items instanceof JsonSerializable) {
+        }
+        if ($items instanceof Jsonable) {
+            return json_decode($items->toJson(), true, 512, JSON_THROW_ON_ERROR);
+        }
+        if ($items instanceof \JsonSerializable) {
             return $items->jsonSerialize();
+        }
+        if ($items instanceof \Traversable) {
+            return iterator_to_array($items);
         }
 
         return (array) $items;
@@ -362,12 +356,8 @@ trait Arr
 
     /**
      * Explode the "value" and "key" arguments passed to "pluck".
-     *
-     * @param string|array $value
-     * @param string|array|null $key
-     * @return array
      */
-    protected function explodePluckParameters($value, $key)
+    protected function explodePluckParameters($value, $key): array
     {
         $value = is_string($value) ? explode('.', $value) : $value;
 
@@ -378,40 +368,31 @@ trait Arr
 
     /**
      * Determine if the given value is callable, but not a string.
-     *
-     * @param mixed $value
-     * @return bool
      */
-    protected function useAsCallable($value)
+    protected function useAsCallable($value): bool
     {
         return !is_string($value) && is_callable($value);
     }
 
     /**
      * Return the default value of the given value.
-     *
-     * @param mixed $value
-     * @return mixed
      */
-    protected function value($value)
+    protected function value($value, ...$args)
     {
-        return $value instanceof Closure ? $value() : $value;
+        return $value instanceof \Closure ? $value(...$args) : $value;
     }
 
     /**
      * Get a value retrieving callback.
      *
-     * @param string $value
-     * @return callable
+     * @param callable|string|null $value
      */
-    protected function valueRetriever($value)
+    protected function valueRetriever($value): callable
     {
         if ($this->useAsCallable($value)) {
             return $value;
         }
 
-        return function ($item) use ($value) {
-            return $this->dataGet($item, $value);
-        };
+        return fn ($item) => $this->dataGet($item, $value);
     }
 }

@@ -1,39 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Tests;
 
 use Limelight\Limelight;
+use Limelight\Mecab\Node;
+use Limelight\Classes\LimelightResults;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
+use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
 class TestCase extends PhpunitTestCase
 {
     /**
      * Path to test logs.
-     *
-     * @var string
      */
-    protected $logPath = __DIR__.'/Stubs/test.log';
+    protected string $logPath = __DIR__.'/Stubs/test.log';
 
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $limelight;
+    protected static Limelight $limelight;
 
-    /**
-     * Set Limelight on object.
-     */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$limelight = new Limelight();
     }
 
     /**
      * Assert MecabNode object equals expected array.
-     *
-     * @param Node $nodes
-     * @param array      $expected
      */
-    protected function assertNodeResult($nodes, $expected)
+    protected function assertNodeResult(Node $nodes, array $expected): void
     {
         $count = 0;
 
@@ -42,19 +36,14 @@ class TestCase extends PhpunitTestCase
 
             $this->assertEquals($expectedLine, $node->feature);
 
-            $count += 1;
+            $count++;
         }
     }
 
     /**
      * Get romaji string for results.
-     *
-     * @param RomajiConverter $converter
-     * @param LimelightResults $results
-     *
-     * @return string
      */
-    protected function getRomajiConversion($converter, $results)
+    protected function getRomajiConversion(RomajiConverter $converter, LimelightResults $results): string
     {
         $conversion = '';
 
@@ -70,27 +59,23 @@ class TestCase extends PhpunitTestCase
     /**
      * Clear the test.log file.
      */
-    protected function clearLog()
+    protected function clearLog(): void
     {
         file_put_contents($this->logPath, '');
     }
 
     /**
      * Read test.log file.
-     *
-     * @return string
      */
-    protected function readLog()
+    protected function readLog(): string
     {
         return file_get_contents($this->logPath);
     }
 
     /**
      * Parse test phrase and return LimelightResults.
-     *
-     * @return LimelightResults
      */
-    protected function getResults()
+    protected function getResults(): LimelightResults
     {
         return self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
     }

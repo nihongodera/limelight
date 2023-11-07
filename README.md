@@ -45,13 +45,13 @@ composer install
 
 #### Without Docker
 ##### Requirements
-  - php > 5.6
+  - php >= 7.4
 
 ##### Dependencies
 Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.
 
 ###### Linux Ubuntu Users
-Use the install script included in this repository. The script only works for and php7.
+Use the install script included in this repository. The script only works for php7.
 Download the script:
 ```
 curl -O https://raw.githubusercontent.com/nihongodera/limelight/master/install_mecab_php-mecab.sh

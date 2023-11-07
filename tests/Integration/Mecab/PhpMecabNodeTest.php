@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Mecab;
 
+use Limelight\Mecab\Mecab;
 use Limelight\Tests\TestCase;
 use Limelight\Mecab\PhpMecab\PhpMecab;
 
 class PhpMecabNodeTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $phpmecab;
+    protected static Mecab $phpmecab;
 
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$phpmecab = new PhpMecab([]);
     }
@@ -23,7 +20,7 @@ class PhpMecabNodeTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_the_next_node()
+    public function it_can_get_the_next_node(): void
     {
         $node = self::$phpmecab->parseToNode('眠たいです。');
 
@@ -37,7 +34,7 @@ class PhpMecabNodeTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_the_feature()
+    public function it_can_get_the_feature(): void
     {
         $node = self::$phpmecab->parseToNode('眠たいです。');
 
@@ -47,7 +44,7 @@ class PhpMecabNodeTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_the_surface()
+    public function it_can_get_the_surface(): void
     {
         $node = self::$phpmecab->parseToNode('眠たいです。');
 

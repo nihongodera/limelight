@@ -1,28 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Settoushi implements PartOfSpeech
 {
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
+        ?array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'prefix';
 
         return $properties;

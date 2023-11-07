@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration;
 
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
+use Limelight\Classes\LimelightWord;
+use Limelight\Classes\LimelightResults;
+use Limelight\Exceptions\PluginNotFoundException;
 
 class LimelightWordTest extends TestCase
 {
     /**
      * @test
      */
-    public function it_can_get_plugin_data_by_method_call()
+    public function it_can_get_plugin_data_by_method_call(): void
     {
         $romaji = $this->getResults()->pull(0)->romaji();
 
@@ -20,7 +25,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_plugin_data_by_property_call()
+    public function it_can_get_plugin_data_by_property_call(): void
     {
         $romaji = $this->getResults()->pull(0)->romaji;
 
@@ -30,7 +35,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_property_by_property_name()
+    public function it_can_get_property_by_property_name(): void
     {
         $word = $this->getResults()->pull(0)->word;
 
@@ -40,7 +45,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_json_when_object_is_printed()
+    public function it_returns_json_when_object_is_printed(): void
     {
         $word = $this->getResults()->pull(0);
 
@@ -48,9 +53,7 @@ class LimelightWordTest extends TestCase
 
         echo $word;
 
-        $output = ob_get_contents();
-
-        ob_end_clean();
+        $output = ob_get_clean();
 
         $this->assertJsonStringEqualsJsonString('{"rawMecab":[{"type":"parsed","literal":"\u6771\u4eac","partOfSpeech1":"meishi","partOfSpeech2":"koyuumeishi","partOfSpeech3":"\u5730\u57df","partOfSpeech4":"\u4e00\u822c","inflectionType":"*","inflectionForm":"*","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc"}],"word":"\u6771\u4eac","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc","partOfSpeech":"proper noun","grammar":null,"parsed":true,"pluginData":{"Furigana":"<ruby><rb>\u6771\u4eac<\/rb><rp>(<\/rp><rt>\u3068\u3046\u304d\u3087\u3046<\/rt><rp>)<\/rp><\/ruby>","Romaji":"T\u014dky\u014d"}}', $output);
     }
@@ -58,7 +61,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_raw_mecab_data()
+    public function it_can_get_raw_mecab_data(): void
     {
         $rawMecab = $this->getResults()->pull(0)->rawMecab();
 
@@ -68,7 +71,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_word()
+    public function it_can_get_word(): void
     {
         $word = $this->getResults()->pull(0)->word();
 
@@ -78,7 +81,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_word_when_get_called()
+    public function it_can_get_word_when_get_called(): void
     {
         $word = $this->getResults()->pull(0)->get();
 
@@ -88,7 +91,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_lemma()
+    public function it_can_get_lemma(): void
     {
         $lemma = $this->getResults()->pull(0)->lemma();
 
@@ -98,7 +101,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_reading()
+    public function it_can_get_reading(): void
     {
         $reading = $this->getResults()->pull(0)->reading();
 
@@ -108,7 +111,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_pronunciation()
+    public function it_can_get_pronunciation(): void
     {
         $pronunciation = $this->getResults()->pull(0)->pronunciation();
 
@@ -118,7 +121,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_partOfSpeech()
+    public function it_can_get_partOfSpeech(): void
     {
         $partOfSpeech = $this->getResults()->pull(0)->partOfSpeech();
 
@@ -128,7 +131,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_grammar()
+    public function it_can_get_grammar(): void
     {
         $grammar = $this->getResults()->pull(0)->grammar();
 
@@ -138,7 +141,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_plugin_data()
+    public function it_can_get_plugin_data(): void
     {
         $furigana = $this->getResults()->pull(0)->plugin('Furigana');
 
@@ -148,7 +151,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_romaji()
+    public function it_can_get_romaji(): void
     {
         $romaji = $this->getResults()->pull(8)->romaji();
 
@@ -158,7 +161,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_get_furigana()
+    public function it_can_get_furigana(): void
     {
         $furigana = $this->getResults()->pull(6)->furigana();
 
@@ -168,7 +171,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_convert_to_hiragana()
+    public function it_can_convert_to_hiragana(): void
     {
         $reading = $this->getResults()->pull(0)->toHiragana()->reading();
 
@@ -178,7 +181,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_convert_to_katakana()
+    public function it_can_convert_to_katakana(): void
     {
         $pronunciation = $this->getResults()->pull(8)->toKatakana()->word();
 
@@ -187,29 +190,33 @@ class LimelightWordTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException Limelight\Exceptions\PluginNotFoundException
-     * @expectedExceptionMessage Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?
      */
-    public function it_throws_exception_when_plugin_not_registered()
+    public function it_throws_exception_when_plugin_not_registered(): void
     {
+        $this->expectExceptionMessage(
+            'Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?'
+        );
+        $this->expectException(PluginNotFoundException::class);
+
         $config = Config::getInstance();
 
         $config->erase('plugins', 'Romaji');
 
-        $string = $this->getResults()->romaji()->words();
-        
-        $config->resetConfig();
+        try {
+            $this->getResults()->romaji()->words();
+        } finally {
+            $config->resetConfig();
+        }
     }
 
     /**
      * @test
      */
-    public function it_parses_the_lemma()
+    public function it_parses_the_lemma(): void
     {
         $lemma = $this->getResults()->first()->parseLemma();
 
-        $this->assertInstanceOf('Limelight\Classes\LimelightWord', $lemma);
+        $this->assertInstanceOf(LimelightWord::class, $lemma);
 
         $this->assertEquals('トウキョウ', $lemma->reading());
     }
@@ -217,7 +224,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_append_to_property()
+    public function it_can_append_to_property(): void
     {
         $wordObject = $this->getResults()->pull(0);
 
@@ -235,7 +242,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_set_partOfSpeech()
+    public function it_can_set_partOfSpeech(): void
     {
         Config::getInstance()->resetConfig();
 
@@ -255,7 +262,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_can_set_plugin_data()
+    public function it_can_set_plugin_data(): void
     {
         $wordObject = $this->getResults()->pull(0);
 
@@ -273,7 +280,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_shows_info_for_nonparsed_kana_words()
+    public function it_shows_info_for_nonparsed_kana_words(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -291,7 +298,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_reading_to_kana_for_nonparsed_kana_words()
+    public function it_converts_reading_to_kana_for_nonparsed_kana_words(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -309,7 +316,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_pronunciation_to_kana_for_nonparsed_kana_words()
+    public function it_converts_pronunciation_to_kana_for_nonparsed_kana_words(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -327,7 +334,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_gets_romaji_for_nonparsed_kana_words()
+    public function it_gets_romaji_for_nonparsed_kana_words(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -341,7 +348,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_shows_parsed_words_as_parsed()
+    public function it_shows_parsed_words_as_parsed(): void
     {
         $results = self::$limelight->parse('チケット');
 
@@ -353,7 +360,7 @@ class LimelightWordTest extends TestCase
     /**
      * @test
      */
-    public function it_shows_nonparsed_words_as_nonparsed()
+    public function it_shows_nonparsed_words_as_nonparsed(): void
     {
         $results = self::$limelight->parse('矮星');
 
@@ -361,13 +368,11 @@ class LimelightWordTest extends TestCase
 
         $this->assertFalse($result->parsed());
     }
-    
+
     /**
      * Parse test phrase and return LimelightResults.
-     *
-     * @return LimelightResults
      */
-    protected function getResults()
+    protected function getResults(): LimelightResults
     {
         return self::$limelight->parse('東京に行って、パスタを食べてしまった。おいしかったです！');
     }

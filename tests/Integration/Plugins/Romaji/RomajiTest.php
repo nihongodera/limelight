@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_stores_space_seperated_strings_on_object()
+    public function it_stores_space_seperated_strings_on_object(): void
     {
         $results = self::$limelight->parse('今週末山を登ります！');
 
@@ -21,7 +23,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_multibyte_chars_to_uppercase()
+    public function it_converts_multibyte_chars_to_uppercase(): void
     {
         $results = self::$limelight->parse('大阪');
 
@@ -33,7 +35,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_allows_english_punctuation_to_remain_when_noparse()
+    public function it_allows_english_punctuation_to_remain_when_noparse(): void
     {
         $results = self::$limelight->noParse('うれ.しい');
 
@@ -45,7 +47,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_passes_english_words()
+    public function it_passes_english_words(): void
     {
         $results = self::$limelight->parse('大阪 pass 今週');
 

@@ -1,29 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Exceptions;
 
 use Limelight\Config\Config;
 
 class LimelightException extends \Exception
 {
+    protected bool $debug;
+
     /**
      * Console output colors.
-     *
-     * @var array
      */
-    protected $colors = [
+    protected array $colors = [
         'red'   => "\033[0;31m ",
         'blue'  => "\033[0;36m ",
         'green' => "\033[0;32m ",
         'none'  => "\033[0m",
     ];
 
-    /**
-     * Construct.
-     *
-     * @param string $message
-     */
-    public function __construct($message = 'Requested plugin not found.')
+    public function __construct(string $message = 'Requested plugin not found.')
     {
         $config = Config::getInstance();
 
@@ -34,10 +31,8 @@ class LimelightException extends \Exception
 
     /**
      * Handle exception.
-     *
-     * @return string
      */
-    public function handle()
+    public function handle(): string
     {
         if ($this->debug) {
             echo __CLASS__.': '.$this->red("{$this->message}\n");
@@ -53,7 +48,7 @@ class LimelightException extends \Exception
     /**
      * Print stack trace for exception.
      */
-    protected function printTrace()
+    protected function printTrace(): void
     {
         $trace = $this->getTrace();
 
@@ -66,9 +61,9 @@ class LimelightException extends \Exception
         foreach ($trace as $layer) {
             $number = $this->blue($count.'. ');
 
-            $file = (isset($layer['file']) ? $layer['file'] : null);
+            $file = $layer['file'] ?? null;
 
-            $line = (isset($layer['line']) ? $this->green(' line '.$layer['line']) : null);
+            $line = isset($layer['line']) ? $this->green(' line '.$layer['line']) : null;
 
             $class = $layer['class'];
 
@@ -80,51 +75,38 @@ class LimelightException extends \Exception
 
             echo $output."\n";
 
-            $count += 1;
+            $count++;
         }
     }
 
     /**
      * Color text red.
-     *
-     * @param string $text
-     * @return string
      */
-    protected function red($text)
+    protected function red(string $text): string
     {
         return $this->colorText($text, 'red');
     }
 
     /**
      * Color text blue.
-     *
-     * @param string $text
-     * @return string
      */
-    protected function blue($text)
+    protected function blue(string $text): string
     {
         return $this->colorText($text, 'blue');
     }
 
     /**
      * Color text green.
-     *
-     * @param string $text
-     * @return string
      */
-    protected function green($text)
+    protected function green(string $text): string
     {
         return $this->colorText($text, 'green');
     }
 
     /**
      * Color text given color.
-     *
-     * @param string $text
-     * @param string $color
-     * @return string
      */
-    private function colorText($text, $color)
+    private function colorText(string $text, string $color): string
     {
         return $this->colors[$color].$text.$this->colors['none'];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Exceptions;
 
 class InternalErrorException extends LimelightException
@@ -9,12 +11,7 @@ class InternalErrorException extends LimelightException
      */
     protected $message;
 
-    /**
-     * Construct.
-     *
-     * @param string $message
-     */
-    public function __construct($message = 'An internal error has occurred.')
+    public function __construct(string $message = 'An internal error has occurred.')
     {
         $this->message = $message;
 
@@ -23,10 +20,8 @@ class InternalErrorException extends LimelightException
 
     /**
      * How to display error.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->handle();
     }

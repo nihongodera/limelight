@@ -1,36 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse;
 
-use Limelight\Classes\LimelightResults;
-use Limelight\Classes\LimelightWord;
-use Limelight\Events\Dispatcher;
-use Limelight\Exceptions\InvalidInputException;
-use Limelight\Helpers\JapaneseHelpers;
-use Limelight\Helpers\PluginHelper;
 use Limelight\Limelight;
+use Limelight\Events\Dispatcher;
+use Limelight\Helpers\PluginHelper;
+use Limelight\Classes\LimelightWord;
+use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Classes\LimelightResults;
+use Limelight\Exceptions\InvalidInputException;
 
 class NoParser
 {
-    use PluginHelper;
     use JapaneseHelpers;
+    use PluginHelper;
 
-    /**
-     * @var Limelight
-     */
-    private $limelight;
+    private Limelight $limelight;
 
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * Construct.
-     *
-     * @param Limelight  $limelight
-     * @param Dispatcher $dispatcher
-     */
     public function __construct(Limelight $limelight, Dispatcher $dispatcher)
     {
         $this->limelight = $limelight;
@@ -40,12 +30,9 @@ class NoParser
     /**
      * Handle the no-parse for given text.
      *
-     * @param string $text
-     * @param array $pluginWhiteList
      * @throws InvalidInputException
-     * @return LimelightResults
      */
-    public function handle($text, array $pluginWhiteList)
+    public function handle(string $text, array $pluginWhiteList): LimelightResults
     {
         if ($this->hasKanji($text)) {
             throw new InvalidInputException('Text must not contain kanji.');
@@ -70,30 +57,25 @@ class NoParser
 
     /**
      * Build token using raw text for all properties.
-     *
-     * @param string $text
-     * @return array
      */
-    private function buildToken($text)
+    private function buildToken(string $text): array
     {
         return [
-            'literal' => $text,
-            'lemma' => $text,
-            'reading' => $text,
+            'literal'       => $text,
+            'lemma'         => $text,
+            'reading'       => $text,
             'pronunciation' => $text,
         ];
     }
 
     /**
      * Build array on full properties.
-     *
-     * @return array
      */
-    private function buildProperties()
+    private function buildProperties(): array
     {
         return [
             'partOfSpeech' => null,
-            'grammar' => null,
+            'grammar'      => null,
         ];
     }
 }

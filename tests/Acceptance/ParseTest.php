@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Acceptance;
 
 use Limelight\Limelight;
@@ -7,25 +9,22 @@ use Limelight\Tests\TestCase;
 
 class ParseTest extends TestCase
 {
-    /**
-     * @var array
-     */
-    protected static $lib;
+    protected static array $lib;
 
     /**
      * Set static limelight and test libs on object.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        
+
         self::$lib = include 'tests/lib.php';
     }
 
     /**
      * @test
      */
-    public function it_parses_a_simple_sentence()
+    public function it_parses_a_simple_sentence(): void
     {
         $results = self::$limelight->parse('音楽を聴きます。');
 
@@ -55,7 +54,7 @@ class ParseTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_slightly_more_complicated_sentence()
+    public function it_parses_a_slightly_more_complicated_sentence(): void
     {
         $results = self::$limelight->parse('東京に行って、パスタを食べてしまった。');
 
@@ -101,7 +100,7 @@ class ParseTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_multiple_sentences()
+    public function it_parses_multiple_sentences(): void
     {
         $results = self::$limelight->parse('私はすき焼きが大好きです。だから、いつも食べています。');
 
@@ -115,33 +114,31 @@ class ParseTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_random_characters()
+    public function it_handles_random_characters(): void
     {
         $results = self::$limelight->parse('フキイldksf塩jkdfllsdf帰依kdサブ');
 
         $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->string('word'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_parses_text(): void
+    {
+        $results = self::$limelight->parse(self::$lib['textOne']);
+
+        $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->string('word'));
 
         $words = $results->all();
+
+        $this->assertCount(450, $words);
     }
 
     /**
      * @test
      */
-    public function it_parses_text()
-    {
-         $results = self::$limelight->parse(self::$lib['textOne']);
-
-         $this->assertEquals(preg_replace('/\s+/', '', self::$lib['textOne']), $results->string('word'));
-
-         $words = $results->all();
-
-         $this->assertCount(450, $words);
-    }
-
-    /**
-     * @test
-     */
-    public function it_fires_single_event_when_word_is_not_parsed()
+    public function it_fires_single_event_when_word_is_not_parsed(): void
     {
         $this->clearLog();
 
@@ -149,7 +146,7 @@ class ParseTest extends TestCase
 
         $limelight->dispatcher()->addListeners(['Limelight\Tests\Stubs\TestListener'], 'WordWasCreated');
 
-        $results = $limelight->parse('ケータイ');
+        $limelight->parse('ケータイ');
 
         $log = $this->readLog();
 

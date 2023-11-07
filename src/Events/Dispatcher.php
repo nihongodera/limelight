@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Events;
 
 use Limelight\Exceptions\EventErrorException;
@@ -8,23 +10,14 @@ class Dispatcher
 {
     /**
      * Registered listeners.
-     *
-     * @var array
      */
-    protected $registeredListeners = [];
+    protected array $registeredListeners = [];
 
     /**
      * When false, events are fired.
-     *
-     * @var bool
      */
-    protected $suppressEvents = false;
+    protected bool $suppressEvents = false;
 
-    /**
-     * Construct.
-     *
-     * @param array $configListeners
-     */
     public function __construct(array $configListeners)
     {
         $this->addAllListeners($configListeners);
@@ -32,21 +25,18 @@ class Dispatcher
 
     /**
      * Add array of listeners from config.
-     *
-     * @param array $configListeners
      */
-    public function addAllListeners(array $configListeners)
+    public function addAllListeners(array $configListeners): void
     {
         array_walk($configListeners, [$this, 'addListeners']);
     }
 
     /**
-     * Add a single listener.
+     * Add a single or multiple listeners.
      *
      * @param LimelightListener|array $listeners
-     * @param string $eventName
      */
-    public function addListeners($listeners, $eventName)
+    public function addListeners($listeners, string $eventName): void
     {
         $listeners = (is_array($listeners) ? $listeners : [$listeners]);
 
@@ -62,34 +52,28 @@ class Dispatcher
     /**
      * Clear all registered listeners.
      */
-    public function clearListeners()
+    public function clearListeners(): void
     {
         $this->registeredListeners = [];
     }
 
     /**
      * Get all registered listeners.
-     *
-     * @return array
      */
-    public function getListeners()
+    public function getListeners(): array
     {
         return $this->registeredListeners;
     }
 
     /**
      * Call handle method on all listeners for event.
-     *
-     * @param string $eventName
-     * @param mixed $payload
-     * @return mixed
      */
-    public function fire($eventName, $payload = null)
+    public function fire(string $eventName, $payload = null)
     {
         if (isset($this->registeredListeners[$eventName]) && $this->suppressEvents === false) {
             $listeners = $this->registeredListeners[$eventName];
 
-            return array_map(function (LimelightListener $listener) use ($payload) {
+            return array_map(static function (LimelightListener $listener) use ($payload) {
                 return $listener->handle($payload);
             }, $listeners);
         }
@@ -99,11 +83,8 @@ class Dispatcher
 
     /**
      * Turn eventing on/off.
-     *
-     * @param bool $suppressEvents
-     * @return bool
      */
-    public function toggleEvents($suppressEvents)
+    public function toggleEvents(bool $suppressEvents): bool
     {
         if ($suppressEvents === true && $this->suppressEvents === false) {
             $this->suppressEvents = true;

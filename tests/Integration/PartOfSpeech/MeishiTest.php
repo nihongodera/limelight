@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\PartOfSpeech;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_part_of_speech_to_noun()
+    public function it_changes_part_of_speech_to_noun(): void
     {
         $results = self::$limelight->parse('テレビ');
 
@@ -19,7 +21,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_proper_nouns()
+    public function it_handles_proper_nouns(): void
     {
         $results = self::$limelight->parse('東京');
 
@@ -37,7 +39,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_pronouns()
+    public function it_handles_pronouns(): void
     {
         $results = self::$limelight->parse('私');
 
@@ -55,7 +57,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_sahensuru_verbs()
+    public function it_handles_sahensuru_verbs(): void
     {
         $results = self::$limelight->parse('全うするために');
 
@@ -71,7 +73,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_tokushuda_adjectives()
+    public function it_handles_tokushuda_adjectives(): void
     {
         $results = self::$limelight->parse('大好きです');
 
@@ -87,7 +89,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_fukushikanou_plus_joshi()
+    public function it_handles_fukushikanou_plus_joshi(): void
     {
         $results = self::$limelight->parse('食べるために');
 
@@ -105,7 +107,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_kanji_numbers()
+    public function it_handles_kanji_numbers(): void
     {
         $results = self::$limelight->parse('一');
 
@@ -123,7 +125,7 @@ class MeishiTest extends TestCase
     /**
      * @test
      */
-    public function it_handles_roman_numbers()
+    public function it_handles_roman_numbers(): void
     {
         $results = self::$limelight->parse('5');
 

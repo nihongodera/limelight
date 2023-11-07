@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins\Library\Romaji\Styles;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
 class Wapuro extends RomajiConverter
 {
-    /**
-     * Romaji library.
-     *
-     * @var array
-     */
-    protected $conversions;
+    protected array $conversions;
 
     /**
      * Conversions for 'n'.
-     *
-     * @var array
      */
-    protected $nConversions = [
+    protected array $nConversions = [
         'a' => 'nn',
         'i' => 'nn',
         'u' => 'nn',
@@ -29,48 +25,28 @@ class Wapuro extends RomajiConverter
 
     /**
      * Conversions for particles.
-     *
-     * @var array
      */
-    protected $particleConversions = [
-        //
-    ];
+    protected array $particleConversions = [];
 
     /**
      * Conversions for small tsu.
-     *
-     * @var array
      */
-    protected $tsuConversions = [
-        //
-    ];
+    protected array $tsuConversions = [];
 
     /**
      * Acceptable verb combinations.
-     *
-     * @var array
      */
-    protected $verbCombos = [
-        //
-    ];
+    protected array $verbCombos = [];
 
-    /**
-     * Construct.
-     */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__) . '/Lib/Wapuro.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/Wapuro.php';
     }
 
     /**
-     * handle conversion request.
-     *
-     * @param string $string
-     * @param LimelightWord $word
-     *
-     * @return string
+     * Handle conversion request.
      */
-    public function handle($string, $word)
+    public function handle(string $string, LimelightWord $word): string
     {
         return $this->convert($string, $word);
     }

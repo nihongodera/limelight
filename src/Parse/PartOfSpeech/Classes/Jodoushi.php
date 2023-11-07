@@ -1,28 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Jodoushi implements PartOfSpeech
 {
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
+        ?array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'postposition';
 
         if ($this->isInInflections($previousToken, $currentToken)) {
@@ -31,7 +27,7 @@ class Jodoushi implements PartOfSpeech
             $properties['attachToPrevious'] = true;
         } elseif ($this->isNaraAndPreviousIsMeishi($previousToken, $currentToken)) {
             $properties['partOfSpeech'] = 'conjunction';
-        } elseif ($this->isTokushuAndNa($currentToken)) {
+        } elseif ($this->isTokushuAndNotNa($currentToken)) {
             $properties['partOfSpeech'] = 'verb';
         }
 
@@ -39,14 +35,9 @@ class Jodoushi implements PartOfSpeech
     }
 
     /**
-     * Return true if previous exists, POS is kakarijoshi and is in inflections
-     * array.
-     *
-     * @param array $previousToken
-     * @param array $currentToken
-     * @return bool
+     * Return true if no previous or if previous exists, POS2 is not kakarijoshi and is in inflections.
      */
-    protected function isInInflections($previousToken, $currentToken)
+    protected function isInInflections(?array $previousToken, array $currentToken): bool
     {
         $inflections = [
             'tokushuTa',
@@ -57,19 +48,14 @@ class Jodoushi implements PartOfSpeech
         ];
 
         return is_null($previousToken) ||
-            (!is_null($previousToken) &&
-                $previousToken['partOfSpeech2'] !== 'kakarijoshi') &&
-                in_array($currentToken['inflectionType'], $inflections
-            );
+            ($previousToken['partOfSpeech2'] !== 'kakarijoshi' &&
+                in_array($currentToken['inflectionType'], $inflections, true));
     }
 
     /**
      * Return true if inflection is fuhenkagata and lemma is ん or う.
-     *
-     * @param array $currentToken
-     * @return bool
      */
-    protected function isFuhenkagataAndNorU($currentToken)
+    protected function isFuhenkagataAndNorU(array $currentToken): bool
     {
         return $currentToken['inflectionType'] === 'fuhenkagata' &&
             ($currentToken['lemma'] === 'ん' || $currentToken['lemma'] === 'う');
@@ -77,12 +63,8 @@ class Jodoushi implements PartOfSpeech
 
     /**
      * Return true if literal is なら and previous POS is meishi.
-     *
-     * @param array $previousToken
-     * @param array $currentToken
-     * @return bool
      */
-    protected function isNaraAndPreviousIsMeishi($previousToken, $currentToken)
+    protected function isNaraAndPreviousIsMeishi(?array $previousToken, array $currentToken): bool
     {
         return $currentToken['literal'] === 'なら' &&
             $previousToken &&
@@ -90,15 +72,12 @@ class Jodoushi implements PartOfSpeech
     }
 
     /**
-     * Return true inflection is tokushu and literal is な.
-     *
-     * @param array $currentToken
-     * @return bool
+     * Return true if inflection is tokushu and literal is not な.
      */
-    protected function isTokushuAndNa($currentToken)
+    protected function isTokushuAndNotNa(array $currentToken): bool
     {
-        return $currentToken['inflectionType'] === 'tokushuDa' ||
-            $currentToken['inflectionType'] === 'tokushuDesu' &&
+        return ($currentToken['inflectionType'] === 'tokushuDa' ||
+            $currentToken['inflectionType'] === 'tokushuDesu') &&
             $currentToken['literal'] !== 'な';
     }
 }

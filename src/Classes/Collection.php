@@ -1,43 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use IteratorAggregate;
 use JsonSerializable;
+use IteratorAggregate;
 use Limelight\Helpers\Arr;
+use Limelight\Helpers\Converter;
+use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
-use Limelight\Helpers\Converter;
 
-abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggregate
+/**
+ * Collection methods adapted from Laravel Collection.
+ *
+ * @link https://github.com/illuminate/collections/blob/master/Collection.php
+ */
+abstract class Collection implements ArrayAccess, IteratorAggregate, JsonSerializable
 {
     use Arr;
 
     /**
-     * Collection methods adapted from Laravel Collection.
-     * https://github.com/illuminate/support/blob/master/Collection.php.
-     */
-
-    /**
      * Get all words.
-     *
-     * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->words;
     }
 
     /**
-     * Chunk the underlying collection array.
-     *
-     * @param int $size
-     * @return static
+     * Chunk the collection into chunks of the given size.
      */
-    public function chunk($size)
+    public function chunk(int $size): Collection
     {
+        if ($size <= 0) {
+            return new static($this->text, [], $this->pluginData);
+        }
+
         $chunks = [];
 
         foreach (array_chunk($this->words, $size, true) as $chunk) {
@@ -49,11 +51,8 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Convert collection to given format.
-     *
-     * @param string $format
-     * @return static
      */
-    public function convert($format)
+    public function convert(string $format): Collection
     {
         $converted = [];
 
@@ -72,46 +71,39 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Count the number of items on the object.
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->words);
     }
 
     /**
      * Get the items in the collection that are not present in the given items.
-     *
-     * @param mixed $items
-     * @return static
      */
-    public function diff($items)
+    public function diff($items): Collection
     {
         return new static(
             $this->text,
-            array_diff($this->words, $this->getArrayableItems($items)), $this->pluginData
+            array_diff($this->words, $this->getArrayableItems($items)),
+            $this->pluginData
         );
     }
 
     /**
      * Create a new collection consisting of every n-th element.
-     *
-     * @param int $step
-     * @param int $offset
-     * @return static
      */
-    public function every($step, $offset = 0)
+    public function nth(int $step, int $offset = 0): Collection
     {
         $new = [];
 
         $position = 0;
 
-        foreach ($this->words as $item) {
-            if ($position % $step === $offset) {
+        foreach ($this->slice($offset)->words as $item) {
+            if ($position % $step === 0) {
                 $new[] = $item;
             }
 
-            ++$position;
+            $position++;
         }
 
         return new static($this->text, $new, $this->pluginData);
@@ -119,27 +111,34 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Get all items except for those with the specified keys.
-     *
-     * @param mixed $keys
-     * @return static
      */
-    public function except($keys)
+    public function except($keys): Collection
     {
-        $keys = is_array($keys) ? $keys : func_get_args();
+        if (is_null($keys)) {
+            return new static(
+                $this->text,
+                $this->words,
+                $this->pluginData
+            );
+        }
+
+        if ($keys instanceof Collection) {
+            $keys = $keys->all();
+        } elseif (!is_array($keys)) {
+            $keys = func_get_args();
+        }
 
         return new static(
             $this->text,
-            $this->arrExcept($this->words, $keys), $this->pluginData
+            $this->arrExcept($this->words, $keys),
+            $this->pluginData
         );
     }
 
     /**
      * Run a filter over each of the items.
-     *
-     * @param callable|null $callback
-     * @return static
      */
-    public function filter(callable $callback = null)
+    public function filter(?callable $callback = null): Collection
     {
         if ($callback) {
             $return = [];
@@ -158,27 +157,21 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Get the first item from the collection.
-     *
-     * @param callable|null $callback
-     * @param mixed $default
-     * @return mixed
      */
-    public function first(callable $callback = null, $default = null)
+    public function first(?callable $callback = null, $default = null)
     {
         return $this->arrFirst($this->words, $callback, $default);
     }
 
     /**
      * Get a flattened array of the items in the collection.
-     *
-     * @param int $depth
-     * @return static
      */
-    public function flatten($depth = INF)
+    public function flatten(int $depth = PHP_INT_MAX): Collection
     {
         return new static(
             $this->text,
-            $this->arrFlatten($this->words, $depth), $this->pluginData
+            $this->arrFlatten($this->words, $depth),
+            $this->pluginData
         );
     }
 
@@ -186,11 +179,10 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Remove an item from the collection by key.
      *
      * @param string|array $keys
-     * @return $this
      */
-    public function forget($keys)
+    public function forget($keys): Collection
     {
-        foreach ((array) $keys as $key) {
+        foreach ($this->getArrayableItems($keys) as $key) {
             $this->offsetUnset($key);
         }
 
@@ -199,12 +191,8 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Group an associative array by a field or using a callback.
-     *
-     * @param callable|string $groupBy
-     * @param bool $preserveKeys
-     * @return static
      */
-    public function groupBy($groupBy, $preserveKeys = false)
+    public function groupBy($groupBy, bool $preserveKeys = false): Collection
     {
         $groupBy = $this->valueRetriever($groupBy);
 
@@ -218,6 +206,13 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
             }
 
             foreach ($groupKeys as $groupKey) {
+                if (is_bool($groupKey)) {
+                    $groupKey = (int) $groupKey;
+                }
+                if ($groupKey instanceof \Stringable) {
+                    $groupKey = (string) $groupKey;
+                }
+
                 if (!array_key_exists($groupKey, $results)) {
                     $results[$groupKey] = new static($this->text, [], $this->pluginData);
                 }
@@ -231,75 +226,62 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Concatenate values of a given key as a string.
-     *
-     * @param string $value
-     * @param string $glue
-     * @return string
      */
-    public function implode($value, $glue = null)
+    public function implode($value, ?string $glue = null): string
     {
-        $first = $this->first();
-
-        if (is_array($first) || is_object($first)) {
-            return implode($glue, $this->pluck($value)->all());
+        if ($this->useAsCallable($value)) {
+            return implode($glue ?? '', $this->map($value)->all());
         }
 
-        return implode($value, $this->words);
+        $first = $this->first();
+
+        if (is_array($first) || (is_object($first) && !$first instanceof \Stringable)) {
+            return implode($glue ?? '', $this->pluck($value)->all());
+        }
+
+        return implode($value ?? '', $this->words);
     }
 
     /**
      * Intersect the collection with the given items.
-     *
-     * @param mixed $items
-     * @return static
      */
-    public function intersect($items)
+    public function intersect($items): Collection
     {
         return new static(
             $this->text,
-            array_intersect($this->words, $this->getArrayableItems($items)), $this->pluginData
+            array_intersect($this->words, $this->getArrayableItems($items)),
+            $this->pluginData
         );
     }
 
     /**
      * Determine if the collection is empty or not.
-     *
-     * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->words);
     }
 
     /**
      * Get the keys of the collection items.
-     *
-     * @return static
      */
-    public function keys()
+    public function keys(): Collection
     {
         return new static($this->text, array_keys($this->words), $this->pluginData);
     }
 
     /**
      * Get the last item from the collection.
-     *
-     * @param callable|null $callback
-     * @param mixed $default
-     * @return mixed
      */
-    public function last(callable $callback = null, $default = null)
+    public function last(?callable $callback = null, $default = null)
     {
         return $this->arrLast($this->words, $callback, $default);
     }
 
     /**
      * Run a map over each of the items.
-     *
-     * @param callable $callback
-     * @return static
      */
-    public function map(callable $callback)
+    public function map(callable $callback): Collection
     {
         $keys = array_keys($this->words);
 
@@ -310,23 +292,18 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Merge the collection with the given items.
-     *
-     * @param mixed $items
-     * @return static
      */
-    public function merge($items)
+    public function merge($items): Collection
     {
         return new static(
             $this->text,
-            array_merge($this->words, $this->getArrayableItems($items)), $this->pluginData
+            array_merge($this->words, $this->getArrayableItems($items)),
+            $this->pluginData
         );
     }
 
     /**
      * Get an item at a given offset.
-     *
-     * @param mixed $key
-     * @return mixed
      */
     public function offsetGet($key)
     {
@@ -335,22 +312,16 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Determine if an item exists at an offset.
-     *
-     * @param mixed $key
-     * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
-        return array_key_exists($key, $this->words);
+        return isset($this->words[$key]);
     }
 
     /**
      * Set the item at a given offset.
-     *
-     * @param mixed $key
-     * @param mixed $value
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         if (is_null($key)) {
             $this->words[] = $value;
@@ -361,75 +332,86 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Unset the item at a given offset.
-     *
-     * @param string $key
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         unset($this->words[$key]);
     }
 
     /**
      * Get the items with the specified keys.
-     *
-     * @param mixed $keys
-     * @return static
      */
-    public function only($keys)
+    public function only($keys): Collection
     {
+        if (is_null($keys)) {
+            return new static(
+                $this->text,
+                $this->words,
+                $this->pluginData
+            );
+        }
+
+        if ($keys instanceof Collection) {
+            $keys = $keys->all();
+        }
+
         $keys = is_array($keys) ? $keys : func_get_args();
 
         return new static(
             $this->text,
-            $this->arrOnly($this->words, $keys), $this->pluginData
+            $this->arrOnly($this->words, $keys),
+            $this->pluginData
         );
     }
 
     /**
      * Get the values of a given key.
-     *
-     * @param string $value
-     * @param string|null $key
-     * @return static
      */
-    public function pluck($value, $key = null)
+    public function pluck($value, $key = null): Collection
     {
         return new static(
             $this->text,
-            $this->arrPluck($this->words, $value, $key), $this->pluginData
+            $this->arrPluck($this->words, $value, $key),
+            $this->pluginData
         );
     }
 
     /**
-     * Get and remove the last item from the collection.
-     *
-     * @return mixed
+     * Get and remove the last N items from the collection.
      */
-    public function pop()
+    public function pop(int $count = 1)
     {
-        return array_pop($this->words);
+        if ($count === 1) {
+            return array_pop($this->words);
+        }
+
+        if ($this->isEmpty()) {
+            return new static($this->text, $this->words, $this->pluginData);
+        }
+
+        $results = [];
+
+        $collectionCount = $this->count();
+
+        foreach (range(1, min($count, $collectionCount)) as $item) {
+            $results[] = array_pop($this->words);
+        }
+
+        return new static($this->text, $results, $this->pluginData);
     }
 
     /**
      * Push an item onto the beginning of the collection.
-     *
-     * @param mixed $value
-     * @param mixed $key
-     * @return $this
      */
-    public function prepend($value, $key = null)
+    public function prepend($value, $key = null): Collection
     {
-        $this->words = $this->arrPrepend($this->words, $value, $key);
+        $this->words = $this->arrPrepend($this->words, ...func_get_args());
 
         return $this;
     }
 
     /**
      * Get and remove an item from the collection.
-     *
-     * @param mixed $key
-     * @param mixed $default
-     * @return mixed
      */
     public function pull($key, $default = null)
     {
@@ -437,14 +419,13 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
     }
 
     /**
-     * Push an item onto the end of the collection.
-     *
-     * @param mixed $value
-     * @return static
+     * Push one or more items onto the end of the collection.
      */
-    public function push($value)
+    public function push(...$values): Collection
     {
-        $this->offsetSet(null, $value);
+        foreach ($values as $value) {
+            $this->words[] = $value;
+        }
 
         return $this;
     }
@@ -453,76 +434,78 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Create a collection of all elements that do not pass a given truth test.
      *
      * @param callable|mixed $callback
-     * @return static
      */
-    public function reject($callback)
+    public function reject($callback = true): Collection
     {
-        if ($this->useAsCallable($callback)) {
-            return $this->filter(function ($value, $key) use ($callback) {
-                return !$callback($value, $key);
-            });
-        }
+        $useAsCallable = $this->useAsCallable($callback);
 
-        return $this->filter(function ($item) use ($callback) {
-            return $item != $callback;
+        return $this->filter(function ($value, $key) use ($callback, $useAsCallable) {
+            return $useAsCallable
+                ? !$callback($value, $key)
+                : $value != $callback;
         });
     }
 
     /**
-     * Get and remove the first item from the collection.
-     *
-     * @return mixed
+     * Get and remove the first N items from the collection.
      */
-    public function shift()
+    public function shift(int $count = 1)
     {
-        return array_shift($this->words);
+        if ($count === 1) {
+            return array_shift($this->words);
+        }
+
+        if ($this->isEmpty()) {
+            return new static($this->text, $this->words, $this->pluginData);
+        }
+
+        $results = [];
+
+        $collectionCount = $this->count();
+
+        foreach (range(1, min($count, $collectionCount)) as $item) {
+            $results[] = array_shift($this->items);
+        }
+
+        return new static($this->text, $results, $this->pluginData);
     }
 
     /**
      * Slice the underlying collection array.
-     *
-     * @param int $offset
-     * @param int $length
-     * @return static
      */
-    public function slice($offset, $length = null)
+    public function slice(int $offset, ?int $length = null): Collection
     {
         return new static(
             $this->text,
-            array_slice($this->words, $offset, $length, true), $this->pluginData
+            array_slice($this->words, $offset, $length, true),
+            $this->pluginData
         );
     }
 
     /**
      * Splice a portion of the underlying collection array.
-     *
-     * @param int $offset
-     * @param int|null $length
-     * @param mixed $replacement
-     * @return static
      */
-    public function splice($offset, $length = null, $replacement = [])
+    public function splice(int $offset, ?int $length = null, $replacement = []): Collection
     {
-        if (func_num_args() == 1) {
+        if (func_num_args() === 1) {
             return new static(
                 $this->text,
-                array_splice($this->words, $offset), $this->pluginData
+                array_splice($this->words, $offset),
+                $this->pluginData
             );
         }
 
         return new static(
             $this->text,
-            array_splice($this->words, $offset, $length, $replacement), $this->pluginData
+            array_splice($this->words, $offset, $length, $this->getArrayableItems($replacement)),
+            $this->pluginData
         );
     }
 
     /**
      * Take the first or last {$limit} items.
-     *
-     * @param int $limit
-     * @return static
      */
-    public function take($limit)
+    public function take(int $limit): Collection
     {
         if ($limit < 0) {
             return $this->slice($limit, abs($limit));
@@ -533,34 +516,24 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Get the collection of items as a plain array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return array_map(function ($value) {
-            return $value instanceof Arrayable ? $value->toArray() : $value;
-        }, $this->words);
+        return $this->map(fn ($value) => $value instanceof Arrayable ? $value->toArray() : $value)->all();
     }
 
     /**
      * Get the collection of items as JSON.
-     *
-     * @param int $options
-     * @return string
      */
-    public function toJson($options = 0)
+    public function toJson(int $options = 0): string
     {
-        return json_encode($this->jsonSerialize(), $options);
+        return json_encode($this->jsonSerialize(), JSON_THROW_ON_ERROR | $options);
     }
 
     /**
      * Transform each item in the collection using a callback.
-     *
-     * @param callable $callback
-     * @return $this
      */
-    public function transform(callable $callback)
+    public function transform(callable $callback): Collection
     {
         $this->words = $this->map($callback)->all();
 
@@ -571,23 +544,23 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      * Return only unique items from the collection array.
      *
      * @param string|callable|null $key
-     * @return static
      */
-    public function unique($key = null)
+    public function unique($key = null, $strict = false): Collection
     {
-        if (is_null($key)) {
+        if (is_null($key) && $strict === false) {
             return new static(
                 $this->text,
-                array_unique($this->words, SORT_REGULAR), $this->pluginData
+                array_unique($this->words, SORT_REGULAR),
+                $this->pluginData
             );
         }
 
-        $key = $this->valueRetriever($key);
+        $callback = $this->valueRetriever($key);
 
         $exists = [];
 
-        return $this->reject(function ($item) use ($key, &$exists) {
-            if (in_array($id = $key($item), $exists)) {
+        return $this->reject(function ($item, $key) use ($callback, $strict, &$exists) {
+            if (in_array($id = $callback($item, $key), $exists, $strict)) {
                 return true;
             }
 
@@ -597,30 +570,18 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
 
     /**
      * Reset the keys on the underlying array.
-     *
-     * @return static
      */
-    public function values()
+    public function values(): Collection
     {
         return new static($this->text, array_values($this->words), $this->pluginData);
     }
 
     /**
      * Filter items by the given key value pair.
-     *
-     * @param string $key
-     * @param mixed $operator
-     * @param mixed $value
-     * @return static
      */
-    public function where($key, $operator, $value = null)
+    public function where($key, ?string $operator = null, $value = null): Collection
     {
-        if (func_num_args() == 2) {
-            $value = $operator;
-            $operator = '=';
-        }
-
-        return $this->filter($this->operatorForWhere($key, $operator, $value));
+        return $this->filter($this->operatorForWhere(...func_get_args()));
     }
 
     /**
@@ -628,68 +589,81 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
      *
      * e.g. new Collection([1, 2, 3])->zip([4, 5, 6]);
      *      => [[1, 4], [2, 5], [3, 6]]
-     *
-     * @param mixed $items
-     * @return static
      */
-    public function zip($items)
+    public function zip($items): Collection
     {
-        $arrayableItems = array_map(function ($items) {
-            return $this->getArrayableItems($items);
-        }, func_get_args());
+        $arrayableItems = array_map(fn ($items) => $this->getArrayableItems($items), func_get_args());
 
-        $params = array_merge([function () {
-            return new static($this->text, func_get_args(), $this->pluginData);
-        }, $this->words], $arrayableItems);
+        $params = array_merge([fn () => new static($this->text, func_get_args(), $this->pluginData), $this->words], $arrayableItems);
 
         return new static(
             $this->text,
-            call_user_func_array('array_map', $params), $this->pluginData
+            array_map(...$params),
+            $this->pluginData
         );
     }
 
     /**
      * Get an iterator for the items.
-     *
-     * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new ArrayIterator($this->words);
     }
 
     /**
      * Convert the object into something JSON serializable.
-     *
-     * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return array_map(function ($value) {
+        return array_map(static function ($value) {
             if ($value instanceof JsonSerializable) {
                 return $value->jsonSerialize();
-            } elseif ($value instanceof Jsonable) {
-                return json_decode($value->toJson(), true);
-            } elseif ($value instanceof Arrayable) {
-                return $value->toArray();
-            } else {
-                return $value;
             }
-        }, $this->words);
+            if ($value instanceof Jsonable) {
+                return json_decode($value->toJson(), true, 512, JSON_THROW_ON_ERROR);
+            }
+            if ($value instanceof Arrayable) {
+                return $value->toArray();
+            }
+
+            return $value;
+        }, $this->all());
     }
 
     /**
      * Get an operator checker callback.
      *
-     * @param string $key
-     * @param string $operator
-     * @param mixed $value
-     * @return \Closure
+     * @param callable|string $key
      */
-    protected function operatorForWhere($key, $operator, $value)
+    protected function operatorForWhere($key, ?string $operator = null, $value = null): \Closure
     {
+        if ($this->useAsCallable($key)) {
+            return $key;
+        }
+
+        if (func_num_args() === 1) {
+            $value = true;
+
+            $operator = '=';
+        }
+
+        if (func_num_args() === 2) {
+            $value = $operator;
+
+            $operator = '=';
+        }
+
         return function ($item) use ($key, $operator, $value) {
             $retrieved = $this->dataGet($item, $key);
+
+            $strings = array_filter([$retrieved, $value], static function ($value) {
+                return is_string($value) || (is_object($value) && method_exists($value, '__toString'));
+            });
+
+            if (count($strings) < 2 && count(array_filter([$retrieved, $value], 'is_object')) === 1) {
+                return in_array($operator, ['!=', '<>', '!==']);
+            }
 
             switch ($operator) {
                 default:
@@ -703,6 +677,7 @@ abstract class Collection implements ArrayAccess, JsonSerializable, IteratorAggr
                 case '>=':  return $retrieved >= $value;
                 case '===': return $retrieved === $value;
                 case '!==': return $retrieved !== $value;
+                case '<=>': return $retrieved <=> $value;
             }
         };
     }

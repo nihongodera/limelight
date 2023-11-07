@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\PartOfSpeech;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class JoshiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_part_of_speech_to_postposition()
+    public function it_changes_part_of_speech_to_postposition(): void
     {
         $results = self::$limelight->parse('を');
 
@@ -19,7 +21,7 @@ class JoshiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_setsuzokujoshi_to_previous_word()
+    public function it_attaches_setsuzokujoshi_to_previous_word(): void
     {
         $results = self::$limelight->parse('行けば');
 

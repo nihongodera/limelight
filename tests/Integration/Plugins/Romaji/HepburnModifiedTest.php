@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
 use Limelight\Tests\TestCase;
@@ -7,25 +9,22 @@ use Limelight\Plugins\Library\Romaji\Styles\HepburnModified;
 
 class HepburnModifiedTest extends TestCase
 {
-    /**
-     * @var Limelight\Plugins\Library\Romaji\Styles\HepburnModified
-     */
-    protected static $hepburn;
+    protected static HepburnModified $hepburn;
 
     /**
      * Set static hepburn on object.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        
+
         self::$hepburn = new HepburnModified();
     }
 
     /**
      * @test
      */
-    public function it_converts_simple_word_to_romaji()
+    public function it_converts_simple_word_to_romaji(): void
     {
         $results = self::$limelight->parse('行きます');
 
@@ -37,7 +36,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_nn_word_to_romaji()
+    public function it_converts_nn_word_to_romaji(): void
     {
         $results = self::$limelight->parse('参加');
 
@@ -49,7 +48,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_simple_double_vowel_word_to_romaji()
+    public function it_converts_simple_double_vowel_word_to_romaji(): void
     {
         $results = self::$limelight->parse('お兄さん');
 
@@ -61,7 +60,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_sho_to_romaji()
+    public function it_converts_sho_to_romaji(): void
     {
         $results = self::$limelight->parse('初夏');
 
@@ -73,7 +72,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_shou_to_romaji()
+    public function it_converts_shou_to_romaji(): void
     {
         $results = self::$limelight->parse('証券');
 
@@ -85,7 +84,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_kyou_to_romaji()
+    public function it_converts_kyou_to_romaji(): void
     {
         $results = self::$limelight->parse('今日');
 
@@ -97,7 +96,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_multiple_words_to_romaji()
+    public function it_converts_multiple_words_to_romaji(): void
     {
         $results = self::$limelight->parse('福岡に住んでいます。');
 
@@ -109,7 +108,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_k_to_romaji()
+    public function it_converts_double_k_to_romaji(): void
     {
         $results = self::$limelight->parse('結果');
 
@@ -121,7 +120,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_c_to_romaji()
+    public function it_converts_double_c_to_romaji(): void
     {
         $results = self::$limelight->parse('抹茶');
 
@@ -133,7 +132,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_a_when_seperate_words()
+    public function it_doesnt_convert_double_a_when_seperate_words(): void
     {
         $results = self::$limelight->parse('邪悪');
 
@@ -145,7 +144,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_a_when_not_seperate_words()
+    public function it_converts_double_a_when_not_seperate_words(): void
     {
         $results = self::$limelight->parse('お婆さん');
 
@@ -157,7 +156,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_u_when_not_seperate_words()
+    public function it_converts_double_u_when_not_seperate_words(): void
     {
         $results = self::$limelight->parse('数学');
 
@@ -169,7 +168,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_u_when_seperate_words()
+    public function it_doesnt_convert_double_u_when_seperate_words(): void
     {
         $results = self::$limelight->parse('湖');
 
@@ -181,7 +180,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_u_on_vowels()
+    public function it_doesnt_convert_double_u_on_vowels(): void
     {
         $results = self::$limelight->parse('食う');
 
@@ -193,7 +192,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_i()
+    public function it_doesnt_convert_double_i(): void
     {
         $results = self::$limelight->parse('お兄さん');
 
@@ -205,7 +204,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_e_when_not_seperate_words()
+    public function it_converts_double_e_when_not_seperate_words(): void
     {
         $results = self::$limelight->parse('お姉さん');
 
@@ -217,7 +216,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_e_when_seperate_words()
+    public function it_doesnt_convert_double_e_when_seperate_words(): void
     {
         $results = self::$limelight->parse('濡れ縁');
 
@@ -229,7 +228,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_double_o_when_not_seperate_words()
+    public function it_converts_double_o_when_not_seperate_words(): void
     {
         $results = self::$limelight->parse('小躍り');
 
@@ -241,7 +240,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_double_o_when_seperate_words()
+    public function it_doesnt_convert_double_o_when_seperate_words(): void
     {
         $results = self::$limelight->parse('氷');
 
@@ -253,7 +252,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_ou_when_not_seperate_words()
+    public function it_converts_ou_when_not_seperate_words(): void
     {
         $results = self::$limelight->parse('迷う');
 
@@ -265,7 +264,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_ou_when_seperate_words()
+    public function it_doesnt_convert_ou_when_seperate_words(): void
     {
         $results = self::$limelight->parse('学校');
 
@@ -277,7 +276,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_doesnt_convert_nm()
+    public function it_doesnt_convert_nm(): void
     {
         $results = self::$limelight->parse('群馬');
 
@@ -289,7 +288,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_n_vowel_to_n_apostrophe()
+    public function it_converts_n_vowel_to_n_apostrophe(): void
     {
         $results = self::$limelight->parse('簡易');
 
@@ -301,7 +300,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_ha_to_wa()
+    public function it_converts_ha_to_wa(): void
     {
         $results = self::$limelight->parse('は');
 
@@ -313,7 +312,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_he_to_e()
+    public function it_converts_he_to_e(): void
     {
         $results = self::$limelight->parse('へ');
 
@@ -325,7 +324,7 @@ class HepburnModifiedTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_wo_to_o()
+    public function it_converts_wo_to_o(): void
     {
         $results = self::$limelight->parse('を');
 

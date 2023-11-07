@@ -1,32 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Providers\Laravel;
 
-use Illuminate\Support\ServiceProvider;
 use Limelight\Limelight;
+use Illuminate\Support\ServiceProvider;
 
 class LimelightServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
-           __DIR__ . '/../../config.php' => config_path('limelight.php'),
+            __DIR__.'/../../config.php' => config_path('limelight.php'),
         ]);
     }
 
     /**
      * Register bindings in the container.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->app->singleton('Limelight\Limelight', function ($app) {
+        $this->app->singleton(Limelight::class, function () {
             return new Limelight();
         });
     }

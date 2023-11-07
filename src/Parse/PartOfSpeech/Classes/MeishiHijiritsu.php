@@ -1,34 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class MeishiHijiritsu implements PartOfSpeech
 {
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
-        if ($nextToken) {
-            $method = strtolower($currentToken['partOfSpeech3']);
+        ?array $nextToken
+    ): array {
+        if (!$nextToken) {
+            return $properties;
+        }
 
-            if (method_exists($this, $method)) {
-                $properties = $this->$method($properties, $previousToken, $currentToken, $nextToken);
-            }
+        $method = strtolower($currentToken['partOfSpeech3']);
+
+        if (method_exists($this, $method)) {
+            $properties = $this->$method($properties, $previousToken, $currentToken, $nextToken);
         }
 
         return $properties;
@@ -36,15 +34,13 @@ class MeishiHijiritsu implements PartOfSpeech
 
     /**
      * Handle fukushikanou.
-     *
-     * @param array $properties
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
-    private function fukushikanou($properties, $previousToken, $currentToken, $nextToken)
-    {
+    private function fukushikanou(
+        array $properties,
+        ?array $previousToken,
+        array $currentToken,
+        array $nextToken
+    ): array {
         if ($nextToken['partOfSpeech1'] === 'joshi' && $nextToken['literal'] === 'に') {
             $properties['partOfSpeech'] = 'adverb';
 
@@ -56,15 +52,13 @@ class MeishiHijiritsu implements PartOfSpeech
 
     /**
      * Handle jodoushigokan.
-     *
-     * @param array $properties
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
-    private function jodoushigokan($properties, $previousToken, $currentToken, $nextToken)
-    {
+    private function jodoushigokan(
+        array $properties,
+        ?array $previousToken,
+        array $currentToken,
+        array $nextToken
+    ): array {
         if ($nextToken['inflectionType'] === 'tokushuDa') {
             $properties['partOfSpeech'] = 'verb';
 
@@ -84,11 +78,8 @@ class MeishiHijiritsu implements PartOfSpeech
 
     /**
      * Return true if next POS1 is joshi and next POS2 is fukushika.
-     *
-     * @param array $nextToken
-     * @return bool
      */
-    protected function nextIsJoshiAndFukushika($nextToken)
+    protected function nextIsJoshiAndFukushika(array $nextToken): bool
     {
         return $nextToken['partOfSpeech1'] === 'joshi' &&
             $nextToken['partOfSpeech2'] === 'fukushika';
@@ -96,15 +87,13 @@ class MeishiHijiritsu implements PartOfSpeech
 
     /**
      * Handle keiyoudoushigokan for partOfSpeech3.
-     *
-     * @param array $properties
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
-    private function keiyoudoushigokan($properties, $previousToken, $currentToken, $nextToken)
-    {
+    private function keiyoudoushigokan(
+        array $properties,
+        ?array $previousToken,
+        array $currentToken,
+        array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'adjective';
 
         if ($this->nextIsTokushuDaOrRentaika($nextToken)) {
@@ -117,11 +106,8 @@ class MeishiHijiritsu implements PartOfSpeech
     /**
      * Return true if next inflection is tokushuDa and inflection form is
      * taigensetsuzoku or if POS2 is rentaika.
-     *
-     * @param array $nextToken
-     * @return bool
      */
-    protected function nextIsTokushuDaOrRentaika($nextToken)
+    protected function nextIsTokushuDaOrRentaika(array $nextToken): bool
     {
         return (
             $nextToken['inflectionType'] === 'tokushuDa' &&

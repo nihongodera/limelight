@@ -1,41 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
-use Limelight\Parse\PartOfSpeech\PartOfSpeech;
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
+use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Meishi implements PartOfSpeech
 {
     /**
      * POS's that can use other POS class.
-     *
-     * @var array
      */
-    private $overrides = [
-        'sahensetsuzoku' => 'fukushikanou',
+    private array $overrides = [
+        'sahensetsuzoku'    => 'fukushikanou',
         'keiyoudoushigokan' => 'fukushikanou',
         'naikeiyoushigokan' => 'fukushikanou',
-        'tokushu' => 'hijiritsu',
+        'tokushu'           => 'hijiritsu',
     ];
 
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
+        ?array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'noun';
 
         $registry = POSRegistry::getInstance();
@@ -46,7 +40,7 @@ class Meishi implements PartOfSpeech
             $className = 'Meishi'.ucfirst($currentToken['partOfSpeech2']);
         }
 
-        if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\' . $className)) {
+        if (class_exists('Limelight\\Parse\\PartOfSpeech\\Classes\\'.$className)) {
             $POSClass = $registry->getClass($className);
 
             $properties = $POSClass->handle($properties, $previousWord, $previousToken, $currentToken, $nextToken);

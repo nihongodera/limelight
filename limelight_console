@@ -4,22 +4,22 @@
 
 use Limelight\Limelight;
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-$input = (isset($argv[1]) ? $argv[1]: 'こんにちは');
+$input = $argv[1] ?? 'こんにちは';
 
-$method = (isset($argv[2]) ? $argv[2] : null);
+$method = $argv[2] ?? null;
 
-$flag = (isset($argv[3]) ? $argv[3] : null);
+$flag = $argv[3] ?? null;
 
 $limelight = new Limelight();
 
 $results = $limelight->parse($input);
 
 if ($method && $flag) {
-    var_dump($results->$flag()->$method()) . "\n";
-} else if ($method) {
-    var_dump($results->$method()) . "\n";
+    var_dump($results->$flag()->$method())."\n";
+} elseif ($method) {
+    var_dump($results->$method())."\n";
 } else {
     var_dump($results);
 }

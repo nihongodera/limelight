@@ -1,46 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins;
+
+use Limelight\Mecab\Node;
+use Limelight\Classes\LimelightWord;
 
 abstract class Plugin
 {
     /**
      * The original, user input text.
-     *
-     * @var string
      */
-    protected $text;
+    protected string $text;
 
     /**
      * First node from mecab results.
-     *
-     * @var Limelight\Mecab\Node
      */
-    protected $node;
+    protected ?Node $node;
 
     /**
      * Tokens derived from parsing nodes.
-     *
-     * @var array
      */
-    protected $tokens;
+    protected array $tokens;
 
     /**
      * Words derived from text.
      *
-     * @var array
+     * @var LimelightWord[]
      */
-    protected $words;
+    protected array $words;
 
-    /**
-     * Construct.
-     *
-     * @param string $text
-     * @param Node $node
-     * @param array $tokens
-     * @param array $words
-     */
-    public function __construct($text, $node, $tokens, $words)
+    public function __construct(string $text, ?Node $node, array $tokens, array $words)
     {
         $this->text = $text;
         $this->node = $node;
@@ -50,8 +41,6 @@ abstract class Plugin
 
     /**
      * Run the plugin.
-     *
-     * @return mixed
      */
     abstract public function handle();
 }

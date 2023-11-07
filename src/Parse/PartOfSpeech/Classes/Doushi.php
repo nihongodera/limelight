@@ -1,28 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Doushi implements PartOfSpeech
 {
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
+        ?array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'verb';
 
         if ($currentToken['partOfSpeech2'] === 'setsubi') {
@@ -35,12 +31,9 @@ class Doushi implements PartOfSpeech
     }
 
     /**
-     * Return true if POS is hijiritsu and inflection is not meireiI.
-     *
-     * @param array $currentToken
-     * @return bool
+     * Return true if POS2 is hijiritsu and inflection is not meireiI.
      */
-    protected function isHijiritsuNotMeireiI($currentToken)
+    protected function isHijiritsuNotMeireiI(array $currentToken): bool
     {
         return $currentToken['partOfSpeech2'] === 'hijiritsu' &&
             $currentToken['inflectionForm'] !== 'meireiI';

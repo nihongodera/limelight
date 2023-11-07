@@ -1,39 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech;
 
 use Limelight\Exceptions\InternalErrorException;
 
 class POSRegistry
 {
-    /**
-     * Instance of self.
-     *
-     * @var self
-     */
-    private static $instance;
+    private static POSRegistry $instance;
 
     /**
      * Part of speech classes.
-     *
-     * @var array
      */
-    private $classes = [];
+    private array $classes = [];
 
-    /**
-     * Private construct.
-     */
     private function __construct()
     {
-        //
     }
 
-    /**
-     * Get instance of self.
-     *
-     * @return static
-     */
-    public static function getInstance()
+    public static function getInstance(): POSRegistry
     {
         if (!isset(self::$instance)) {
             static::$instance = new self();
@@ -43,19 +29,18 @@ class POSRegistry
     }
 
     /**
-     * Get class form registry.
+     * Get class from registry.
      *
-     * @param string $className
      * @throws InternalErrorException
-     * @return PartOfSpeech
      */
-    public function getClass($className)
+    public function getClass(string $className): PartOfSpeech
     {
         $fullName = 'Limelight\\Parse\\PartOfSpeech\\Classes\\'.$className;
 
         if (isset($this->classes[$fullName])) {
             return $this->classes[$fullName];
-        } elseif ($this->validateClass($fullName)) {
+        }
+        if ($this->validateClass($fullName)) {
             return $this->setClass($fullName);
         }
 
@@ -66,11 +51,8 @@ class POSRegistry
 
     /**
      * Set class in registry.
-     *
-     * @param string $fullName
-     * @return PartOfSpeech
      */
-    public function setClass($fullName)
+    public function setClass(string $fullName): PartOfSpeech
     {
         $this->validateClass($fullName);
 
@@ -84,11 +66,9 @@ class POSRegistry
     /**
      * Validate class.
      *
-     * @param string $class
      * @throws InternalErrorException
-     * @return bool
      */
-    private function validateClass($class)
+    private function validateClass(string $class): bool
     {
         if (!class_exists($class)) {
             throw new InternalErrorException("Class {$class} does not exist.");

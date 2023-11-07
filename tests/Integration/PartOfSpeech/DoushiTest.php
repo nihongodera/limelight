@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\PartOfSpeech;
 
 use Limelight\Tests\TestCase;
@@ -9,7 +11,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_changes_partOfSpeech_to_verb()
+    public function it_changes_partOfSpeech_to_verb(): void
     {
         $results = self::$limelight->parse('開く');
 
@@ -19,7 +21,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_setsubi_to_previous_word()
+    public function it_attaches_setsubi_to_previous_word(): void
     {
         $results = self::$limelight->parse('乗せられる');
 
@@ -35,7 +37,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_attaches_hijiritsu_to_previous_word()
+    public function it_attaches_hijiritsu_to_previous_word(): void
     {
         $results = self::$limelight->parse('開いてる');
 
@@ -51,7 +53,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_simple_verb()
+    public function it_parses_a_simple_verb(): void
     {
         $results = self::$limelight->parse('行く');
 
@@ -69,7 +71,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_masu_verb_like_ikimasu()
+    public function it_parses_a_masu_verb_like_ikimasu(): void
     {
         $results = self::$limelight->parse('帰ります');
 
@@ -87,7 +89,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_mashita_verb_like_ikimashita()
+    public function it_parses_a_mashita_verb_like_ikimashita(): void
     {
         $results = self::$limelight->parse('読みました');
 
@@ -105,7 +107,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_ta_verb_like_itta()
+    public function it_parses_a_ta_verb_like_itta(): void
     {
         $results = self::$limelight->parse('始まった');
 
@@ -123,7 +125,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_nai_verb_like_ikanai()
+    public function it_parses_a_nai_verb_like_ikanai(): void
     {
         $results = self::$limelight->parse('干さない');
 
@@ -141,7 +143,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_masen_verb_ikimasen()
+    public function it_parses_a_masen_verb_ikimasen(): void
     {
         $results = self::$limelight->parse('掛けません');
 
@@ -159,7 +161,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_nakatta_verb_like_ikanakatta()
+    public function it_parses_a_nakatta_verb_like_ikanakatta(): void
     {
         $results = self::$limelight->parse('落とさなかった');
 
@@ -177,7 +179,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_teita_verb_like_itteita()
+    public function it_parses_a_teita_verb_like_itteita(): void
     {
         $results = self::$limelight->parse('聞いていた');
 
@@ -195,7 +197,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_teta_verb_like_itteta()
+    public function it_parses_a_teta_verb_like_itteta(): void
     {
         $results = self::$limelight->parse('取ってた');
 
@@ -213,7 +215,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_teiru_verb_like_itteiru()
+    public function it_parses_a_teiru_verb_like_itteiru(): void
     {
         $results = self::$limelight->parse('見ている');
 
@@ -231,7 +233,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_teru_verb_like_itteru()
+    public function it_parses_a_teru_verb_like_itteru(): void
     {
         $results = self::$limelight->parse('飲んでる');
 
@@ -249,7 +251,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_an_e_verb_like_ike()
+    public function it_parses_an_e_verb_like_ike(): void
     {
         $results = self::$limelight->parse('行け');
 
@@ -267,7 +269,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_an_eba_verb_like_ikeba()
+    public function it_parses_an_eba_verb_like_ikeba(): void
     {
         $results = self::$limelight->parse('買えば');
 
@@ -285,7 +287,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_a_tara_verb_like_ittara()
+    public function it_parses_a_tara_verb_like_ittara(): void
     {
         $results = self::$limelight->parse('書いたら');
 
@@ -303,7 +305,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_an_ou_verb_like_ikou()
+    public function it_parses_an_ou_verb_like_ikou(): void
     {
         $results = self::$limelight->parse('しよう');
 
@@ -321,7 +323,7 @@ class DoushiTest extends TestCase
     /**
      * @test
      */
-    public function it_parses_an_eru_verb_like_ikeru()
+    public function it_parses_an_eru_verb_like_ikeru(): void
     {
         $results = self::$limelight->parse('載せれる');
 

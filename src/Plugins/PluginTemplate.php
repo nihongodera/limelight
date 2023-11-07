@@ -1,20 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins;
 
-use Limelight\Plugins\Plugin;
+use Limelight\Mecab\Node;
+use Limelight\Config\Config;
 
 class PluginTemplate extends Plugin
 {
-    /**
-     * Construct.
-     *
-     * @param string $text
-     * @param Node   $node
-     * @param array  $tokens
-     * @param array  $words
-     */
-    public function __construct($text, $node, $tokens, $words)
+    public function __construct(string $text, ?Node $node, array $tokens, array $words)
     {
         // Construct what you need or delete this
 
@@ -23,8 +18,6 @@ class PluginTemplate extends Plugin
 
     /**
      * Run the plugin.
-     *
-     * @return mixed
      */
     public function handle()
     {

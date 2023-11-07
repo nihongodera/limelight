@@ -1,29 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Config;
 
-use Limelight\Exceptions\InternalErrorException;
 use Limelight\Exceptions\InvalidInputException;
+use Limelight\Exceptions\InternalErrorException;
 
 class Config
 {
-    /**
-     * config.php.
-     *
-     * @var array
-     */
-    private $configFile;
+    private array $configFile;
 
-    /**
-     * Instance of self.
-     *
-     * @var static
-     */
-    private static $instance;
+    private static Config $instance;
 
-    /**
-     * Private construct.
-     */
     private function __construct()
     {
         $this->resetConfig();
@@ -32,13 +21,9 @@ class Config
     /**
      * Get value from config file.
      *
-     * @param string $string [config.php key]
-     *
      * @throws InvalidInputException
-     *
-     * @return mixed
      */
-    public function get($string)
+    public function get(string $string)
     {
         if (isset($this->configFile[$string])) {
             return $this->configFile[$string];
@@ -47,12 +32,7 @@ class Config
         throw new InvalidInputException("Index {$string} does not exist in config.php.");
     }
 
-    /**
-     * Get instance of self.
-     *
-     * @return static
-     */
-    public static function getInstance()
+    public static function getInstance(): Config
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();
@@ -63,10 +43,8 @@ class Config
 
     /**
      * Get registered plugins from config file.
-     *
-     * @return array
      */
-    public function getPlugins()
+    public function getPlugins(): array
     {
         return $this->get('plugins');
     }
@@ -75,11 +53,15 @@ class Config
      * Make class instance from given interface name.  Class must be bound to
      * interface in config.php.
      *
-     * @param string $interface
+     * @template T
+     *
+     * @param class-string<T> $interface
+     *
      * @throws InternalErrorException
-     * @return object
+     *
+     * @return T
      */
-    public function make($interface)
+    public function make(string $interface)
     {
         $bindings = $this->get('bindings');
 
@@ -89,8 +71,8 @@ class Config
 
         $classOptions = $this->getClassOptions($fullClassName);
 
-        set_error_handler(function () {
-            throw new \Exception();
+        set_error_handler(static function () {
+            throw new \RuntimeException();
         });
 
         try {
@@ -99,7 +81,7 @@ class Config
             restore_error_handler();
 
             return $instance;
-        } catch (\Exception $e) {
+        } catch (\RuntimeException $e) {
             throw new InternalErrorException(
                 "Class {$fullClassName} could not be instantiated."
             );
@@ -109,7 +91,7 @@ class Config
     /**
      * Reset config values to those defined in config file.
      */
-    public function resetConfig()
+    public function resetConfig(): void
     {
         if (function_exists('config') && config('limelight') !== null) {
             $this->configFile = config('limelight');
@@ -121,19 +103,19 @@ class Config
     /**
      * Dynamically set config values.
      *
-     * @param string $value
-     * @param string $key1
-     * @param string $key1
+     * @param array|string $value
+     *
      * @throws InvalidInputException
-     * @return bool
      */
-    public function set($value, $key1, $key2 = null)
+    public function set($value, string $key1, ?string $key2 = null): bool
     {
-        if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
+        if (isset($this->configFile[$key1][$key2])) {
             $this->configFile[$key1][$key2] = $value;
 
             return true;
-        } elseif (isset($this->configFile[$key1]) && is_null($key2)) {
+        }
+
+        if (isset($this->configFile[$key1]) && is_null($key2)) {
             $this->configFile[$key1] = $value;
 
             return true;
@@ -144,13 +126,10 @@ class Config
 
     /**
      * Erase config value entirely.
-     *
-     * @param string $key1
-     * @param string $key2
      */
-    public function erase($key1, $key2)
+    public function erase(string $key1, string $key2): void
     {
-        if (isset($this->configFile[$key1]) && isset($this->configFile[$key1][$key2])) {
+        if (isset($this->configFile[$key1][$key2])) {
             unset($this->configFile[$key1][$key2]);
         }
     }
@@ -158,12 +137,9 @@ class Config
     /**
      * Get full class namespace from bindings array.
      *
-     * @param array  $bindings
-     * @param string $interface
      * @throws InternalErrorException
-     * @return string
      */
-    private function getFullClassName(array $bindings, $interface)
+    private function getFullClassName(array $bindings, string $interface): string
     {
         if (isset($bindings[$interface])) {
             return $bindings[$interface];
@@ -177,11 +153,9 @@ class Config
     /**
      * Validate the class before instantiating.
      *
-     * @param string $fullClassName
-     * @param string $interface
      * @throws InternalErrorException
      */
-    private function validateClass($fullClassName, $interface)
+    private function validateClass(string $fullClassName, string $interface): void
     {
         if (!class_exists($fullClassName)) {
             throw new InternalErrorException(
@@ -189,7 +163,7 @@ class Config
             );
         }
 
-        if (!in_array($interface, class_implements($fullClassName))) {
+        if (!in_array($interface, class_implements($fullClassName), true)) {
             throw new InternalErrorException(
                 "Class {$fullClassName} does not implement interface {$interface}."
             );
@@ -198,26 +172,20 @@ class Config
 
     /**
      * Get options for class.
-     *
-     * @param string $fullClassName
-     * @return array
      */
-    private function getClassOptions($fullClassName)
+    private function getClassOptions(string $fullClassName): array
     {
         $shortClassName = $this->getShortClassName($fullClassName);
 
         $options = $this->get('options');
 
-        return isset($options[$shortClassName]) ? $options[$shortClassName] : [];
+        return $options[$shortClassName] ?? [];
     }
 
     /**
      * Get short class name from full namespace.
-     *
-     * @param string $fullClassName
-     * @return string
      */
-    private function getShortClassName($fullClassName)
+    private function getShortClassName(string $fullClassName): string
     {
         return (new \ReflectionClass($fullClassName))->getShortName();
     }
