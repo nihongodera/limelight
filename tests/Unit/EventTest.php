@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Unit;
 
 use Limelight\Config\Config;
 use Limelight\Tests\TestCase;
 use Limelight\Events\Dispatcher;
 use Limelight\Tests\Stubs\TestListener;
+use Limelight\Exceptions\EventErrorException;
 
 class EventTest extends TestCase
 {
     /**
      * Reset config file.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $config = Config::getInstance();
 
@@ -22,17 +25,17 @@ class EventTest extends TestCase
     /**
      * @test
      */
-    public function dispatcher_can_be_instantiated()
+    public function dispatcher_can_be_instantiated(): void
     {
         $dispatcher = $this->buildDispatcher();
 
-        $this->assertInstanceOf('Limelight\Events\Dispatcher', $dispatcher);
+        $this->assertInstanceOf(Dispatcher::class, $dispatcher);
     }
 
     /**
      * @test
      */
-    public function dispatcher_can_add_a_single_listener()
+    public function dispatcher_can_add_a_single_listener(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -42,13 +45,13 @@ class EventTest extends TestCase
 
         $registeredListeners = $dispatcher->getListeners();
 
-        $this->assertInstanceOf('Limelight\Tests\Stubs\TestListener', $registeredListeners['WordWasCreated'][0]);
+        $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
     /**
      * @test
      */
-    public function dispatcher_can_add_an_array_of_listeners()
+    public function dispatcher_can_add_an_array_of_listeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -58,36 +61,36 @@ class EventTest extends TestCase
 
         $registeredListeners = $dispatcher->getListeners();
 
-        $this->assertInstanceOf('Limelight\Tests\Stubs\TestListener', $registeredListeners['WordWasCreated'][0]);
+        $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
     /**
      * @test
      */
-    public function dispatcher_can_add_all_listeners()
+    public function dispatcher_can_add_all_listeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
         $listeners = [
             'WordWasCreated' => [
-                'Limelight\Tests\Stubs\TestListener'
+                TestListener::class,
             ],
             'ParseWasSuccessful' => [
-                'Limelight\Tests\Stubs\TestListener'
-            ]
+                TestListener::class,
+            ],
         ];
 
         $dispatcher->addAllListeners($listeners);
 
         $registeredListeners = $dispatcher->getListeners();
 
-        $this->assertInstanceOf('Limelight\Tests\Stubs\TestListener', $registeredListeners['WordWasCreated'][0]);
+        $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
     /**
      * @test
      */
-    public function dispatcher_can_fire_listener()
+    public function dispatcher_can_fire_listener(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -103,7 +106,7 @@ class EventTest extends TestCase
     /**
      * @test
      */
-    public function dispatcher_can_fire_multiple_listeners()
+    public function dispatcher_can_fire_multiple_listeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -119,7 +122,7 @@ class EventTest extends TestCase
     /**
      * @test
      */
-    public function dispatcher_sends_payload()
+    public function dispatcher_sends_payload(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -135,7 +138,7 @@ class EventTest extends TestCase
     /**
      * @test
      */
-    public function dispatcher_can_be_supressed()
+    public function dispatcher_can_be_supressed(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -153,23 +156,23 @@ class EventTest extends TestCase
     /**
      * @test
      */
-    public function dispatcher_toggles_event_supression()
+    public function dispatcher_toggles_event_suppression(): void
     {
         $dispatcher = $this->buildDispatcher();
 
-        $supressEvents = $dispatcher->toggleEvents(true);
+        $suppressEvents = $dispatcher->toggleEvents(true);
 
-        $this->assertTrue($supressEvents);
+        $this->assertTrue($suppressEvents);
 
-        $supressEvents = $dispatcher->toggleEvents(true);
+        $suppressEvents = $dispatcher->toggleEvents(true);
 
-        $this->assertFalse($supressEvents);
+        $this->assertFalse($suppressEvents);
     }
 
     /**
      * @test
      */
-    public function dispatcher_clears_all_registered_events()
+    public function dispatcher_clears_all_registered_events(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -179,7 +182,7 @@ class EventTest extends TestCase
 
         $registeredListeners = $dispatcher->getListeners();
 
-        $this->assertInstanceOf('Limelight\Tests\Stubs\TestListener', $registeredListeners['WordWasCreated'][0]);
+        $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
 
         $dispatcher->clearListeners();
 
@@ -190,12 +193,11 @@ class EventTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException Limelight\Exceptions\EventErrorException
-     * @expectedExceptionMessage Class I\Dont\Exist does not exist.
      */
-    public function dispatcher_throws_error_if_listener_class_doesnt_exist()
+    public function dispatcher_throws_error_if_listener_class_doesnt_exist(): void
     {
+        $this->expectExceptionMessage("Class I\Dont\Exist does not exist.");
+        $this->expectException(EventErrorException::class);
         $dispatcher = $this->buildDispatcher();
 
         $listener = 'I\Dont\Exist';
@@ -205,10 +207,8 @@ class EventTest extends TestCase
 
     /**
      * Build instance of Dispatcher.
-     *
-     * @return Limelight\Events\Dispatcher
      */
-    protected function buildDispatcher()
+    protected function buildDispatcher(): Dispatcher
     {
         $config = Config::getInstance();
 

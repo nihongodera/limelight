@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Acceptance;
 
 use Limelight\Config\Config;
@@ -10,7 +12,7 @@ class RomajiTest extends TestCase
     /**
      * Reset config file.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $config = Config::getInstance();
 
@@ -20,7 +22,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_hepburn_modified_romaji()
+    public function it_makes_hepburn_modified_romaji(): void
     {
         self::$limelight->setConfig('hepburn_modified', 'Romaji', 'style');
 
@@ -32,7 +34,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_hepburn_traditional_romaji()
+    public function it_makes_hepburn_traditional_romaji(): void
     {
         self::$limelight->setConfig('hepburn_traditional', 'Romaji', 'style');
 
@@ -44,7 +46,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_kunrei_shiki_romaji()
+    public function it_makes_kunrei_shiki_romaji(): void
     {
         self::$limelight->setConfig('kunrei_shiki', 'Romaji', 'style');
 
@@ -56,7 +58,7 @@ class RomajiTest extends TestCase
     /**
      * @test
      */
-    public function it_makes_nihon_shiki_romaji()
+    public function it_makes_nihon_shiki_romaji(): void
     {
         self::$limelight->setConfig('nihon_shiki', 'Romaji', 'style');
 

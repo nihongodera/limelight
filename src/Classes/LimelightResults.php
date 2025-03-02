@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Classes;
 
+use Limelight\Helpers\PluginHelper;
+use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
-use Limelight\Helpers\Contracts\Jsonable;
-use Limelight\Helpers\PluginHelper;
+use Limelight\Exceptions\PluginNotFoundException;
 
 class LimelightResults extends Collection implements Arrayable, Convertable, Jsonable
 {
@@ -13,33 +16,20 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
 
     /**
      * The original input.
-     *
-     * @var string
      */
-    protected $text;
+    protected string $text;
 
     /**
      * Array of words returned from parser.
-     *
-     * @var array
      */
-    protected $words;
+    protected array $words;
 
     /**
      * Results from plugins.
-     *
-     * @var array
      */
-    protected $pluginData = [];
+    protected ?array $pluginData = [];
 
-    /**
-     * Construct.
-     *
-     * @param string $text
-     * @param array $words
-     * @param array/null $pluginData
-     */
-    public function __construct($text, array $words, $pluginData)
+    public function __construct(string $text, array $words, ?array $pluginData)
     {
         $this->text = $text;
         $this->words = $words;
@@ -48,26 +38,20 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
 
     /**
      * Print JSON.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toJson();
     }
 
     /**
      * Get values as string.
-     *
-     * @param string $value
-     * @param string $glue
-     * @return string
      */
-    public function string($value, $glue = null)
+    public function string(string $value, ?string $glue = null): string
     {
         $value = $this->makeSingular($value);
 
-        $collection = $this->map(function ($item, $key) use ($value, $glue) {
+        $collection = $this->map(function ($item) use ($value, $glue) {
             return $this->buildString($item, $value, $glue);
         });
 
@@ -76,60 +60,48 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
 
     /**
      * Get the original, user input text.
-     *
-     * @return string
      */
-    public function original()
+    public function original(): string
     {
         return $this->text;
     }
 
     /**
      * Get all words.
-     *
-     * @return static
      */
-    public function words()
+    public function words(): LimelightResults
     {
         return $this->pluck('word');
     }
 
     /**
      * Get all lemmas.
-     *
-     * @return static
      */
-    public function lemmas()
+    public function lemmas(): LimelightResults
     {
         return $this->pluck('lemma');
     }
 
     /**
      * Get all readings.
-     *
-     * @return static
      */
-    public function readings()
+    public function readings(): LimelightResults
     {
         return $this->pluck('reading');
     }
 
     /**
      * Get all pronunciations.
-     *
-     * @return static
      */
-    public function pronunciations()
+    public function pronunciations(): LimelightResults
     {
         return $this->pluck('pronunciation');
     }
 
     /**
      * Get all partsOfSpeech.
-     *
-     * @return static
      */
-    public function partsOfSpeech()
+    public function partsOfSpeech(): LimelightResults
     {
         return $this->pluck('partOfSpeech');
     }
@@ -138,10 +110,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * Get romaji if data exists.
      *
      * @throws PluginNotFoundException
-     *
-     * @return static
      */
-    public function romaji()
+    public function romaji(): ?LimelightResults
     {
         return $this->getPluginData('romaji');
     }
@@ -150,72 +120,57 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
      * Get furigana if data exists.
      *
      * @throws PluginNotFoundException
-     *
-     * @return static
      */
-    public function furigana()
+    public function furigana(): ?LimelightResults
     {
         return $this->getPluginData('furigana');
     }
 
     /**
      * Convert items to hiragana.
-     *
-     * @return static
      */
-    public function toHiragana()
+    public function toHiragana(): LimelightResults
     {
         return $this->convert('hiragana');
     }
 
     /**
      * Convert items to katakana.
-     *
-     * @return static
      */
-    public function toKatakana()
+    public function toKatakana(): LimelightResults
     {
         return $this->convert('katakana');
     }
 
     /**
      * Get plugin data from object.
-     *
-     * @param string $name
-     * @return mixed|bool
      */
-    public function plugin($name)
+    public function plugin(string $name)
     {
         return $this->getPluginData($name, 'self');
     }
 
     /**
      * Build string for word.
-     *
-     * @param LimelightWord $item
-     * @param string $value
-     * @param string|null $glue
-     * @return string
      */
-    private function buildString($item, $value, $glue)
+    private function buildString(LimelightWord $item, string $value, ?string $glue): string
     {
         if ($this->shouldNotGlue($item, $value, $glue)) {
             return $item->$value;
         }
 
-        return $glue . $item->$value;
+        return $glue.$item->$value;
     }
 
     /**
-     * Return true if should not prefix with glue.
-     *
-     * @param LimelightWord $item
-     * @param string        $value
-     * @param string        $glue
-     * @return bool
+     * Return true if it should not prefix with glue.
      */
-    private function shouldNotGlue($item, $value, $glue)
+    private function shouldNotGlue(LimelightWord $item, string $value, ?string $glue): bool
     {
+        if ($glue === null) {
+            return true;
+        }
+
         return $value !== 'partOfSpeech' &&
             $item->partOfSpeech === 'symbol' &&
             preg_match('/\\s/', $glue);
@@ -223,12 +178,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
 
     /**
      * Cut first chars if its is glue.
-     *
-     * @param Collection $collection
-     * @param string $glue
-     * @return string
      */
-    private function cutFirst(Collection $collection, $glue)
+    private function cutFirst(Collection $collection, ?string $glue): string
     {
         $string = implode('', $collection->all());
 
@@ -241,11 +192,8 @@ class LimelightResults extends Collection implements Arrayable, Convertable, Jso
 
     /**
      * Make value singular.
-     *
-     * @param string $value
-     * @return string
      */
-    private function makeSingular($value)
+    private function makeSingular(string $value): string
     {
         if (substr($value, -1) === 's') {
             return substr($value, 0, -1);

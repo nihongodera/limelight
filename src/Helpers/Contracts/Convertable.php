@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Helpers\Contracts;
 
 interface Convertable
 {
     /**
      * Convert the instance items to format.
-     *
-     * @param string $format
-     * @return mixed
      */
-    public function convert($format);
+    public function convert(string $format);
 }

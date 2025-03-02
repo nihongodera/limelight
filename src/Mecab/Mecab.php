@@ -1,32 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Mecab;
 
-use Mecab\Node;
+use Mecab\Node as MecabNode;
 
 interface Mecab
 {
     /**
      * Split string into nodes.
-     *
-     * @param string $string
-     * @return Node
      */
-    public function parseToNode($string);
+    public function parseToNode(string $string): Node;
 
     /**
      * Split string into nodes, return raw Mecab node.
-     *
-     * @param string $string
-     * @return Node
      */
-    public function parseToMecabNode($string);
+    public function parseToMecabNode(string $string): MecabNode;
 
     /**
      * Parse string, return mecab results as string.
-     *
-     * @param string $string
-     * @return string
      */
-    public function parseToString($string);
+    public function parseToString(string $string): string;
 }

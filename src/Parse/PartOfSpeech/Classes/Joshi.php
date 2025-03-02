@@ -1,28 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Parse\PartOfSpeech\Classes;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Parse\PartOfSpeech\PartOfSpeech;
 
 class Joshi implements PartOfSpeech
 {
     /**
      * Handle the parsing request.
-     *
-     * @param array $properties
-     * @param array $previousWord
-     * @param array $previousToken
-     * @param array $currentToken
-     * @param array $nextToken
-     * @return array
      */
     public function handle(
         array $properties,
-        $previousWord,
-        $previousToken,
+        ?LimelightWord $previousWord,
+        ?array $previousToken,
         array $currentToken,
-        $nextToken
-    ) {
+        ?array $nextToken
+    ): array {
         $properties['partOfSpeech'] = 'postposition';
 
         if ($this->isSetsuzokujishi($currentToken)) {
@@ -33,12 +29,9 @@ class Joshi implements PartOfSpeech
     }
 
     /**
-     * Return true if POS is setsuzokujishi and literal is て, で, or ば.
-     *
-     * @param array $currentToken
-     * @return bool
+     * Return true if POS2 is setsuzokujishi and literal is て, で, or ば.
      */
-    public function isSetsuzokujishi($currentToken)
+    public function isSetsuzokujishi(array $currentToken): bool
     {
         return $currentToken['partOfSpeech2'] === 'setsuzokujoshi' &&
             in_array($currentToken['literal'], ['て', 'で', 'ば']);

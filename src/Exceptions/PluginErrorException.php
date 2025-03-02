@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Exceptions;
 
 class PluginErrorException extends LimelightException
@@ -9,12 +11,7 @@ class PluginErrorException extends LimelightException
      */
     protected $message;
 
-    /**
-     * Construct.
-     *
-     * @param string $message
-     */
-    public function __construct($message = 'Error with requested plugin.')
+    public function __construct(string $message = 'Error with requested plugin.')
     {
         $this->message = $message;
 
@@ -23,10 +20,8 @@ class PluginErrorException extends LimelightException
 
     /**
      * How to display error.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->handle();
     }

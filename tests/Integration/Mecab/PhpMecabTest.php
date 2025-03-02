@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\tests\Integration\Mecab;
 
+use Limelight\Mecab\Mecab;
 use Limelight\Tests\TestCase;
 use Limelight\Mecab\PhpMecab\PhpMecab;
 
 class PhpMecabTest extends TestCase
 {
-    /**
-     * @var Limelight\Limelight
-     */
-    protected static $phpmecab;
+    protected static Mecab $phpmecab;
 
-    /**
-     * Set static limelight on object.
-     */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$phpmecab = new PhpMecab([]);
     }
@@ -23,17 +20,17 @@ class PhpMecabTest extends TestCase
     /**
      * @test
      */
-    public function it_can_be_instantiated()
+    public function it_can_be_instantiated(): void
     {
         $phpmecab = new PhpMecab([]);
 
-        $this->assertInstanceOf('Limelight\Mecab\PhpMecab\PhpMecab', $phpmecab);
+        $this->assertInstanceOf(PhpMecab::class, $phpmecab);
     }
 
     /**
      * @test
      */
-    public function it_can_perform_mecab_parseToNode_method()
+    public function it_can_perform_mecab_parseToNode_method(): void
     {
         $nodes = self::$phpmecab->parseToNode('大丈夫');
 
@@ -49,10 +46,10 @@ class PhpMecabTest extends TestCase
     /**
      * @test
      */
-    public function it_can_access_mecab_parseToString_method()
+    public function it_can_access_mecab_parseToString_method(): void
     {
         $results = self::$phpmecab->parseToString('美味しい');
 
-        $this->assertContains('形容詞,自立,*,*,形容詞・イ段,基本形,美味しい,オイシイ,オイシイ', $results);
+        $this->assertStringContainsString('形容詞,自立,*,*,形容詞・イ段,基本形,美味しい,オイシイ,オイシイ', $results);
     }
 }

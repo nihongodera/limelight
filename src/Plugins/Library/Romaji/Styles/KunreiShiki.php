@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins\Library\Romaji\Styles;
 
+use Limelight\Classes\LimelightWord;
 use Limelight\Plugins\Library\Romaji\RomajiConverter;
 
 class KunreiShiki extends RomajiConverter
 {
-    /**
-     * Romaji library.
-     *
-     * @var array
-     */
-    protected $conversions;
+    protected array $conversions;
 
     /**
      * Conversions for 'n'.
-     *
-     * @var array
      */
-    protected $nConversions = [
+    protected array $nConversions = [
         'a' => 'n\'',
         'i' => 'n\'',
         'u' => 'n\'',
@@ -29,10 +25,8 @@ class KunreiShiki extends RomajiConverter
 
     /**
      * Conversions for particles.
-     *
-     * @var array
      */
-    protected $particleConversions = [
+    protected array $particleConversions = [
         'ha' => 'wa',
         'he' => 'e',
         'wo' => 'o',
@@ -40,42 +34,28 @@ class KunreiShiki extends RomajiConverter
 
     /**
      * Conversions for small tsu.
-     *
-     * @var array
      */
-    protected $tsuConversions = [
-        //
-    ];
+    protected array $tsuConversions = [];
 
     /**
      * Acceptable verb combinations.
-     *
-     * @var array
      */
-    protected $verbCombos = [
+    protected array $verbCombos = [
         'a' => 'â',
         'u' => 'û',
         'e' => 'ê',
         'o' => 'ô',
     ];
 
-    /**
-     * Construct.
-     */
     public function __construct()
     {
-        $this->conversions = include dirname(__DIR__) . '/Lib/KunreiShiki.php';
+        $this->conversions = include dirname(__DIR__).'/Lib/KunreiShiki.php';
     }
 
     /**
-     * handle conversion request.
-     *
-     * @param string $string
-     * @param LimelightWord $word
-     *
-     * @return string
+     * Handle conversion request.
      */
-    public function handle($string, $word)
+    public function handle(string $string, LimelightWord $word): string
     {
         return $this->convert($string, $word);
     }

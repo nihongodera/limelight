@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+use Limelight\Mecab\Mecab;
+use Limelight\Mecab\PhpMecab\PhpMecab;
+use Limelight\Plugins\Library\Romaji\Romaji;
+use Limelight\Plugins\Library\Furigana\Furigana;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -10,8 +17,8 @@ return [
     |
     */
     'plugins' => [
-        'Furigana' => 'Limelight\Plugins\Library\Furigana\Furigana',
-        'Romaji'   => 'Limelight\Plugins\Library\Romaji\Romaji',
+        'Furigana' => Furigana::class,
+        'Romaji'   => Romaji::class,
     ],
 
     /*
@@ -75,7 +82,7 @@ return [
     |
     */
     'bindings' => [
-        'Limelight\Mecab\Mecab' => 'Limelight\Mecab\PhpMecab\PhpMecab',
+        Mecab::class => PhpMecab::class,
     ],
 
     /*

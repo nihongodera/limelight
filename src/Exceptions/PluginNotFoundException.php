@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Exceptions;
 
 class PluginNotFoundException extends LimelightException
@@ -9,12 +11,7 @@ class PluginNotFoundException extends LimelightException
      */
     protected $message;
 
-    /**
-     * Construct.
-     *
-     * @param string $message
-     */
-    public function __construct($message = 'Requested plugin not found.')
+    public function __construct(string $message = 'Requested plugin not found.')
     {
         $this->message = $message;
 
@@ -23,10 +20,8 @@ class PluginNotFoundException extends LimelightException
 
     /**
      * How to display error.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->handle();
     }

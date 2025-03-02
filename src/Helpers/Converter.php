@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Helpers;
 
 class Converter
@@ -8,16 +10,16 @@ class Converter
      * Convert item to given format.
      *
      * @param string|array $items
-     * @param string $format
+     *
      * @return string|array
      */
-    public static function convert($items, $format)
+    public static function convert($items, string $format)
     {
         if (!is_array($items)) {
             return static::$format($items);
         }
 
-        return array_map(function ($value) use ($format) {
+        return array_map(static function ($value) use ($format) {
             if (is_array($value)) {
                 return static::convert($value, $format);
             }
@@ -28,37 +30,24 @@ class Converter
 
     /**
      * Convert to katakana.
-     *
-     * @param string $property
-     * @param array $wordData
-     * @return string
      */
-    private static function katakana($value)
+    private static function katakana(string $value): string
     {
         return static::convertKana($value, 'C');
     }
 
     /**
      * Convert to hiragana.
-     *
-     * @param string $property
-     * @param array $wordData
-     * @return string
      */
-    private static function hiragana($value)
+    private static function hiragana(string $value): string
     {
         return static::convertKana($value, 'c');
     }
 
     /**
      * Handle kana conversions.
-     *
-     * @param string $property
-     * @param array $wordData
-     * @param string $flag
-     * @return string
      */
-    private static function convertKana($value, $flag)
+    private static function convertKana(string $value, string $flag): string
     {
         return mb_convert_kana($value, $flag);
     }

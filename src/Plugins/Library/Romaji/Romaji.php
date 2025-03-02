@@ -1,26 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Plugins\Library\Romaji;
 
 use Limelight\Config\Config;
-use Limelight\Exceptions\PluginErrorException;
 use Limelight\Plugins\Plugin;
+use Limelight\Exceptions\PluginErrorException;
 
 class Romaji extends Plugin
 {
     /**
      * Run the plugin.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): string
     {
         $style = $this->makeStyleClass();
 
         $romajiString = '';
 
         foreach ($this->words as $word) {
-            $hiraganaWord = mb_convert_kana($word->reading, 'c');
+            $hiraganaWord = mb_convert_kana($word->reading ?? '', 'c');
 
             $romajiWord = $style->handle($hiraganaWord, $word);
 
@@ -42,9 +42,8 @@ class Romaji extends Plugin
      * Make decorator class from config value.
      *
      * @throws PluginErrorException
-     * @return RomajiConverter
      */
-    private function makeStyleClass()
+    private function makeStyleClass(): RomajiConverter
     {
         $config = Config::getInstance();
 
@@ -52,24 +51,21 @@ class Romaji extends Plugin
 
         $style = $this->underscoreToCamelCase($options['style']);
 
-        $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\' . ucfirst($style);
+        $styleClass = 'Limelight\\Plugins\\Library\\Romaji\\Styles\\'.ucfirst($style);
 
         if (class_exists($styleClass)) {
             return new $styleClass();
         }
 
         throw new PluginErrorException(
-            "Style {$style} does not exist.  Check config.php file."
+            "Style {$style} does not exist. Check config.php file."
         );
     }
 
     /**
      * Make an underscored word camel-case.
-     *
-     * @param string $string
-     * @return string
      */
-    public function underscoreToCamelCase($string)
+    public function underscoreToCamelCase(string $string): string
     {
         $string = strtolower($string);
 
@@ -90,11 +86,8 @@ class Romaji extends Plugin
 
     /**
      * Multibyte safe ucfirst.
-     *
-     * @param string $string
-     * @return string
      */
-    public function uppercaseFirst($string)
+    public function uppercaseFirst(string $string): string
     {
         $firstChar = mb_substr($string, 0, 1);
 

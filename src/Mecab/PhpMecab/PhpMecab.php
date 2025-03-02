@@ -1,32 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Limelight\Mecab\PhpMecab;
 
-use Limelight\Mecab\Mecab;
-use MeCab\Node;
 use MeCab\Tagger;
+use Limelight\Mecab\Node;
+use Limelight\Mecab\Mecab;
+use MeCab\Node as MecabNode;
 
 class PhpMecab implements Mecab
 {
-    /**
-     * MeCab.
-     *
-     * @var Limelight\Mecab\Mecab
-     */
-    private $mecab;
+    private Tagger $mecab;
 
     /**
      * Options array pulled from config.php.
-     *
-     * @var array
      */
-    private $options;
+    private array $options;
 
-    /**
-     * Construct.
-     *
-     * @param array $options
-     */
     public function __construct(array $options)
     {
         $this->options = $options;
@@ -36,11 +27,8 @@ class PhpMecab implements Mecab
 
     /**
      * Split string into nodes.
-     *
-     * @param string $string
-     * @return Node
      */
-    public function parseToNode($string)
+    public function parseToNode(string $string): Node
     {
         $node = $this->mecab->parseToNode($string);
 
@@ -49,32 +37,24 @@ class PhpMecab implements Mecab
 
     /**
      * Split string into nodes, return raw Mecab node.
-     *
-     * @param string $string
-     * @return Node
      */
-    public function parseToMecabNode($string)
+    public function parseToMecabNode(string $string): MecabNode
     {
         return $this->mecab->parseToNode($string);
     }
 
     /**
      * Parse string, return mecab results as string.
-     *
-     * @param string $string
-     * @return string
      */
-    public function parseToString($string)
+    public function parseToString(string $string): string
     {
         return $this->mecab->parseToString($string);
     }
 
     /**
      * Make instance of MeCab_Tagger.
-     *
-     * @return Tagger
      */
-    private function makeMecab()
+    private function makeMecab(): Tagger
     {
         $options = $this->buildOptions();
 
@@ -83,15 +63,13 @@ class PhpMecab implements Mecab
 
     /**
      * Build options array for constructor.
-     *
-     * @return array
      */
-    private function buildOptions()
+    private function buildOptions(): array
     {
         $options = [];
 
         foreach ($this->options as $flag => $value) {
-            if (!is_null($value) && !empty($value) && $value !== '') {
+            if (!empty($value)) {
                 array_push($options, $flag, $value);
             }
         }
