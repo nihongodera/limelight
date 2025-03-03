@@ -235,7 +235,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, JsonSeriali
 
         $first = $this->first();
 
-        if (is_array($first) || (is_object($first))) {
+        if (is_array($first) || is_object($first)) {
             return implode($glue ?? '', $this->pluck($value)->all());
         }
 
