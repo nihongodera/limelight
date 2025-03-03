@@ -6,13 +6,13 @@ namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use IteratorAggregate;
 use JsonSerializable;
+use IteratorAggregate;
 use Limelight\Helpers\Arr;
+use Limelight\Helpers\Converter;
+use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
-use Limelight\Helpers\Contracts\Jsonable;
-use Limelight\Helpers\Converter;
 
 /**
  * Collection methods adapted from Laravel Collection.
