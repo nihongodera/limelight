@@ -11,20 +11,15 @@ class ParseTest extends TestCase
 {
     protected static array $lib;
 
-    /**
-     * Set static limelight and test libs on object.
-     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
+        // Set static limelight and test libs on object.
         self::$lib = include 'tests/lib.php';
     }
 
-    /**
-     * @test
-     */
-    public function it_parses_a_simple_sentence(): void
+    public function testItParsesASimpleSentence(): void
     {
         $results = self::$limelight->parse('音楽を聴きます。');
 
@@ -51,10 +46,7 @@ class ParseTest extends TestCase
         $this->assertEquals('symbol', $words[3]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_parses_a_slightly_more_complicated_sentence(): void
+    public function testItParsesASlightlyMoreComplicatedSentence(): void
     {
         $results = self::$limelight->parse('東京に行って、パスタを食べてしまった。');
 
@@ -97,10 +89,7 @@ class ParseTest extends TestCase
         $this->assertEquals('symbol', $words[7]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_parses_multiple_sentences(): void
+    public function testItParsesMultipleSentences(): void
     {
         $results = self::$limelight->parse('私はすき焼きが大好きです。だから、いつも食べています。');
 
@@ -111,20 +100,14 @@ class ParseTest extends TestCase
         $this->assertCount(12, $words);
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_random_characters(): void
+    public function testItHandlesRandomCharacters(): void
     {
         $results = self::$limelight->parse('フキイldksf塩jkdfllsdf帰依kdサブ');
 
         $this->assertEquals('フキイldksf塩jkdfllsdf帰依kdサブ', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_parses_text(): void
+    public function testItParsesText(): void
     {
         $results = self::$limelight->parse(self::$lib['textOne']);
 
@@ -135,10 +118,7 @@ class ParseTest extends TestCase
         $this->assertCount(450, $words);
     }
 
-    /**
-     * @test
-     */
-    public function it_fires_single_event_when_word_is_not_parsed(): void
+    public function testItFiresSingleEventWhenWordIsNotParsed(): void
     {
         $this->clearLog();
 

@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class FiraaTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_sets_partOfSpeech_to_interjection(): void
+    public function testItSetsPartOfSpeechToInterjection(): void
     {
         $results = self::$limelight->parse('えーと');
 

@@ -4,36 +4,27 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Limelight;
 use Limelight\Config\Config;
+use Limelight\Limelight;
 use Limelight\Tests\TestCase;
 
 class LimelightTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_can_be_instantiated(): void
+    public function testItCanBeInstantiated(): void
     {
         $limelight = new Limelight();
 
         $this->assertInstanceOf(Limelight::class, $limelight);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_parse_input(): void
+    public function testItCanParseInput(): void
     {
         $results = self::$limelight->parse('出来るかな。。。');
 
         $this->assertEquals('出来るかな。。。', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_can_access_mecab_parseToNode_method(): void
+    public function testItCanAccessMecabParseToNodeMethod(): void
     {
         $nodes = self::$limelight->mecabToNode('大丈夫');
 
@@ -46,10 +37,7 @@ class LimelightTest extends TestCase
         $this->assertNodeResult($nodes, $expected);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_access_mecab_parseToMecabNode_method(): void
+    public function testItCanAccessMecabParseToMecabNodeMethod(): void
     {
         $rawNodes = self::$limelight->mecabToMecabNode('大丈夫');
 
@@ -70,20 +58,14 @@ class LimelightTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function it_can_access_mecab_parseToString_method(): void
+    public function testItCanAccessMecabParseToStringMethod(): void
     {
         $results = self::$limelight->mecabToString('美味しい');
 
         $this->assertStringContainsString('形容詞,自立,*,*,形容詞・イ段,基本形,美味しい,オイシイ,オイシイ', $results);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_set_config_values(): void
+    public function testItCanSetConfigValues(): void
     {
         $limelight = self::$limelight;
 
@@ -98,10 +80,7 @@ class LimelightTest extends TestCase
         $config->resetConfig();
     }
 
-    /**
-     * @test
-     */
-    public function it_fires_event_after_word_is_created(): void
+    public function testItFiresEventAfterWordIsCreated(): void
     {
         $this->clearLog();
 
@@ -120,10 +99,7 @@ class LimelightTest extends TestCase
         $limelight->dispatcher()->clearListeners();
     }
 
-    /**
-     * @test
-     */
-    public function it_fires_event_after_results_object_is_created(): void
+    public function testItFiresEventAfterResultsObjectIsCreated(): void
     {
         $this->clearLog();
 
@@ -142,10 +118,7 @@ class LimelightTest extends TestCase
         $limelight->dispatcher()->clearListeners();
     }
 
-    /**
-     * @test
-     */
-    public function it_fires_event_after_word_is_created_in_noparse(): void
+    public function testItFiresEventAfterWordIsCreatedInNoParse(): void
     {
         $this->clearLog();
 
@@ -164,10 +137,7 @@ class LimelightTest extends TestCase
         $limelight->dispatcher()->clearListeners();
     }
 
-    /**
-     * @test
-     */
-    public function it_fires_event_that_sets_new_listener_after_results_object_is_created_in_noparse(): void
+    public function testItFiresEventThatSetsNewListenerAfterResultsObjectIsCreatedInNoParse(): void
     {
         $this->clearLog();
 
@@ -186,10 +156,7 @@ class LimelightTest extends TestCase
         $limelight->dispatcher()->clearListeners();
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_fires_event_when_supressed_in_noparse(): void
+    public function testItDoesntFiresEventWhenSuppressedInNoParse(): void
     {
         $this->clearLog();
 
@@ -208,10 +175,7 @@ class LimelightTest extends TestCase
         $limelight->dispatcher()->clearListeners();
     }
 
-    /**
-     * @test
-     */
-    public function it_turns_events_back_on_after_running_noparse_with_event_supression(): void
+    public function testItTurnsEventsBackOnAfterRunningNoParseWithEventSuppression(): void
     {
         $this->clearLog();
 

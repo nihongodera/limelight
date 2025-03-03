@@ -4,36 +4,27 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Acceptance;
 
-use Limelight\Tests\TestCase;
 use Limelight\Exceptions\InvalidInputException;
 use Limelight\Exceptions\PluginNotFoundException;
+use Limelight\Tests\TestCase;
 
 class NoParseTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_parses_kana_text(): void
+    public function testItParsesKanaText(): void
     {
         $results = self::$limelight->noParse('できるかな。。。');
 
         $this->assertEquals('できるかな。。。', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_romaji_for_kana_text(): void
+    public function testItGetsRomajiForKanaText(): void
     {
         $results = self::$limelight->noParse('ねんがっぴ');
 
         $this->assertEquals('nengappi', $results->string('romaji'));
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_run_plugins_not_in_given_whitelist(): void
+    public function testItDoesntRunPluginsNotInGivenWhitelist(): void
     {
         $this->expectExceptionMessage(
             'Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?'
@@ -45,10 +36,7 @@ class NoParseTest extends TestCase
         $results->plugin('romaji');
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_for_kanji_text(): void
+    public function testItThrowsExceptionForKanjiText(): void
     {
         $this->expectExceptionMessage('Text must not contain kanji.');
         $this->expectException(InvalidInputException::class);

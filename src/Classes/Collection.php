@@ -6,13 +6,13 @@ namespace Limelight\Classes;
 
 use ArrayAccess;
 use ArrayIterator;
-use JsonSerializable;
 use IteratorAggregate;
+use JsonSerializable;
 use Limelight\Helpers\Arr;
-use Limelight\Helpers\Converter;
-use Limelight\Helpers\Contracts\Jsonable;
 use Limelight\Helpers\Contracts\Arrayable;
 use Limelight\Helpers\Contracts\Convertable;
+use Limelight\Helpers\Contracts\Jsonable;
+use Limelight\Helpers\Converter;
 
 /**
  * Collection methods adapted from Laravel Collection.
@@ -235,7 +235,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, JsonSeriali
 
         $first = $this->first();
 
-        if (is_array($first) || (is_object($first) && !$first instanceof \Stringable)) {
+        if (is_array($first) || (is_object($first))) {
             return implode($glue ?? '', $this->pluck($value)->all());
         }
 

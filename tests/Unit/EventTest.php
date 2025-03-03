@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Limelight\tests\Unit;
 
 use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
 use Limelight\Events\Dispatcher;
-use Limelight\Tests\Stubs\TestListener;
 use Limelight\Exceptions\EventErrorException;
+use Limelight\Tests\Stubs\TestListener;
+use Limelight\Tests\TestCase;
 
 class EventTest extends TestCase
 {
-    /**
-     * Reset config file.
-     */
     public static function tearDownAfterClass(): void
     {
         $config = Config::getInstance();
@@ -22,20 +19,14 @@ class EventTest extends TestCase
         $config->resetConfig();
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_be_instantiated(): void
+    public function testDispatcherCanBeInstantiated(): void
     {
         $dispatcher = $this->buildDispatcher();
 
         $this->assertInstanceOf(Dispatcher::class, $dispatcher);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_add_a_single_listener(): void
+    public function testDispatcherCanAddASingleListener(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -48,10 +39,7 @@ class EventTest extends TestCase
         $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_add_an_array_of_listeners(): void
+    public function testDispatcherCanAddAnArrayOfListeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -64,10 +52,7 @@ class EventTest extends TestCase
         $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_add_all_listeners(): void
+    public function testDispatcherCanAddAllListeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -87,10 +72,7 @@ class EventTest extends TestCase
         $this->assertInstanceOf(TestListener::class, $registeredListeners['WordWasCreated'][0]);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_fire_listener(): void
+    public function testDispatcherCanFireListener(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -103,10 +85,7 @@ class EventTest extends TestCase
         $this->assertEquals('It works!', $result[0]);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_fire_multiple_listeners(): void
+    public function testDispatcherCanFireMultipleListeners(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -119,10 +98,7 @@ class EventTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_sends_payload(): void
+    public function testDispatcherSendsPayload(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -135,10 +111,7 @@ class EventTest extends TestCase
         $this->assertEquals('Payload says Hello!', $result[0]);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_can_be_supressed(): void
+    public function testDispatcherCanBeSuppressed(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -153,10 +126,7 @@ class EventTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_toggles_event_suppression(): void
+    public function testDispatcherTogglesEventSuppression(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -169,10 +139,7 @@ class EventTest extends TestCase
         $this->assertFalse($suppressEvents);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_clears_all_registered_events(): void
+    public function testDispatcherClearsAllRegisteredEvents(): void
     {
         $dispatcher = $this->buildDispatcher();
 
@@ -191,10 +158,7 @@ class EventTest extends TestCase
         $this->assertEquals([], $registeredListeners);
     }
 
-    /**
-     * @test
-     */
-    public function dispatcher_throws_error_if_listener_class_doesnt_exist(): void
+    public function testDispatcherThrowsErrorIfListenerClassDoesntExist(): void
     {
         $this->expectExceptionMessage("Class I\Dont\Exist does not exist.");
         $this->expectException(EventErrorException::class);
@@ -205,9 +169,6 @@ class EventTest extends TestCase
         $dispatcher->addListeners($listener, 'WordWasCreated');
     }
 
-    /**
-     * Build instance of Dispatcher.
-     */
     protected function buildDispatcher(): Dispatcher
     {
         $config = Config::getInstance();

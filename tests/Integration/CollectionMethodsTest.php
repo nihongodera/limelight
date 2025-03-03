@@ -14,10 +14,7 @@ class CollectionMethodsTest extends TestCase
      * chunk()
      */
 
-    /**
-     * @test
-     */
-    public function chunk_chunks_items(): void
+    public function testChunkChunksItems(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
@@ -42,10 +39,7 @@ class CollectionMethodsTest extends TestCase
      * convert()
      */
 
-    /**
-     * @test
-     */
-    public function convert_converts_array_to_format(): void
+    public function testConvertConvertsArrayToFormat(): void
     {
         $readings = $this->getResults()->pluck('reading')->convert('hiragana')->flatten();
 
@@ -54,10 +48,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['おんがく', 'を', 'ききます', '。'], $readings->all());
     }
 
-    /**
-     * @test
-     */
-    public function convert_converts_limelightword_to_format(): void
+    public function testConvertConvertsLimelightwordToFormat(): void
     {
         $converted = $this->getResults()->only(0)->convert('hiragana');
 
@@ -70,10 +61,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals('おんがく', $word->pronunciation);
     }
 
-    /**
-     * @test
-     */
-    public function convert_converts_nested_arrays_to_format(): void
+    public function testConvertConvertsNestedArraysToFormat(): void
     {
         $converted = $this->getResults()->only(0)->convert('katakana');
 
@@ -88,10 +76,7 @@ class CollectionMethodsTest extends TestCase
      * count()
      */
 
-    /**
-     * @test
-     */
-    public function count_returns_count(): void
+    public function testCountReturnsCount(): void
     {
         $this->assertEquals(4, $this->getResults()->count());
     }
@@ -100,10 +85,7 @@ class CollectionMethodsTest extends TestCase
      * diff()
      */
 
-    /**
-     * @test
-     */
-    public function diff_finds_items_that_are_different(): void
+    public function testDiffFindsItemsThatAreDifferent(): void
     {
         $answer = $this->getResults()->diff($this->getResults()->forget(0));
 
@@ -116,20 +98,14 @@ class CollectionMethodsTest extends TestCase
      * nth()
      */
 
-    /**
-     * @test
-     */
-    public function every_returns_every_nth_item(): void
+    public function testEveryReturnsEveryNthItem(): void
     {
         $answer = $this->getResults()->nth(2);
 
         $this->assertEquals(['音楽', '聴きます'], $answer->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function every_returns_every_nth_item_with_offset(): void
+    public function testEveryReturnsEveryNthItemWithOffset(): void
     {
         $answer = $this->getResults()->nth(2, 1);
 
@@ -140,10 +116,7 @@ class CollectionMethodsTest extends TestCase
      * except()
      */
 
-    /**
-     * @test
-     */
-    public function except_returns_limelightresults_without_items(): void
+    public function testExceptReturnsLimelightresultsWithoutItems(): void
     {
         $answer = $this->getResults()->except(0);
 
@@ -156,10 +129,7 @@ class CollectionMethodsTest extends TestCase
      * filter()
      */
 
-    /**
-     * @test
-     */
-    public function filter_with_callback_returns_filtered_limelightresults_object(): void
+    public function testFilterWithCallbackReturnsFilteredLimelightResultsObject(): void
     {
         $answer = $this->getResults()->filter(function ($item, $key) {
             return $item->get() !== '音楽';
@@ -170,10 +140,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertCount(3, $answer->all());
     }
 
-    /**
-     * @test
-     */
-    public function filter_with_null_returns_filtered_limelightresults_object(): void
+    public function testFilterWithNullReturnsFilteredLimelightResultsObject(): void
     {
         $results = $this->getResults()->push([]);
 
@@ -190,10 +157,7 @@ class CollectionMethodsTest extends TestCase
      * first()
      */
 
-    /**
-     * @test
-     */
-    public function first_gets_first_word(): void
+    public function testFirstGetsFirstWord(): void
     {
         $first = $this->getResults()->first();
 
@@ -202,10 +166,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals('音楽', $first->word());
     }
 
-    /**
-     * @test
-     */
-    public function first_gets_first_word_to_pass_truth_test(): void
+    public function testFirstGetsFirstWordToPassTruthTest(): void
     {
         $first = $this->getResults()->first(function ($item, $key) {
             return $item->word() === 'を';
@@ -220,10 +181,7 @@ class CollectionMethodsTest extends TestCase
      * flatten()
      */
 
-    /**
-     * @test
-     */
-    public function flatten_flattens_item(): void
+    public function testFlattenFlattensItem(): void
     {
         $answer = $this->getResults()->pluck('pluginData')->flatten();
 
@@ -245,10 +203,7 @@ class CollectionMethodsTest extends TestCase
      * forget()
      */
 
-    /**
-     * @test
-     */
-    public function forget_forgets_item(): void
+    public function testForgetForgetsItem(): void
     {
         $answer = $this->getResults()->forget(1);
 
@@ -261,10 +216,7 @@ class CollectionMethodsTest extends TestCase
      * groupBy()
      */
 
-    /**
-     * @test
-     */
-    public function groupby_groups_items_by_key(): void
+    public function testGroupByGroupsItemsByKey(): void
     {
         $answer = $this->getResults()->merge($this->getResults())->groupBy('partOfSpeech');
 
@@ -285,10 +237,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['。', '。'], $symbols->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function groupby_groups_items_using_callback(): void
+    public function testGroupByGroupsItemsUsingCallback(): void
     {
         $answer = $this->getResults()->merge($this->getResults())->groupBy(function ($item) {
             return substr($item->partOfSpeech, 0, 1);
@@ -315,10 +264,7 @@ class CollectionMethodsTest extends TestCase
      * implode()
      */
 
-    /**
-     * @test
-     */
-    public function implode_implodes_and_returns_string(): void
+    public function testImplodeImplodesAndReturnsString(): void
     {
         $answer = $this->getResults()->implode('word');
 
@@ -329,10 +275,7 @@ class CollectionMethodsTest extends TestCase
      * intersect()
      */
 
-    /**
-     * @test
-     */
-    public function intersect_intersects_collections(): void
+    public function testIntersectIntersectsCollections(): void
     {
         $answer = $this->getResults()->intersect($this->getResults()->forget(1)->forget(2));
 
@@ -345,20 +288,14 @@ class CollectionMethodsTest extends TestCase
      * isEmpty()
      */
 
-    /**
-     * @test
-     */
-    public function isempty_returns_false_if_not_empty(): void
+    public function testIsEmptyReturnsFalseIfNotEmpty(): void
     {
         $empty = $this->getResults()->isEmpty();
 
         $this->assertFalse($empty);
     }
 
-    /**
-     * @test
-     */
-    public function isempty_returns_true_if_empty(): void
+    public function testIsEmptyReturnsTrueIfEmpty(): void
     {
         $empty = self::$limelight->parse('')->isEmpty();
 
@@ -369,10 +306,7 @@ class CollectionMethodsTest extends TestCase
      * keys()
      */
 
-    /**
-     * @test
-     */
-    public function keys_returns_keys(): void
+    public function testKeysReturnsKeys(): void
     {
         $keys = $this->getResults()->keys();
 
@@ -383,10 +317,7 @@ class CollectionMethodsTest extends TestCase
      * last()
      */
 
-    /**
-     * @test
-     */
-    public function last_gets_last_word(): void
+    public function testLastGetsLastWord(): void
     {
         $last = $this->getResults()->last();
 
@@ -395,10 +326,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals('。', $last->word());
     }
 
-    /**
-     * @test
-     */
-    public function last_gets_last_word_to_pass_truth_test(): void
+    public function testLastGetsLastWordToPassTruthTest(): void
     {
         $last = $this->getResults()->last(function ($item, $key) {
             return $item->word() === 'を';
@@ -413,12 +341,8 @@ class CollectionMethodsTest extends TestCase
      * map()
      */
 
-    /**
-     * @test
-     */
-    public function map_returns_mapped_limelightresults_object(): void
+    public function testMapReturnsMappedLimelightResultsObject(): void
     {
-
         $answer = $this->getResults()->map(function ($item) {
             return $item->get();
         });
@@ -432,10 +356,7 @@ class CollectionMethodsTest extends TestCase
      * merge()
      */
 
-    /**
-     * @test
-     */
-    public function merge_merges_two_collections(): void
+    public function testMergeMergesTwoCollections(): void
     {
         $results1 = $this->getResults();
 
@@ -452,10 +373,7 @@ class CollectionMethodsTest extends TestCase
      * only()
      */
 
-    /**
-     * @test
-     */
-    public function only_gets_values_only_for_specified_keys(): void
+    public function testOnlyGetsValuesOnlyForSpecifiedKeys(): void
     {
         $answer = $this->getResults()->only(2);
 
@@ -468,10 +386,7 @@ class CollectionMethodsTest extends TestCase
      * pluck()
      */
 
-    /**
-     * @test
-     */
-    public function pluck_plucks_values_for_key(): void
+    public function testPluckPlucksValuesForKey(): void
     {
         $words = $this->getResults()->pluck('word');
 
@@ -484,10 +399,7 @@ class CollectionMethodsTest extends TestCase
      * pop()
      */
 
-    /**
-     * @test
-     */
-    public function pop_pops(): void
+    public function testPopPops(): void
     {
         $answer = $this->getResults()->pop();
 
@@ -500,10 +412,7 @@ class CollectionMethodsTest extends TestCase
      * prepend()
      */
 
-    /**
-     * @test
-     */
-    public function prepend_puts_item_at_front_of_items(): void
+    public function testPrependPutsItemAtFrontOfItems(): void
     {
         $word = $this->getResults()->first();
 
@@ -518,10 +427,7 @@ class CollectionMethodsTest extends TestCase
      * pull()
      */
 
-    /**
-     * @test
-     */
-    public function pull_removes_word_by_key(): void
+    public function testPullRemovesWordByKey(): void
     {
         $results = $this->getResults();
 
@@ -538,10 +444,7 @@ class CollectionMethodsTest extends TestCase
      * push()
      */
 
-    /**
-     * @test
-     */
-    public function push_pushes_new_item_onto_limelightresults(): void
+    public function testPushPushesNewItemOntoLimelightResults(): void
     {
         $results = $this->getResults();
 
@@ -556,10 +459,7 @@ class CollectionMethodsTest extends TestCase
      * reject()
      */
 
-    /**
-     * @test
-     */
-    public function reject_rejects_items_that_return_true_in_callback(): void
+    public function testRejectRejectsItemsThatReturnTrueInCallback(): void
     {
         $answer = $this->getResults()->reject(function ($value) {
             return $value->partOfSpeech !== 'verb';
@@ -572,10 +472,7 @@ class CollectionMethodsTest extends TestCase
      * shift()
      */
 
-    /**
-     * @test
-     */
-    public function shift_removes_and_returns_first_item(): void
+    public function testShiftRemovesAndReturnsFirstItem(): void
     {
         $results = $this->getResults();
 
@@ -590,10 +487,7 @@ class CollectionMethodsTest extends TestCase
      * slice()
      */
 
-    /**
-     * @test
-     */
-    public function slice_slices_array_at_given_index(): void
+    public function testSliceSlicesArrayAtGivenIndex(): void
     {
         $results = $this->getResults();
 
@@ -606,10 +500,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $results->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function slice_limits_size_of_return(): void
+    public function testSliceLimitsSizeOfReturn(): void
     {
         $results = $this->getResults();
 
@@ -624,10 +515,7 @@ class CollectionMethodsTest extends TestCase
      * splice()
      */
 
-    /**
-     * @test
-     */
-    public function splice_splices_at_given_index(): void
+    public function testSpliceSplicesAtGivenIndex(): void
     {
         $results = $this->getResults();
 
@@ -640,10 +528,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function splice_limits_size_of_return(): void
+    public function testSpliceLimitsSizeOfReturn(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
@@ -656,10 +541,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['聴きます', '。'], $answer->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function splice_replaces_items(): void
+    public function testSpliceReplacesItems(): void
     {
         $results = $this->getResults();
 
@@ -674,10 +556,7 @@ class CollectionMethodsTest extends TestCase
      * take()
      */
 
-    /**
-     * @test
-     */
-    public function take_takes_items_from_the_front(): void
+    public function testTakeTakesItemsFromTheFront(): void
     {
         $answer = $this->getResults()->take(2);
 
@@ -686,10 +565,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['音楽', 'を'], $answer->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function take_takes_items_from_the_back(): void
+    public function testTakeTakesItemsFromTheBack(): void
     {
         $answer = $this->getResults()->take(-2);
 
@@ -702,10 +578,7 @@ class CollectionMethodsTest extends TestCase
      * toArray()
      */
 
-    /**
-     * @test
-     */
-    public function toarray_returns_array_with_public_properties(): void
+    public function testToArrayReturnsArrayWithPublicProperties(): void
     {
         $answer = $this->getResults()->toArray();
 
@@ -734,10 +607,7 @@ class CollectionMethodsTest extends TestCase
      * toJson()
      */
 
-    /**
-     * @test
-     */
-    public function tojson_return_json_with_public_properties(): void
+    public function testToJsonReturnJsonWithPublicProperties(): void
     {
         $json = $this->getResults()->toJson();
 
@@ -772,10 +642,7 @@ class CollectionMethodsTest extends TestCase
      * transform()
      */
 
-    /**
-     * @test
-     */
-    public function transform_transforms_items(): void
+    public function testTransformTransformsItems(): void
     {
         $results = $this->getResults();
 
@@ -792,10 +659,7 @@ class CollectionMethodsTest extends TestCase
      * unique()
      */
 
-    /**
-     * @test
-     */
-    public function unique_returns_unique_items(): void
+    public function testUniqueReturnsUniqueItems(): void
     {
         $results = $this->getResults()->merge($this->getResults());
 
@@ -806,10 +670,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $unique->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function unique_return_unique_items_for_given_key(): void
+    public function testUniqueReturnUniqueItemsForGivenKey(): void
     {
         $results = $this->getResults()->merge(self::$limelight->parse('行く'));
 
@@ -820,10 +681,7 @@ class CollectionMethodsTest extends TestCase
         $this->assertEquals(['音楽', 'を', '聴きます', '。'], $unique->pluck('word')->all());
     }
 
-    /**
-     * @test
-     */
-    public function unique_returns_unique_for_callback(): void
+    public function testUniqueReturnsUniqueForCallback(): void
     {
         $results = self::$limelight->parse('行く 行きます 行った 帰る 買う');
 
@@ -840,10 +698,7 @@ class CollectionMethodsTest extends TestCase
      * values()
      */
 
-    /**
-     * @test
-     */
-    public function values_resets_values(): void
+    public function testValuesResetsValues(): void
     {
         $modified = $this->getResults()->forget(1);
 
@@ -858,10 +713,7 @@ class CollectionMethodsTest extends TestCase
      * where()
      */
 
-    /**
-     * @test
-     */
-    public function where_finds_items_meeting_conditions(): void
+    public function testWhereFindsItemsMeetingConditions(): void
     {
         $answer = $this->getResults()->where('word', '音楽');
 
@@ -874,10 +726,7 @@ class CollectionMethodsTest extends TestCase
      * zip()
      */
 
-    /**
-     * @test
-     */
-    public function zip_zips_collections_together(): void
+    public function testZipZipsCollectionsTogether(): void
     {
         $answer = $this->getResults()->zip([1, 2, 3, 4]);
 

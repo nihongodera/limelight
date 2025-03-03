@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class KigouTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_symbol(): void
+    public function testItChangesPartOfSpeechToSymbol(): void
     {
         $results = self::$limelight->parse('。');
 

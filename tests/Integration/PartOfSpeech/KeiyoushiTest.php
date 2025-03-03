@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class KeiyoushiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_adjective(): void
+    public function testItChangesPartOfSpeechToAdjective(): void
     {
         $results = self::$limelight->parse('熱い');
 

@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class SetsuzokushiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_conjunction(): void
+    public function testItChangesPartOfSpeechToConjunction(): void
     {
         $results = self::$limelight->parse('けれども');
 

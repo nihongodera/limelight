@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Integration\Plugins\Romaji;
 
-use Limelight\Tests\TestCase;
 use Limelight\Plugins\Library\Romaji\Styles\KunreiShiki;
+use Limelight\Tests\TestCase;
 
 class KunreiShikiTest extends TestCase
 {
     protected static KunreiShiki $kunrei;
 
-    /**
-     * Set static Kunrei on object.
-     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -21,10 +18,7 @@ class KunreiShikiTest extends TestCase
         self::$kunrei = new KunreiShiki();
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_simple_word_to_romaji(): void
+    public function testItConvertsSimpleWordToRomaji(): void
     {
         $results = self::$limelight->parse('行きます');
 
@@ -33,10 +27,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('ikimasu', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_nn_word_to_romaji(): void
+    public function testItConvertsNnWordToRomaji(): void
     {
         $results = self::$limelight->parse('参加');
 
@@ -45,10 +36,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('sanka', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_simple_double_vowel_word_to_romaji(): void
+    public function testItConvertsSimpleDoubleVowelWordToRomaji(): void
     {
         $results = self::$limelight->parse('お兄さん');
 
@@ -57,10 +45,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('oniisan', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_sho_to_romaji(): void
+    public function testItConvertsShoToRomaji(): void
     {
         $results = self::$limelight->parse('初夏');
 
@@ -69,10 +54,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('syoka', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_long_o_to_romaji(): void
+    public function testItConvertsLongOToRomaji(): void
     {
         $results = self::$limelight->parse('証券');
 
@@ -81,10 +63,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('syôken', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_kyou_to_romaji(): void
+    public function testItConvertsKyouToRomaji(): void
     {
         $results = self::$limelight->parse('今日');
 
@@ -93,10 +72,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('kyô', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_multiple_words_to_romaji(): void
+    public function testItConvertsMultipleWordsToRomaji(): void
     {
         $results = self::$limelight->parse('福岡に住んでいます。');
 
@@ -105,10 +81,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('Hukuokanisundeimasu.', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_double_k_to_romaji(): void
+    public function testItConvertsDoubleKToRomaji(): void
     {
         $results = self::$limelight->parse('結果');
 
@@ -117,10 +90,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('kekka', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_double_c_to_romaji(): void
+    public function testItConvertsDoubleCToRomaji(): void
     {
         $results = self::$limelight->parse('抹茶');
 
@@ -129,10 +99,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('mattya', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_nm_to_mm(): void
+    public function testItConvertsNmToMm(): void
     {
         $results = self::$limelight->parse('群馬');
 
@@ -141,10 +108,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('Gunma', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_n_vowel_to_n_dash(): void
+    public function testItConvertsNVowelToNDash(): void
     {
         $results = self::$limelight->parse('簡易');
 
@@ -153,10 +117,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('kan\'i', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_convert_long_vowels_not_listed(): void
+    public function testItDoesntConvertLongVowelsNotListed(): void
     {
         $results = self::$limelight->parse('お婆さん');
 
@@ -165,10 +126,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('obâsan', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_ha_to_wa(): void
+    public function testItConvertsHaToWa(): void
     {
         $results = self::$limelight->parse('は');
 
@@ -177,10 +135,7 @@ class KunreiShikiTest extends TestCase
         $this->assertEquals('wa', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_he_to_e(): void
+    public function testItConvertsHeToE(): void
     {
         $results = self::$limelight->parse('へ');
 
