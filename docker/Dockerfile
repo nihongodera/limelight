@@ -1,4 +1,5 @@
-FROM php:7.4-cli
+# syntax=docker/dockerfile:1.4
+FROM php:8.4-cli
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -24,7 +25,7 @@ RUN set -eux; \
     buildDeps='unzip'; \
     apt-get update; \
     apt-get install -y $buildDeps --no-install-recommends; \
-    curl -fsSL https://github.com/nihongodera/php-mecab/archive/master.zip -o php-mecab.zip; \
+    curl -fsSL https://github.com/shono0027/php-mecab/archive/master.zip -o php-mecab.zip; \
     unzip php-mecab.zip; \
     apt-get purge -y --auto-remove $buildDeps; \
     apt-get clean; \

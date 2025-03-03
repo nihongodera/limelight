@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Tests\TestCase;
-use Limelight\Classes\LimelightWord;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
+use Limelight\Tests\TestCase;
 
 class CollectionMethodsTest extends TestCase
 {
