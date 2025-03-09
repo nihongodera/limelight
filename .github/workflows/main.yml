@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - edited
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: zip, mbstring
+          tools: phpunit:12.0.7
+      - name: Install mecab-php extension
+        run: sudo apt-get update && ./install_mecab_php-mecab.sh
+      - name: Install Composer & Dependencies
+        uses: 'ramsey/composer-install@v2'
+      - name: Run tests
+        run: ${PWD}/vendor/bin/phpunit
