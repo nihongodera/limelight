@@ -21,7 +21,7 @@ jobs:
       # - name: Install dependencies
       #   run: sudo apt-get install -y --no-install-recommends unzip mecab mecab-ipadic-utf8 mecab-utils libmecab-dev
       - name: Install mecab-php extension
-        run: run apt-get update && ./install_mecab_php-mecab.sh
+        run: sudo apt-get update && ./install_mecab_php-mecab.sh
         # run:  |
         #   curl -fsSL https://github.com/nihongodera/php-mecab/archive/master.zip -o php-mecab.zip; \
         #   unzip php-mecab.zip; \
