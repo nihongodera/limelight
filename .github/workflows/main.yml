@@ -18,8 +18,8 @@ jobs:
           php-version: '8.4'
           extensions: zip, mbstring
           tools: phpunit:12.0.7
-      - name: Install dependencies
-        run: apt-get install -y --no-install-recommends unzip mecab mecab-ipadic-utf8 mecab-utils libmecab-dev
+      # - name: Install dependencies
+      #   run: sudo apt-get install -y --no-install-recommends unzip mecab mecab-ipadic-utf8 mecab-utils libmecab-dev
       - name: Install mecab-php extension
         run: ./install_mecab_php-mecab.sh
         # run:  |
