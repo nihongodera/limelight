@@ -235,7 +235,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, JsonSeriali
 
         $first = $this->first();
 
-        if (is_array($first) || (is_object($first) && !$first instanceof \Stringable)) {
+        if (is_array($first) || is_object($first)) {
             return implode($glue ?? '', $this->pluck($value)->all());
         }
 
@@ -305,7 +305,7 @@ abstract class Collection implements ArrayAccess, IteratorAggregate, JsonSeriali
     /**
      * Get an item at a given offset.
      */
-    public function offsetGet($key)
+    public function offsetGet($key): mixed
     {
         return $this->words[$key];
     }

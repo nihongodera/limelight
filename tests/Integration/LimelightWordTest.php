@@ -4,48 +4,36 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Integration;
 
-use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
-use Limelight\Classes\LimelightWord;
 use Limelight\Classes\LimelightResults;
+use Limelight\Classes\LimelightWord;
+use Limelight\Config\Config;
 use Limelight\Exceptions\PluginNotFoundException;
+use Limelight\Tests\TestCase;
 
 class LimelightWordTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_can_get_plugin_data_by_method_call(): void
+    public function testItCanGetPluginDataByMethodCall(): void
     {
         $romaji = $this->getResults()->pull(0)->romaji();
 
         $this->assertEquals('Tōkyō', $romaji);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_plugin_data_by_property_call(): void
+    public function testItCanGetPluginDataByPropertyCall(): void
     {
         $romaji = $this->getResults()->pull(0)->romaji;
 
         $this->assertEquals('Tōkyō', $romaji);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_property_by_property_name(): void
+    public function testItCanGetPropertyByPropertyName(): void
     {
         $word = $this->getResults()->pull(0)->word;
 
         $this->assertEquals('東京', $word);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_json_when_object_is_printed(): void
+    public function testItReturnsJsonWhenObjectIsPrinted(): void
     {
         $word = $this->getResults()->pull(0);
 
@@ -58,140 +46,98 @@ class LimelightWordTest extends TestCase
         $this->assertJsonStringEqualsJsonString('{"rawMecab":[{"type":"parsed","literal":"\u6771\u4eac","partOfSpeech1":"meishi","partOfSpeech2":"koyuumeishi","partOfSpeech3":"\u5730\u57df","partOfSpeech4":"\u4e00\u822c","inflectionType":"*","inflectionForm":"*","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc"}],"word":"\u6771\u4eac","lemma":"\u6771\u4eac","reading":"\u30c8\u30a6\u30ad\u30e7\u30a6","pronunciation":"\u30c8\u30fc\u30ad\u30e7\u30fc","partOfSpeech":"proper noun","grammar":null,"parsed":true,"pluginData":{"Furigana":"<ruby><rb>\u6771\u4eac<\/rb><rp>(<\/rp><rt>\u3068\u3046\u304d\u3087\u3046<\/rt><rp>)<\/rp><\/ruby>","Romaji":"T\u014dky\u014d"}}', $output);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_raw_mecab_data(): void
+    public function testItCanGetRawMecabData(): void
     {
         $rawMecab = $this->getResults()->pull(0)->rawMecab();
 
         $this->assertEquals('東京', $rawMecab[0]['literal']);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_word(): void
+    public function testItCanGetWord(): void
     {
         $word = $this->getResults()->pull(0)->word();
 
         $this->assertEquals('東京', $word);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_word_when_get_called(): void
+    public function testItCanGetWordWhenGetCalled(): void
     {
         $word = $this->getResults()->pull(0)->get();
 
         $this->assertEquals('東京', $word);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_lemma(): void
+    public function testItCanGetLemma(): void
     {
         $lemma = $this->getResults()->pull(0)->lemma();
 
         $this->assertEquals('東京', $lemma);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_reading(): void
+    public function testItCanGetReading(): void
     {
         $reading = $this->getResults()->pull(0)->reading();
 
         $this->assertEquals('トウキョウ', $reading);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_pronunciation(): void
+    public function testItCanGetPronunciation(): void
     {
         $pronunciation = $this->getResults()->pull(0)->pronunciation();
 
         $this->assertEquals('トーキョー', $pronunciation);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_partOfSpeech(): void
+    public function testItCanGetPartOfSpeech(): void
     {
         $partOfSpeech = $this->getResults()->pull(0)->partOfSpeech();
 
         $this->assertEquals('proper noun', $partOfSpeech);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_grammar(): void
+    public function testItCanGetGrammar(): void
     {
         $grammar = $this->getResults()->pull(0)->grammar();
 
         $this->assertEquals(null, $grammar);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_plugin_data(): void
+    public function testItCanGetPluginData(): void
     {
         $furigana = $this->getResults()->pull(0)->plugin('Furigana');
 
         $this->AssertEquals('<ruby><rb>東京</rb><rp>(</rp><rt>とうきょう</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_romaji(): void
+    public function testItCanGetRomaji(): void
     {
         $romaji = $this->getResults()->pull(8)->romaji();
 
         $this->assertEquals('oishikatta', $romaji);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_furigana(): void
+    public function testItCanGetFurigana(): void
     {
         $furigana = $this->getResults()->pull(6)->furigana();
 
         $this->assertEquals('<ruby><rb>食</rb><rp>(</rp><rt>た</rt><rp>)</rp></ruby>べてしまった', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_convert_to_hiragana(): void
+    public function testItCanConvertToHiragana(): void
     {
         $reading = $this->getResults()->pull(0)->toHiragana()->reading();
 
         $this->assertEquals('とうきょう', $reading);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_convert_to_katakana(): void
+    public function testItCanConvertToKatakana(): void
     {
         $pronunciation = $this->getResults()->pull(8)->toKatakana()->word();
 
         $this->assertEquals('オイシカッタ', $pronunciation);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_when_plugin_not_registered(): void
+    public function testItThrowsExceptionWhenPluginNotRegistered(): void
     {
         $this->expectExceptionMessage(
             'Plugin data for Romaji can not be found. Is the Romaji plugin registered in config?'
@@ -209,10 +155,7 @@ class LimelightWordTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function it_parses_the_lemma(): void
+    public function testItParsesTheLemma(): void
     {
         $lemma = $this->getResults()->first()->parseLemma();
 
@@ -221,10 +164,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('トウキョウ', $lemma->reading());
     }
 
-    /**
-     * @test
-     */
-    public function it_can_append_to_property(): void
+    public function testItCanAppendToProperty(): void
     {
         $wordObject = $this->getResults()->pull(0);
 
@@ -239,10 +179,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('東京市', $word);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_set_partOfSpeech(): void
+    public function testItCanSetPartOfSpeech(): void
     {
         Config::getInstance()->resetConfig();
 
@@ -259,10 +196,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('test', $partOfSpeech);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_set_plugin_data(): void
+    public function testItCanSetPluginData(): void
     {
         $wordObject = $this->getResults()->pull(0);
 
@@ -277,10 +211,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('test', $romaji);
     }
 
-    /**
-     * @test
-     */
-    public function it_shows_info_for_nonparsed_kana_words(): void
+    public function testItShowsInfoForNonParsedKanaWords(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -295,10 +226,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('ロマンティック', $pronunciation);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_reading_to_kana_for_nonparsed_kana_words(): void
+    public function testItConvertsReadingToKanaForNonParsedKanaWords(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -313,10 +241,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('ろまんてぃっく', $hiragana);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_pronunciation_to_kana_for_nonparsed_kana_words(): void
+    public function testItConvertsPronunciationToKanaForNonParsedKanaWords(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -331,10 +256,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('ろまんてぃっく', $hiragana);
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_romaji_for_nonparsed_kana_words(): void
+    public function testItGetsRomajiForNonParsedKanaWords(): void
     {
         $results = self::$limelight->parse('ロマンティック');
 
@@ -345,10 +267,7 @@ class LimelightWordTest extends TestCase
         $this->assertEquals('Romanthikku', $romaji);
     }
 
-    /**
-     * @test
-     */
-    public function it_shows_parsed_words_as_parsed(): void
+    public function testItShowsParsedWordsAsParsed(): void
     {
         $results = self::$limelight->parse('チケット');
 
@@ -357,10 +276,7 @@ class LimelightWordTest extends TestCase
         $this->assertTrue($result->parsed());
     }
 
-    /**
-     * @test
-     */
-    public function it_shows_nonparsed_words_as_nonparsed(): void
+    public function testItShowsNonParsedWordsAsNonParsed(): void
     {
         $results = self::$limelight->parse('矮星');
 

@@ -4,87 +4,63 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Tests\TestCase;
 use Limelight\Helpers\JapaneseHelpers;
+use Limelight\Tests\TestCase;
 
 class JapaneseHelpersTest extends TestCase
 {
     use JapaneseHelpers;
 
-    /**
-     * @test
-     */
-    public function hasKanji_finds_kanji(): void
+    public function testHasKanjiFindsKanji(): void
     {
         $bool = $this->hasKanji('行きます');
 
         $this->assertTrue($bool);
     }
 
-    /**
-     * @test
-     */
-    public function hasKanji_returns_false_for_no_kanji(): void
+    public function testHasKanjiReturnsFalseForNoKanji(): void
     {
         $bool = $this->hasKanji('おいしい！');
 
         $this->assertFalse($bool);
     }
 
-    /**
-     * @test
-     */
-    public function hasKanji_returns_false_for_english(): void
+    public function testHasKanjiReturnsFalseForEnglish(): void
     {
         $bool = $this->hasKanji('Hello');
 
         $this->assertFalse($bool);
     }
 
-    /**
-     * @test
-     */
-    public function isKatakana_finds_katakana(): void
+    public function testIsKatakanaFindsKatakana(): void
     {
         $bool = $this->isKatakana('ア');
 
         $this->assertEquals(1, $bool);
     }
 
-    /**
-     * @test
-     */
-    public function isKatakana_returns_false_for_hiragana(): void
+    public function testIsKatakanaReturnsFalseForHiragana(): void
     {
         $bool = $this->isKatakana('は');
 
         $this->assertFalse($bool);
     }
 
-    /**
-     * @test
-     */
-    public function isKatakana_returns_false_for_kanji(): void
+    public function testIsKatakanaReturnsFalseForKanji(): void
     {
         $bool = $this->isKatakana('例');
 
         $this->assertFalse($bool);
     }
 
-    /**
-     * @test
-     */
-    public function isKatakana_returns_false_for_english(): void
+    public function testIsKatakanaReturnsFalseForEnglish(): void
     {
         $bool = $this->isKatakana('p');
 
         $this->assertFalse($bool);
     }
 
-    /**
-     * @test
-     */
-    public function getChars_splits_english_string(): void
+    public function testGetCharsSplitsEnglishString(): void
     {
         $string = 'hello';
 
@@ -97,10 +73,7 @@ class JapaneseHelpersTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function getChars_splits_japanese_string(): void
+    public function testGetCharsSplitsJapaneseString(): void
     {
         $string = 'パスタが食べたいです！';
 

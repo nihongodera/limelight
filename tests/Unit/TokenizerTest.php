@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Mecab\Mecab;
 use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
+use Limelight\Mecab\Mecab;
 use Limelight\Parse\Tokenizer;
+use Limelight\Tests\TestCase;
 
 class TokenizerTest extends TestCase
 {
     protected static Mecab $mecab;
 
-    /**
-     * Set static tokenizer on object.
-     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -25,20 +22,14 @@ class TokenizerTest extends TestCase
         self::$mecab = $config->make(Mecab::class);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_be_instantiated(): void
+    public function testItCanBeInstantiated(): void
     {
         $tokenizer = new Tokenizer();
 
         $this->assertInstanceOf(Tokenizer::class, $tokenizer);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_tokens_for_single_token_string(): void
+    public function testItMakesTokensForSingleTokenString(): void
     {
         $tokenizer = new Tokenizer();
 
@@ -53,10 +44,7 @@ class TokenizerTest extends TestCase
         $this->assertEquals('meishi', $tokens[0]['partOfSpeech1']);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_tokens_for_multi_token_string(): void
+    public function testItMakesTokensForMultiTokenString(): void
     {
         $tokenizer = new Tokenizer();
 

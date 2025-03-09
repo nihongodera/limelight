@@ -18,6 +18,7 @@
   - [Sources, Contributions, and Contributing](#sources-contributions-and-contributing)
 
 ### Version Notes
+  - March 9, 2025: php 8 support was added.
   - April 25, 2016: The Limelight API changed in Version 1.6.0. The new API uses collection methods to give developers better control of Limelight parse results. Please see the [wiki](https://github.com/nihongodera/limelight/wiki) for the updated documentation.
   - April 11, 2016: php-mecab, the MeCab bindings Limelight uses, were updated to version 0.6.0 in Dec. 2015 for php 7 support. The pre-0.6.0 bindings no longer work with the master branch of Limelight. If you are using an older version of php-mecab, please update your bindings or use the [php-mecab_pre_0.6.0](https://github.com/nihongodera/limelight/tree/php-mecab_pre_0.6.0) version.
 
@@ -43,9 +44,14 @@ Install composer dependencies from within the container:
 composer install
 ```
 
+To run the tests, run phpunit in the container:
+```
+vendor/bin/phpunit
+```
+
 #### Without Docker
 ##### Requirements
-  - php >= 7.4
+  - php >= 8.0
 
 ##### Dependencies
 Before installing Limelight, you must install both mecab and the php extension php-mecab on your system.

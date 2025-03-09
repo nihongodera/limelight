@@ -4,25 +4,19 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Tests\TestCase;
 use Limelight\Parse\PartOfSpeech\POSRegistry;
+use Limelight\Tests\TestCase;
 
 class POSRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_gets_an_instance_of_itself(): void
+    public function testItGetsAnInstanceOfItself(): void
     {
         $registry = POSRegistry::getInstance();
 
         $this->assertInstanceOf(POSRegistry::class, $registry);
     }
 
-    /**
-     * @test
-     */
-    public function it_sets_a_class_in_the_registry_and_gets_same(): void
+    public function testItSetsAClassInTheRegistryAndGetsSame(): void
     {
         $registry = POSRegistry::getInstance();
 

@@ -1,4 +1,5 @@
-FROM php:7.4-cli
+# syntax=docker/dockerfile:1.4
+FROM php:8.4-cli
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en

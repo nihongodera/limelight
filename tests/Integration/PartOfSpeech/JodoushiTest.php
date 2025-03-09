@@ -8,20 +8,14 @@ use Limelight\Tests\TestCase;
 
 class JodoushiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_postposition(): void
+    public function testItChangesPartOfSpeechToPostposition(): void
     {
         $results = self::$limelight->parse('です');
 
         $this->assertEquals('postposition', $results->pull(0)->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_attach_desu_to_previous_word(): void
+    public function testItDoesntAttachDesuToPreviousWord(): void
     {
         $results = self::$limelight->parse('大好きです');
 
@@ -34,10 +28,7 @@ class JodoushiTest extends TestCase
         $this->assertEquals('です', $words[1]->word());
     }
 
-    /**
-     * @test
-     */
-    public function it_attaches_desired_inflections_to_previous_word(): void
+    public function testItAttachesDesiredInflectionsToPreviousWord(): void
     {
         $results = self::$limelight->parse('したくない');
 
@@ -48,10 +39,7 @@ class JodoushiTest extends TestCase
         $this->assertEquals('したくない', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_attaches_nn_to_previous_word(): void
+    public function testItAttachesNnToPreviousWord(): void
     {
         $results = self::$limelight->parse('見えません');
 
@@ -62,10 +50,7 @@ class JodoushiTest extends TestCase
         $this->assertEquals('見えません', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_attaches_u_to_previous_word(): void
+    public function testItAttachesUToPreviousWord(): void
     {
         $results = self::$limelight->parse('作ろう');
 
@@ -76,20 +61,14 @@ class JodoushiTest extends TestCase
         $this->assertEquals('作ろう', $results->string('word'));
     }
 
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_verb_when_da(): void
+    public function testItChangesPartOfSpeechToVerbWhenDa(): void
     {
         $results = self::$limelight->parse('楽しいだ');
 
         $this->assertEquals('verb', $results->pull(1)->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_verb_when_desu(): void
+    public function testItChangesPartOfSpeechToVerbWhenDesu(): void
     {
         $results = self::$limelight->parse('美味しいです');
 

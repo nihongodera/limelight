@@ -9,9 +9,6 @@ use Limelight\Tests\TestCase;
 
 class RomajiTest extends TestCase
 {
-    /**
-     * Reset config file.
-     */
     public static function tearDownAfterClass(): void
     {
         $config = Config::getInstance();
@@ -19,10 +16,7 @@ class RomajiTest extends TestCase
         $config->resetConfig();
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_hepburn_modified_romaji(): void
+    public function testItMakesHepburnModifiedRomaji(): void
     {
         self::$limelight->setConfig('hepburn_modified', 'Romaji', 'style');
 
@@ -31,10 +25,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('kyō wa Shōta to issho ni Gunmaken ni itte, watashi no o nēsan to matcha o nomimashita.', $results);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_hepburn_traditional_romaji(): void
+    public function testItMakesHepburnTraditionalRomaji(): void
     {
         self::$limelight->setConfig('hepburn_traditional', 'Romaji', 'style');
 
@@ -43,10 +34,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('kyō wa Shōta to issho ni Gummaken ni itte, watashi no o neesan to matcha wo nomimashita.', $results);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_kunrei_shiki_romaji(): void
+    public function testItMakesKunreiShikiRomaji(): void
     {
         self::$limelight->setConfig('kunrei_shiki', 'Romaji', 'style');
 
@@ -55,10 +43,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('kyô wa Syôta to issyo ni Gunmaken ni itte, watasi no o nêsan to mattya o nomimasita.', $results);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_nihon_shiki_romaji(): void
+    public function testItMakesNihonShikiRomaji(): void
     {
         self::$limelight->setConfig('nihon_shiki', 'Romaji', 'style');
 

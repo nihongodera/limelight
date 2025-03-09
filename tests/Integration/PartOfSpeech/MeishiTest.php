@@ -8,20 +8,14 @@ use Limelight\Tests\TestCase;
 
 class MeishiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_part_of_speech_to_noun(): void
+    public function testItChangesPartOfSpeechToNoun(): void
     {
         $results = self::$limelight->parse('テレビ');
 
         $this->assertEquals('noun', $results->pull(0)->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_proper_nouns(): void
+    public function testItHandlesProperNouns(): void
     {
         $results = self::$limelight->parse('東京');
 
@@ -36,10 +30,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('proper noun', $words[0]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_pronouns(): void
+    public function testItHandlesPronouns(): void
     {
         $results = self::$limelight->parse('私');
 
@@ -54,10 +45,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('pronoun', $words[0]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_sahensuru_verbs(): void
+    public function testItHandlesSahensuruVerbs(): void
     {
         $results = self::$limelight->parse('全うするために');
 
@@ -70,10 +58,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('verb', $words[0]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_tokushuda_adjectives(): void
+    public function testItHandlesTokushudaAdjectives(): void
     {
         $results = self::$limelight->parse('大好きです');
 
@@ -86,10 +71,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('adjective', $words[0]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_fukushikanou_plus_joshi(): void
+    public function testItHandlesFukushikanouPlusJoshi(): void
     {
         $results = self::$limelight->parse('食べるために');
 
@@ -104,10 +86,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('adverb', $words[1]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_kanji_numbers(): void
+    public function testItHandlesKanjiNumbers(): void
     {
         $results = self::$limelight->parse('一');
 
@@ -122,10 +101,7 @@ class MeishiTest extends TestCase
         $this->assertEquals('number', $words[0]->partOfSpeech());
     }
 
-    /**
-     * @test
-     */
-    public function it_handles_roman_numbers(): void
+    public function testItHandlesRomanNumbers(): void
     {
         $results = self::$limelight->parse('5');
 

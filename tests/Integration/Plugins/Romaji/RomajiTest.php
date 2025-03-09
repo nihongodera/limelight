@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class RomajiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_stores_space_seperated_strings_on_object(): void
+    public function testItStoresSpaceSeperatedStringsOnObject(): void
     {
         $results = self::$limelight->parse('今週末山を登ります！');
 
@@ -20,10 +17,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('Konshūmatsu yama o noborimasu!', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_multibyte_chars_to_uppercase(): void
+    public function testItConvertsMultibyteCharsToUppercase(): void
     {
         $results = self::$limelight->parse('大阪');
 
@@ -32,10 +26,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('Ōsaka', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_allows_english_punctuation_to_remain_when_noparse(): void
+    public function testItAllowsEnglishPunctuationToRemainWhenNoparse(): void
     {
         $results = self::$limelight->noParse('うれ.しい');
 
@@ -44,10 +35,7 @@ class RomajiTest extends TestCase
         $this->assertEquals('Ure.shii', $conversion);
     }
 
-    /**
-     * @test
-     */
-    public function it_passes_english_words(): void
+    public function testItPassesEnglishWords(): void
     {
         $results = self::$limelight->parse('大阪 pass 今週');
 

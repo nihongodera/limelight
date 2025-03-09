@@ -17,10 +17,7 @@ class FuriganaTest extends TestCase
         self::$lib = include 'tests/lib.php';
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_kanji_to_string_for_single_kanji_word(): void
+    public function testItAddsKanjiToStringForSingleKanjiWord(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -33,10 +30,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_passes_katakana_words_untouched(): void
+    public function testItPassesKatakanaWordsUntouched(): void
     {
         $results = self::$limelight->parse('テレビ');
 
@@ -49,10 +43,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('テレビ', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_passes_hiragana_words_untouched(): void
+    public function testItPassesHiraganaWordsUntouched(): void
     {
         $results = self::$limelight->parse('おいしい');
 
@@ -65,10 +56,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('おいしい', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_kanji_to_string_for_double_kanji_word(): void
+    public function testItAddsKanjiToStringForDoubleKanjiWord(): void
     {
         $results = self::$limelight->parse('勉強する');
 
@@ -81,10 +69,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>勉強</rb><rp>(</rp><rt>べんきょう</rt><rp>)</rp></ruby>する', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_adds_kana_to_string_for_kana_only_word(): void
+    public function testItAddsKanaToStringForKanaOnlyWord(): void
     {
         $results = self::$limelight->parse('おいしい');
 
@@ -97,10 +82,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('おいしい', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_kanji_kana_word(): void
+    public function testItMakesFuriganaForKanjiKanaWord(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -113,10 +95,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_kanji_kana_kanji_word(): void
+    public function testItMakesFuriganaForKanjiKanaKanjiWord(): void
     {
         $results = self::$limelight->parse('使い方');
 
@@ -129,10 +108,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>使</rb><rp>(</rp><rt>つか</rt><rp>)</rp></ruby>い<ruby><rb>方</rb><rp>(</rp><rt>かた</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_kanji_kanji_word(): void
+    public function testItMakesFuriganaForKanjiKanjiWord(): void
     {
         $results = self::$limelight->parse('健康');
 
@@ -145,10 +121,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>健康</rb><rp>(</rp><rt>けんこう</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_kana_kanji_word(): void
+    public function testItMakesFuriganaForKanaKanjiWord(): void
     {
         $results = self::$limelight->parse('ソ連');
 
@@ -161,10 +134,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('ソ<ruby><rb>連</rb><rp>(</rp><rt>れん</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_kanji_punc_word(): void
+    public function testItMakesFuriganaForKanjiPuncWord(): void
     {
         $results = self::$limelight->parse('元気？');
 
@@ -177,10 +147,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_1(): void
+    public function testItMakesFuriganaForWordWhenSameHiraganaAppears1(): void
     {
         $results = self::$limelight->parse('中傷し');
 
@@ -193,10 +160,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>中傷</rb><rp>(</rp><rt>ちゅうしょう</rt><rp>)</rp></ruby>し', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_2(): void
+    public function testItMakesFuriganaForWordWhenSameHiraganaAppears2(): void
     {
         $results = self::$limelight->parse('少々');
 
@@ -209,10 +173,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>少々</rb><rp>(</rp><rt>しょうしょう</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_word_when_same_hiragana_appears_3(): void
+    public function testItMakesFuriganaForWordWhenSameHiraganaAppears3(): void
     {
         $results = self::$limelight->parse('行きたい');
 
@@ -225,10 +186,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('<ruby><rb>行</rb><rp>(</rp><rt>い</rt><rp>)</rp></ruby>きたい', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_complex_phrase(): void
+    public function testItMakesFuriganaForComplexPhrase(): void
     {
         $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
 
@@ -241,10 +199,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('アッ、<ruby><rb>太郎</rb><rp>(</rp><rt>たろう</rt><rp>)</rp></ruby>！<ruby><rb>久</rb><rp>(</rp><rt>ひさ</rt><rp>)</rp></ruby>しぶり！<ruby><rb>元気</rb><rp>(</rp><rt>げんき</rt><rp>)</rp></ruby>？', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_number_kanji_combos(): void
+    public function testItMakesFuriganaForNumberKanjiCombos(): void
     {
         $results = self::$limelight->parse('20日');
 
@@ -257,10 +212,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('20<ruby><rb>日</rb><rp>(</rp><rt>にち</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_furigana_for_complete_article(): void
+    public function testItMakesFuriganaForCompleteArticle(): void
     {
         $results = self::$limelight->parse(self::$lib['furigana1']);
 
@@ -275,10 +227,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals($expected, $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_get_furigana_off_results_object(): void
+    public function testItCanGetFuriganaOffResultsObject(): void
     {
         $results = self::$limelight->parse('アッ、太郎！久しぶり！元気？');
 
@@ -289,10 +238,7 @@ class FuriganaTest extends TestCase
             $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_make_furigana_for_half_width_numbers(): void
+    public function testItDoesntMakeFuriganaForHalfWidthNumbers(): void
     {
         $results = self::$limelight->parse('7時');
 
@@ -301,10 +247,7 @@ class FuriganaTest extends TestCase
         $this->assertEquals('7<ruby><rb>時</rb><rp>(</rp><rt>じ</rt><rp>)</rp></ruby>', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_doesnt_make_furigana_for_full_width_numbers(): void
+    public function testItDoesntMakeFuriganaForFullWidthNumbers(): void
     {
         $results = self::$limelight->parse('７時');
 

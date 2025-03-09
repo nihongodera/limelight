@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class RentaishiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_determiner(): void
+    public function testItChangesPartOfSpeechToDeterminer(): void
     {
         $results = self::$limelight->parse('いわゆる');
 

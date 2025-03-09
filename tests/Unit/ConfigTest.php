@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Mecab\Mecab;
 use Limelight\Config\Config;
-use Limelight\Tests\TestCase;
-use Limelight\Exceptions\InvalidInputException;
 use Limelight\Exceptions\InternalErrorException;
+use Limelight\Exceptions\InvalidInputException;
+use Limelight\Mecab\Mecab;
+use Limelight\Tests\TestCase;
 
 class ConfigTest extends TestCase
 {
-    /**
-     * Reset config file.
-     */
     public static function tearDownAfterClass(): void
     {
         $config = Config::getInstance();
@@ -22,10 +19,7 @@ class ConfigTest extends TestCase
         $config->resetConfig();
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_config_values(): void
+    public function testItGetsConfigValues(): void
     {
         $config = Config::getInstance();
 
@@ -34,10 +28,7 @@ class ConfigTest extends TestCase
         $this->assertIsArray($plugins);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_for_getting_invalid_config_value(): void
+    public function testItThrowsExceptionForGettingInvalidConfigValue(): void
     {
         $this->expectExceptionMessage('Index pluins does not exist in config.php.');
         $this->expectException(InvalidInputException::class);
@@ -47,20 +38,14 @@ class ConfigTest extends TestCase
         $config->get('pluins');
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_an_instance_of_itself(): void
+    public function testItGetsAnInstanceOfItself(): void
     {
         $config = Config::getInstance();
 
         $this->assertInstanceOf(Config::class, $config);
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_plugins_from_file(): void
+    public function testItGetsPluginsFromFile(): void
     {
         $config = Config::getInstance();
 
@@ -69,10 +54,7 @@ class ConfigTest extends TestCase
         $this->assertIsArray($plugins);
     }
 
-    /**
-     * @test
-     */
-    public function it_makes_mecab(): void
+    public function testItMakesMecab(): void
     {
         $config = Config::getInstance();
 
@@ -81,10 +63,7 @@ class ConfigTest extends TestCase
         $this->assertInstanceOf(Mecab::class, $mecab);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_when_it_cant_make_mecab(): void
+    public function testItThrowsExceptionWhenItCantMakeMecab(): void
     {
         $this->expectExceptionMessage('Class kljsdf defined in config.php does not exist.');
         $this->expectException(InternalErrorException::class);
@@ -96,10 +75,7 @@ class ConfigTest extends TestCase
         $config->make(Mecab::class);
     }
 
-    /**
-     * @test
-     */
-    public function it_resets_config_file(): void
+    public function testItResetsConfigFile(): void
     {
         $config = Config::getInstance();
 
@@ -120,10 +96,7 @@ class ConfigTest extends TestCase
         $this->assertEquals('hepburn_modified', $romaji['style']);
     }
 
-    /**
-     * @test
-     */
-    public function it_sets_values_on_config_file(): void
+    public function testItSetsValuesOnConfigFile(): void
     {
         $config = Config::getInstance();
 
@@ -140,10 +113,7 @@ class ConfigTest extends TestCase
         $config->resetConfig();
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_for_setting_invalid_config_value(): void
+    public function testItThrowsExceptionForSettingInvalidConfigValue(): void
     {
         $this->expectExceptionMessage('Key not found in config file.');
         $this->expectException(InvalidInputException::class);

@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class FukushiTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_changes_partOfSpeech_to_adverb(): void
+    public function testItChangesPartOfSpeechToAdverb(): void
     {
         $results = self::$limelight->parse('ときどき');
 

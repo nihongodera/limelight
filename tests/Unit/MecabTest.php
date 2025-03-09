@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Limelight\tests\Unit;
 
-use Limelight\Mecab\Mecab;
 use Limelight\Config\Config;
+use Limelight\Mecab\Mecab;
 use Limelight\Tests\TestCase;
 
 class MecabTest extends TestCase
 {
     protected static Mecab $mecab;
 
-    /**
-     * Set static mecab on object.
-     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -24,10 +21,7 @@ class MecabTest extends TestCase
         self::$mecab = $config->make(Mecab::class);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_be_instantiated(): void
+    public function testItCanBeInstantiated(): void
     {
         $config = Config::getInstance();
 
@@ -39,10 +33,7 @@ class MecabTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_has_parseToNode_method(): void
+    public function testItHasParseToNodeMethod(): void
     {
         $this->assertTrue(
             method_exists(self::$mecab, 'parseToNode'),
@@ -50,10 +41,7 @@ class MecabTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_has_parseToString_method(): void
+    public function testItHasParseToStringMethod(): void
     {
         $this->assertTrue(
             method_exists(self::$mecab, 'parseToString'),

@@ -8,10 +8,7 @@ use Limelight\Tests\TestCase;
 
 class PluginTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_runs_plugins_by_default(): void
+    public function testItRunsPluginsByDefault(): void
     {
         $results = self::$limelight->parse('燃える');
 
@@ -24,10 +21,7 @@ class PluginTest extends TestCase
         $this->assertEquals('<ruby><rb>燃</rb><rp>(</rp><rt>も</rt><rp>)</rp></ruby>える', $furigana);
     }
 
-    /**
-     * @test
-     */
-    public function it_turns_plugins_off_if_false_is_passed_as_second_parameter(): void
+    public function testItTurnsPluginsOffIfFalseIsPassedAsSecondParameter(): void
     {
         $results = self::$limelight->parse('燃える', false);
 
