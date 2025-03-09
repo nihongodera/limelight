@@ -25,7 +25,7 @@ RUN set -eux; \
     buildDeps='unzip'; \
     apt-get update; \
     apt-get install -y $buildDeps --no-install-recommends; \
-    curl -fsSL https://github.com/shono0027/php-mecab/archive/master.zip -o php-mecab.zip; \
+    curl -fsSL https://github.com/nihongodera/php-mecab/archive/master.zip -o php-mecab.zip; \
     unzip php-mecab.zip; \
     apt-get purge -y --auto-remove $buildDeps; \
     apt-get clean; \
